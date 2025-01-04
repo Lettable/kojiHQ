@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -33,7 +34,7 @@ export default function ThreadView() {
         ETH: "0",
         LTC: "0"
     })
-    const searchParams = useSearchParams()
+    const pathname = usePathname()
     const router = useRouter()
 
     useEffect(() => {
@@ -79,7 +80,7 @@ export default function ThreadView() {
         }
         getCurrentUser()
 
-        const threadId = searchParams.get('id')
+        const threadId = pathname.split('/')
         if (threadId) {
             fetchThreadById(threadId)
             fetchPosts(threadId)
@@ -90,7 +91,7 @@ export default function ThreadView() {
 
         const storedTheme = localStorage.getItem('theme')
         setIsDarkTheme(storedTheme ? storedTheme === 'dark' : true)
-    }, [searchParams])
+    }, [pathname])
 
     const fetchThreadById = async (id) => {
         try {

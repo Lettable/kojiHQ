@@ -10,7 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MessageSquare, Users, Clock, Pin, ChevronLeft, Bitcoin, DollarSign, Plus } from 'lucide-react'
 import Header from '@/partials/Header'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { jwtDecode } from 'jwt-decode'
 import { FaEthereum } from 'react-icons/fa'
 
@@ -32,8 +33,8 @@ export default function ForumView() {
   const [totalPages, setTotalPages] = useState(1)
 
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const forumId = searchParams.get('id')
+  const pathname = usePathname()
+  const forumId = pathname.split('/')
 
   useEffect(() => {
     const fetchCryptoPrices = async () => {
@@ -255,7 +256,7 @@ export default function ForumView() {
                                   Pinned
                                 </Badge>
                               )}
-                              <Link href={`/thread?id=${thread.id}`} className="text-xl font-semibold text-white transition-colors">
+                              <Link href={`/thread/${thread.id}`} className="text-xl font-semibold text-white transition-colors">
                                 {thread.title}
                               </Link>
                             </div>

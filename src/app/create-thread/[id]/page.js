@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams, useParams } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -14,10 +15,8 @@ import Header from '@/partials/Header'
 import ReactMarkdown from 'react-markdown'
 import { jwtDecode } from 'jwt-decode'
 import uploadFile from '@/lib/utils/UploadFile'
-import { Suspense } from 'react'
 
 export default function CreateThread() {
-    const searchParams = useSearchParams()
     const [currentUser, setCurrentUser] = useState(null)
     const [isDarkTheme, setIsDarkTheme] = useState(true)
     const [forums, setForums] = useState([])
@@ -31,6 +30,7 @@ export default function CreateThread() {
     const [authToken, setAuthToken] = useState('');
     const params = useParams();
     const router = useRouter();
+    const pathname = usePathname()
 
     useEffect(() => {
         const getCurrentUser = () => {
@@ -68,14 +68,14 @@ export default function CreateThread() {
         fetchForums()
 
 
-        const forumId = searchParams.get('forumId')
+        const forumId = pathname.split('/')
         if (forumId) {
             fetchForumById(forumId)
         }
 
         const storedTheme = localStorage.getItem('theme')
         setIsDarkTheme(storedTheme ? storedTheme === 'dark' : true)
-    }, [searchParams, authToken])
+    }, [pathname, authToken])
 
     const fetchForumById = async (id) => {
         try {
@@ -103,10 +103,6 @@ export default function CreateThread() {
         if (forum) {
             setSelectedCategory(forum.category)
         }
-    }
-    
-    function forumFallBack() {
-        return <div className="flex items-center justify-center h-screen bg-black text-white text-2xl font-bold">Loading...</div>;
     }
 
     const handleCategoryChange = (value) => {
@@ -161,7 +157,7 @@ export default function CreateThread() {
             }
 
             const newThread = await response.json()
-            router.push(`/thread?id=${newThread._id}`)
+            router.push(`/thread/${newThread._id}`)
         } catch (error) {
             console.error('Error creating thread:', error)
         } finally {
@@ -178,7 +174,6 @@ export default function CreateThread() {
     const categories = [...new Set(forums.map(forum => forum.category))]
 
     return (
-        <Suspense fallback={<forumFallBack />}>
         <div className={`min-h-screen ${isDarkTheme ? 'bg-black text-white' : 'bg-white text-black'}`}>
             <Header
                 avatar={currentUser && currentUser.profilePic}
@@ -352,6 +347,5 @@ export default function CreateThread() {
                 </div>
             </main>
         </div>
-        </Suspense>
     )
 }
