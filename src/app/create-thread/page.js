@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams, useParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -16,7 +17,6 @@ import { jwtDecode } from 'jwt-decode'
 import uploadFile from '@/lib/utils/UploadFile'
 
 export default function CreateThread() {
-    const searchParams = useSearchParams()
     const [currentUser, setCurrentUser] = useState(null)
     const [isDarkTheme, setIsDarkTheme] = useState(true)
     const [forums, setForums] = useState([])
@@ -67,7 +67,8 @@ export default function CreateThread() {
         fetchForums()
 
 
-        const forumId = searchParams.get('forumId')
+        const { forumId } = router.query
+        // const forumId = searchParams.get('forumId')
         if (forumId) {
             fetchForumById(forumId)
         }
