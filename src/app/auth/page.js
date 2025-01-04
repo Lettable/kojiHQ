@@ -237,7 +237,7 @@ export default function AuthPage() {
                       {isLoginLoading ? 'Logging in...' : 'Login'}
                     </Button>
                   </motion.div>
-                  <motion.div
+                  {/* <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="mt-3"
@@ -245,7 +245,7 @@ export default function AuthPage() {
                     <Button className="w-full bg-white/10 hover:bg-white/20 text-white" onClick={continueAsGuest}>
                       Continue as Guest / Try
                     </Button>
-                  </motion.div>
+                  </motion.div> */}
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}

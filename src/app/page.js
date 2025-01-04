@@ -652,7 +652,7 @@ export default function HomePage() {
                   <CardContent>
                     <div className="text-white space-y-2">
                       {forums.map(forum => (
-                        <a href={`/forum?id=${forum.id}`} key={forum.id} className={`flex items-center text-white justify-between p-4 rounded-lg bg-zinc-800/10 ${isDarkTheme ? 'hover:bg-zinc-800/50' : 'hover:bg-gray-50'} transition-colors cursor-pointer`}>
+                        <a href={`/forum/${forum.id}`} key={forum.id} className={`flex items-center text-white justify-between p-4 rounded-lg bg-zinc-800/10 ${isDarkTheme ? 'hover:bg-zinc-800/50' : 'hover:bg-gray-50'} transition-colors cursor-pointer`}>
                           <div className="flex-1">
                             <h3 className="font-semibold">{forum.title}</h3>
                             <p className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
