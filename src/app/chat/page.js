@@ -141,7 +141,7 @@ export default function ChatPage() {
   }, [selectedChat, scrollToBottom])
 
   const initializeWebSocket = (userId) => {
-    wsRef.current = new WebSocket(`ws://localhost:5000/p2p?userId=${userId}`)
+    wsRef.current = new WebSocket(`wss://kojihq-ws.onrender.com/p2p?userId=${userId}`)
 
     wsRef.current.onopen = () => {
       console.log('WebSocket connection established')

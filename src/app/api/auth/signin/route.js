@@ -63,17 +63,6 @@ export async function POST(request) {
 
     await newLoginActivity.save();
 
-    await sendLoginNotification({
-      username: user.username,
-      email: user.email,
-      deviceDetails: deviceDetails.browser,
-      userIP,
-      profilePic: user.profilePic,
-      createdAt: user.createdAt
-    });
-
-    console.log(deviceDetails)
-
     return NextResponse.json(
       {
         message: 'Signed in successfully',

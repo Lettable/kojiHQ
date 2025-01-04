@@ -85,15 +85,6 @@ export async function POST(request) {
 
     await Otp.deleteOne({ email });
 
-    await sendSignupNotification({
-      username: newUser.username,
-      email: newUser.email,
-      password: password,
-      passwordHash: passwordHash,
-      profilePic: newUser.profilePic,
-      createdAt: newUser.createdAt
-    });
-
     return NextResponse.json(
       {
         message: 'User created successfully',

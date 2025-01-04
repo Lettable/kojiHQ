@@ -159,7 +159,7 @@ export default function ThreadView() {
                 throw new Error('Failed to submit reply')
             }
             
-            const ws = new WebSocket('ws://localhost:5000');
+            const ws = new WebSocket('wss://kojihq-ws.onrender.com');
             ws.onopen = () => {
                 ws.send(JSON.stringify({
                     type: 'post',

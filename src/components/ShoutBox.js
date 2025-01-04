@@ -94,7 +94,7 @@ export default function Shoutbox() {
   const connectWebSocket = useCallback(() => {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return;
 
-    wsRef.current = new WebSocket('ws://localhost:5000');
+    wsRef.current = new WebSocket('wss://kojihq-ws.onrender.com');
 
     wsRef.current.onopen = () => {
       console.log('WebSocket connected');
