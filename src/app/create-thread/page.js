@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams, useParams } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -15,8 +14,10 @@ import Header from '@/partials/Header'
 import ReactMarkdown from 'react-markdown'
 import { jwtDecode } from 'jwt-decode'
 import uploadFile from '@/lib/utils/UploadFile'
+import { Suspense } from 'react'
 
 export default function CreateThread() {
+    const searchParams = useSearchParams()
     const [currentUser, setCurrentUser] = useState(null)
     const [isDarkTheme, setIsDarkTheme] = useState(true)
     const [forums, setForums] = useState([])
@@ -67,8 +68,7 @@ export default function CreateThread() {
         fetchForums()
 
 
-        const { forumId } = router.query
-        // const forumId = searchParams.get('forumId')
+        const forumId = searchParams.get('forumId')
         if (forumId) {
             fetchForumById(forumId)
         }
@@ -103,6 +103,10 @@ export default function CreateThread() {
         if (forum) {
             setSelectedCategory(forum.category)
         }
+    }
+    
+    function forumFallBack() {
+        return <div className="flex items-center justify-center h-screen bg-black text-white text-2xl font-bold">Loading...</div>;
     }
 
     const handleCategoryChange = (value) => {
@@ -174,6 +178,7 @@ export default function CreateThread() {
     const categories = [...new Set(forums.map(forum => forum.category))]
 
     return (
+        <Suspense fallback={<forumFallBack />}>
         <div className={`min-h-screen ${isDarkTheme ? 'bg-black text-white' : 'bg-white text-black'}`}>
             <Header
                 avatar={currentUser && currentUser.profilePic}
@@ -347,5 +352,6 @@ export default function CreateThread() {
                 </div>
             </main>
         </div>
+        </Suspense>
     )
 }
