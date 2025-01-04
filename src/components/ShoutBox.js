@@ -154,30 +154,28 @@ export default function Shoutbox() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        setIsLoading(false);
-        return;
-      }
-
       try {
-        const decoded = jwtDecode(token);
-        usernameRef.current = decoded.username;
-        setUser(decoded);
-
-        const [authResponse, emojisResponse, messagesResponse] = await Promise.all([
-          fetch(`/api/check-authorization?userId=${decoded.userId}`),
+        const [emojisResponse, messagesResponse] = await Promise.all([
           fetch('/api/emojis'),
           fetch('/api/messages')
         ]);
 
-        const authData = await authResponse.json();
         const emojisData = await emojisResponse.json();
         const messagesData = await messagesResponse.json();
 
-        setUser(prev => ({ ...prev, isAuthorized: authData.isAuthorized }));
         setEmojis(emojisData);
         setMessages(messagesData.messages);
+
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+          const decoded = jwtDecode(token);
+          usernameRef.current = decoded.username;
+          setUser(decoded);
+
+          const authResponse = await fetch(`/api/check-authorization?userId=${decoded.userId}`);
+          const authData = await authResponse.json();
+          setUser(prev => ({ ...prev, isAuthorized: authData.isAuthorized }));
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -237,48 +235,6 @@ export default function Shoutbox() {
   return (
     <div className={`flex flex-col h-full w-full`}>
       <main className="flex-grow flex flex-col overflow-hidden">
-        {/* <ScrollArea className="flex-grow" ref={scrollAreaRef} style={{ height: '400px' }}>
-          <div className="p-2 space-y-2">
-            <AnimatePresence>
-              {messages.map((message) => (
-                <motion.div
-                  key={message._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  className={`flex items-start space-x-2 ${message.userId === user?.userId ? 'justify-end' : 'justify-start'}`}
-                >
-                  {message.userId !== user?.userId && (
-                    <Link href={`/user/${message.userId}`}>
-                      <img
-                        src={message.profilePic || '/placeholder.svg?height=28&width=28'}
-                        alt={message.username}
-                        className="w-7 h-7 rounded-full cursor-pointer"
-                      />
-                    </Link>
-                  )}
-                  <div className={`flex flex-col ${message.userId === user?.userId ? 'items-end' : 'items-start'}`}>
-                    <div className={`px-3 py-1.5 rounded-lg max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg ${message.userId === user?.userId
-                        ? 'bg-blue-600 text-white'
-                        : isDarkTheme
-                          ? 'bg-zinc-800 text-white'
-                          : 'bg-zinc-200 text-black'
-                      }`}>
-                      {message.userId !== user?.userId && (
-                        <p className={`font-semibold text-[12px] ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'} mb-0.5`}>{message.username}</p> 
-                        )}
-                      <p className="text-xs break-words">{renderTextWithEmojis(message.content, emojis)}</p>
-                    </div>
-                    <span className={`text-[10px] ${isDarkTheme ? 'text-gray-400' : 'text-gray-500'} mt-0.5`}>
-                      {formatTimestamp(message.createdAt)}
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        </ScrollArea> */}
-
         <ScrollArea className="flex-grow" ref={scrollAreaRef} style={{ height: '500px' }}>
           <div className="p-4 space-y-4">
             <AnimatePresence>
@@ -325,7 +281,7 @@ export default function Shoutbox() {
         </ScrollArea>
 
 
-        {user ? (
+        {/* {user ? (
           user.isAuthorized ? (
             <div className={`border-t ${isDarkTheme ? 'border-white/10' : 'border-black/10'} p-4`}>
               <div className="flex items-center space-x-2 min-h-[31px] max-h-[41px] ">
@@ -369,7 +325,55 @@ export default function Shoutbox() {
               <p>Please sign in to participate in the chat</p>
             </div>
           </div>
+        )} */}
+
+
+        {user ? (
+          user.isAuthorized ? (
+            <div className={`border-t ${isDarkTheme ? 'border-white/10' : 'border-black/10'} p-4`}>
+              <div className="flex items-center space-x-2 min-h-[31px] max-h-[41px] ">
+                <Textarea
+                  placeholder="Type your message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  className={`flex-grow min-h-[31px] max-h-[41px] resize-none ${isDarkTheme
+                    ? 'bg-white/5 border-white/10 focus:border-yellow-400/50'
+                    : 'bg-black/5 border-black/10 focus:border-yellow-600/50'
+                    } rounded-full py-2 px-4`}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      sendMessage();
+                    }
+                  }}
+                />
+                <EnhancedEmojiPicker onEmojiSelect={handleEmojiSelect} isDarkTheme={isDarkTheme} />
+                <Button
+                  onClick={sendMessage}
+                  disabled={!newMessage.trim()}
+                  className="bg-yellow-600 hover:bg-yellow-700 rounded-full p-auto"
+                >
+                  <Send className="h-auto w-auto" />
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className={`border-t ${isDarkTheme ? 'border-white/10' : 'border-black/10'} p-4`}>
+              <div className="flex items-center justify-center space-x-2 text-yellow-400">
+                <AlertTriangle className="w-4 h-4" />
+                <p>You may have done something unusual. It should be fixed soon, or contact support.</p>
+              </div>
+            </div>
+          )
+        ) : (
+          <div className={`border-t ${isDarkTheme ? 'border-white/10' : 'border-black/10'} p-4`}>
+            <div className="flex items-center justify-center space-x-2 text-yellow-400">
+              <AlertTriangle className="w-4 h-4" />
+              <p>Please sign in to participate in the chat</p>
+            </div>
+          </div>
         )}
+
       </main>
       <style jsx global>{`
         .mention {
