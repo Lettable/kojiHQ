@@ -255,7 +255,7 @@ export default function AuthPage() {
                     className="bg-[#5865F2] hover:bg-[#4752C4] w-full text-white flex items-center justify-center"
                     asChild
                   >
-                    <a href="https://discord.com/oauth2/authorize?client_id=1315371901027352616&response_type=code&redirect_uri=https%3A%2F%2Fsideprojector.vercel.app%2Fapi%2Fdiscord&scope=identify+email">
+                    <a href="https://discord.com/oauth2/authorize?client_id=1325208183215620226&response_type=code&redirect_uri=https%3A%2F%2Fkojimarketplace.vercel.app%2Fapi%2Fdiscord&scope=identify+email">
                     <FaDiscord className="h-5 w-5" />
                       Go with Discord
                     </a>

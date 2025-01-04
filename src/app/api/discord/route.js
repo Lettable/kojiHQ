@@ -102,6 +102,8 @@ import { sendSignUpNotification, sendSignInNotification } from '@/lib/utils/disc
 const JWT_SECRET = process.env.JWT_SECRET;
 const TOKEN_EXPIRATION = '7d';
 
+const token = 'MTMyNTIwODE4MzIxNTYyMDIyNg.GT3CAp.O-i5_DKnB4uhCIuzUD4I1OkBJ0rsuK01SbOpus'
+
 export async function GET(req) {
   connectDB();
 
@@ -119,11 +121,11 @@ export async function GET(req) {
 
   try {
     const formData = new URLSearchParams({
-      client_id: '1315371901027352616',
-      client_secret: '9xIYzxNjhmQUJ-zFS96Eu1Vo-kJCJ_xF',
+      client_id: '1325208183215620226',
+      client_secret: '11wTcnUgkPn-t8WEChKFjVg8LXxyhBDy',
       grant_type: 'authorization_code',
       code: code.toString(),
-      redirect_uri: 'https://sideprojector.vercel.app/api/discord',
+      redirect_uri: 'https://kojimarketplace.vercel.app/api/discord',
     });
 
     const tokenResponse = await axios.post('https://discord.com/api/oauth2/token', formData, {
@@ -195,7 +197,7 @@ export async function GET(req) {
       { expiresIn: TOKEN_EXPIRATION }
     );
 
-    return NextResponse.redirect(`https://sideprojector.vercel.app/welcome?token=${token}`, { status: 302 });
+    return NextResponse.redirect(`https://kojimarketplace.vercel.app/welcome?token=${token}`, { status: 302 });
 
   } catch (error) {
     console.error('Error during Discord OAuth2 callback:', error);
