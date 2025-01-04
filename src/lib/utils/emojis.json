@@ -1,0 +1,954 @@
+[
+  {
+    "id": "14785236901",
+    "emojiTitle": ":success:",
+    "emojiUrl": "/emojis/success.png",
+    "isAnimated": false,
+    "isPremium": false
+  },
+  {
+    "id": "25896314702",
+    "emojiTitle": ":troll:",
+    "emojiUrl": "/emojis/troll.png",
+    "isAnimated": false,
+    "isPremium": false
+  },
+  {
+    "id": "36985214703",
+    "emojiTitle": ":nike:",
+    "emojiUrl": "/emojis/nike.png",
+    "isAnimated": false,
+    "isPremium": false
+  },
+  {
+    "id": "47852136904",
+    "emojiTitle": ":steam:",
+    "emojiUrl": "/emojis/steam.png",
+    "isAnimated": false,
+    "isPremium": false
+  },
+  {
+    "id": "58963214705",
+    "emojiTitle": ":kubernetes:",
+    "emojiUrl": "/emojis/kubernetes.png",
+    "isAnimated": false,
+    "isPremium": false
+  },
+  {
+    "id": "69874512306",
+    "emojiTitle": ":facebook:",
+    "emojiUrl": "/emojis/facebook.png",
+    "isAnimated": false,
+    "isPremium": false
+  },
+  {
+    "id": "74185296307",
+    "emojiTitle": ":slack:",
+    "emojiUrl": "/emojis/slack.png",
+    "isAnimated": false,
+    "isPremium": false
+  },
+  {
+    "id": "85296374108",
+    "emojiTitle": ":google:",
+    "emojiUrl": "/emojis/google.png",
+    "isAnimated": false,
+    "isPremium": false
+  },
+  {
+    "id": "96325874109",
+    "emojiTitle": ":instagram:",
+    "emojiUrl": "/emojis/instagram.png",
+    "isAnimated": false,
+    "isPremium": false
+  },
+  {
+    "id": "10254789610",
+    "emojiTitle": ":nodejs:",
+    "emojiUrl": "/emojis/nodejs.png",
+    "isAnimated": false,
+    "isPremium": false
+  },
+  {
+    "id": "1025498673203",
+    "emojiTitle": ":verified:",
+    "emojiUrl": "https://emoji.discadia.com/emojis/e068c349-96c2-4688-8d4b-69d08adfb375.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "11365824711",
+    "emojiTitle": ":typescript:",
+    "emojiUrl": "/emojis/typescript.png",
+    "isAnimated": false,
+    "isPremium": false
+  },
+  {
+    "id": "102547829376",
+    "emojiTitle": ":osama_bin_laden:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/1494-osama.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254786667",
+    "emojiTitle": ":troll_pakistan:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/4083-trollpakistan.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "87282304737",
+    "emojiTitle": ":kashmir:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/6034-flag-ks.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "876547829376",
+    "emojiTitle": ":pakistan_ball:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/6540-pakistanball.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "102547823476",
+    "emojiTitle": ":parrot_pakistan:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/4484_pakistanparrot.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "102540093476",
+    "emojiTitle": ":peep_shy:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/2330-peeposhy.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "12478953612",
+    "emojiTitle": ":youtube:",
+    "emojiUrl": "/emojis/youtube.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "13589624713",
+    "emojiTitle": ":dabbing:",
+    "emojiUrl": "/emojis/dabbing.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "14695872314",
+    "emojiTitle": ":thinking:",
+    "emojiUrl": "/emojis/thinking.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "15796284315",
+    "emojiTitle": ":watching-you:",
+    "emojiUrl": "/emojis/watching-you.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "16845392716",
+    "emojiTitle": ":facepalm:",
+    "emojiUrl": "/emojis/facepalm.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "17984256317",
+    "emojiTitle": ":party:",
+    "emojiUrl": "/emojis/party.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "18936527418",
+    "emojiTitle": ":depressed:",
+    "emojiUrl": "/emojis/depressed.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "19045736219",
+    "emojiTitle": ":lol:",
+    "emojiUrl": "/emojis/lol.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "20147385920",
+    "emojiTitle": ":fb-laugh:",
+    "emojiUrl": "/emojis/fb-laugh.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "21298546321",
+    "emojiTitle": ":amongus:",
+    "emojiUrl": "/emojis/amongus.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "102547447876",
+    "emojiTitle": ":horney_peep:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/5379-horny.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "1025478946344",
+    "emojiTitle": ":peep_deku:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/16875-peepodeku.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "1022343946344",
+    "emojiTitle": ":peepodeku:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/16875-peepodeku.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "1025478899879",
+    "emojiTitle": ":peep_toxic:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/3465-peepo-anxious.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "102234394394",
+    "emojiTitle": ":duage:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/13595-duage.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "102547096876",
+    "emojiTitle": ":peep_susge_gang:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/59382-pepesusgesquad.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "22387459622",
+    "emojiTitle": ":space-float:",
+    "emojiUrl": "/emojis/space_float.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "23479658123",
+    "emojiTitle": ":amongus-dance:",
+    "emojiUrl": "/emojis/among_us_orange_dance.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "24589317624",
+    "emojiTitle": ":amongus-halloween:",
+    "emojiUrl": "/emojis/amongustwerkhalloween.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "25639874125",
+    "emojiTitle": ":amongus-pet:",
+    "emojiUrl": "/emojis/among_us_pet.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "26749835226",
+    "emojiTitle": ":amongus-sus:",
+    "emojiUrl": "/emojis/among_us_sus.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "27834956127",
+    "emojiTitle": ":venting:",
+    "emojiUrl": "/emojis/venting.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "28934765228",
+    "emojiTitle": ":alert:",
+    "emojiUrl": "/emojis/alert.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "29046785329",
+    "emojiTitle": ":party-blob:",
+    "emojiUrl": "/emojis/party_blob.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "30154789630",
+    "emojiTitle": ":dumpster-fire:",
+    "emojiUrl": "/emojis/dumpster-fire.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "31298654731",
+    "emojiTitle": ":high-level:",
+    "emojiUrl": "/emojis/high-level.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "32384976132",
+    "emojiTitle": ":typing-cat:",
+    "emojiUrl": "/emojis/typingcat.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "33495768233",
+    "emojiTitle": ":bugs-bunny:",
+    "emojiUrl": "/emojis/bugs_bunny.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "34589713634",
+    "emojiTitle": ":cat-jam:",
+    "emojiUrl": "/emojis/catjam.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "35674829335",
+    "emojiTitle": ":blob-yes:",
+    "emojiUrl": "/emojis/blob-yes.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "36798254336",
+    "emojiTitle": ":clapclap:",
+    "emojiUrl": "/emojis/clapclap-e.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "37859461237",
+    "emojiTitle": ":cool-doge:",
+    "emojiUrl": "/emojis/cool-doge.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "38941675338",
+    "emojiTitle": ":cheers:",
+    "emojiUrl": "/emojis/cheers.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "39072846139",
+    "emojiTitle": ":smart:",
+    "emojiUrl": "/emojis/smart.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "40178954640",
+    "emojiTitle": ":partyparrot:",
+    "emojiUrl": "/emojis/partyparrot.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789641",
+    "emojiTitle": ":fingergun:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/73097-fingerguns.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789642",
+    "emojiTitle": ":peeprobotdance:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/9796-vampirepeped.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "40178954641",
+    "emojiTitle": ":peep-e-q:",
+    "emojiUrl": "/emojis/peep-e-q.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "41289654742",
+    "emojiTitle": ":peepjail:",
+    "emojiUrl": "/emojis/peepojail.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "42359764843",
+    "emojiTitle": ":peepotalk:",
+    "emojiUrl": "/emojis/peepotalk.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "43475876944",
+    "emojiTitle": ":peepo-okq:",
+    "emojiUrl": "/emojis/peepo-okq.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "44586957845",
+    "emojiTitle": ":peepo-lq:",
+    "emojiUrl": "/emojis/peepo1q.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "45697848946",
+    "emojiTitle": ":peepochat:",
+    "emojiUrl": "/emojis/peepochat.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "46758969147",
+    "emojiTitle": ":peepoclap:",
+    "emojiUrl": "/emojis/peepoclap.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "48975982349",
+    "emojiTitle": ":peepojamq:",
+    "emojiUrl": "/emojis/peepojamq.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "49068793450",
+    "emojiTitle": ":peepom16q:",
+    "emojiUrl": "/emojis/peepom16q.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "50187904551",
+    "emojiTitle": ":peeponotes:",
+    "emojiUrl": "/emojis/peeponotes.jpg",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "51290715652",
+    "emojiTitle": ":peepgaming:",
+    "emojiUrl": "/emojis/peepgaming.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "52309826753",
+    "emojiTitle": ":peeposad:",
+    "emojiUrl": "/emojis/peeposad.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "53410937854",
+    "emojiTitle": ":peeposhrug:",
+    "emojiUrl": "/emojis/peeposhrug.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "54521048955",
+    "emojiTitle": ":peeposq:",
+    "emojiUrl": "/emojis/peeposq.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "56743260157",
+    "emojiTitle": ":peepoq2:",
+    "emojiUrl": "/emojis/peepoq.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "57854371258",
+    "emojiTitle": ":peeps:",
+    "emojiUrl": "/emojis/peeps.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "58965482359",
+    "emojiTitle": ":0pepo-runq:",
+    "emojiUrl": "/emojis/0pepo_runq.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "59076593460",
+    "emojiTitle": ":peepo2:",
+    "emojiUrl": "/emojis/peepo.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "61298715662",
+    "emojiTitle": ":patrickq:",
+    "emojiUrl": "/emojis/01_patrickq.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "63410937864",
+    "emojiTitle": ":dancing-cat:",
+    "emojiUrl": "/emojis/01-dancing-cat.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "64521048965",
+    "emojiTitle": ":done:",
+    "emojiUrl": "/emojis/done.jpg",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "66743260167",
+    "emojiTitle": ":loading:",
+    "emojiUrl": "/emojis/loading.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "69076593470",
+    "emojiTitle": ":thankyou:",
+    "emojiUrl": "/emojis/thankyou.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "70187604571",
+    "emojiTitle": ":panic-intensifies:",
+    "emojiUrl": "/emojis/mild-panic-intensifies.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "71298715672",
+    "emojiTitle": ":trihard:",
+    "emojiUrl": "/emojis/trihard.jpg",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "72309826773",
+    "emojiTitle": ":kappa:",
+    "emojiUrl": "/emojis/kappa.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789674",
+    "emojiTitle": ":muslimpepe:",
+    "emojiUrl": "/emojis/muslim_pepoeq.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10836493943",
+    "emojiTitle": ":bluegrinch:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/88521-bluegrinch.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789489",
+    "emojiTitle": ":decreux_sad:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/95290-decreux-sad.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789484",
+    "emojiTitle": ":decreux_shh:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/94391-decreux-shh.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789490",
+    "emojiTitle": ":i_like_all_dit:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/19908-i-like-all-dit.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789491",
+    "emojiTitle": ":cat_heart:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/91307-cat-heart.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789492",
+    "emojiTitle": ":stretched_skull:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/81197-stretched-skull.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789493",
+    "emojiTitle": ":nerdgeo:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/24934-nerdgeo.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789494",
+    "emojiTitle": ":skeleton_stairing:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/54199-berserkskeletonmeme1.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789495",
+    "emojiTitle": ":cockroach_dancing:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/34027-cockroach-rainbows.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789496",
+    "emojiTitle": ":dancingskeleton:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/62409-dancingskeleton.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789497",
+    "emojiTitle": ":fuck_you_finger:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/22460-fuckyou.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789498",
+    "emojiTitle": ":happy_happy_happy:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/89119-happy.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789499",
+    "emojiTitle": ":memechewcat:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/32315-memechew.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789500",
+    "emojiTitle": ":SorryFrogStonks:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/44998-sorryfrogstonks.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789501",
+    "emojiTitle": ":shy_joe:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/22867-shy-joe.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789502",
+    "emojiTitle": ":oiiaooiia:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/21384-oiiaooiia.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789503",
+    "emojiTitle": ":elmofire:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/81562-elmofire.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789504",
+    "emojiTitle": ":cool_glass_smog:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/81562-elmofire.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789505",
+    "emojiTitle": ":actually_dog:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/16076-actuallydog.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789506",
+    "emojiTitle": ":what_the_f:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/58082-what-the.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "10254789507",
+    "emojiTitle": ":crazy_cockroach_dancing:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/52709-cockroach-dancing.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 1,
+    "emojiTitle": ":woman-yelling:",
+    "emojiUrl": "/emojis/woman-yelling.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 2,
+    "emojiTitle": ":watch-out:",
+    "emojiUrl": "/emojis/watch_out.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 3,
+    "emojiTitle": ":yuno:",
+    "emojiUrl": "/emojis/yuno.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 4,
+    "emojiTitle": ":you-no:",
+    "emojiUrl": "/emojis/y_u_no.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 5,
+    "emojiTitle": ":you-dont-say:",
+    "emojiUrl": "/emojis/you_dont_say.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 6,
+    "emojiTitle": ":whoa-guys:",
+    "emojiUrl": "/emojis/whoa_guys.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 7,
+    "emojiTitle": ":okay:",
+    "emojiUrl": "/emojis/okay.jpg",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 8,
+    "emojiTitle": ":panik:",
+    "emojiUrl": "/emojis/panik.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 9,
+    "emojiTitle": ":feels:",
+    "emojiUrl": "/emojis/feels.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 10,
+    "emojiTitle": ":epic-win:",
+    "emojiUrl": "/emojis/epic_win.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 11,
+    "emojiTitle": ":lol:",
+    "emojiUrl": "/emojis/lol.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 12,
+    "emojiTitle": ":rage:",
+    "emojiUrl": "/emojis/rage.jpg",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 13,
+    "emojiTitle": ":no:",
+    "emojiUrl": "/emojis/no.jpg",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 14,
+    "emojiTitle": ":notbad:",
+    "emojiUrl": "/emojis/notbad.jpg",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 15,
+    "emojiTitle": ":me-gusta:",
+    "emojiUrl": "/emojis/megusta.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 16,
+    "emojiTitle": ":see-what-you-did:",
+    "emojiUrl": "/emojis/i_see_what_you_did_there.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 17,
+    "emojiTitle": ":facepalm:",
+    "emojiUrl": "/emojis/facepalm.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 18,
+    "emojiTitle": ":crycat:",
+    "emojiUrl": "/emojis/crycat.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 19,
+    "emojiTitle": ":let-me-in:",
+    "emojiUrl": "/emojis/let_me_in.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 20,
+    "emojiTitle": ":woohoo-bananadance:",
+    "emojiUrl": "/emojis/woohoo-bananadance.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 21,
+    "emojiTitle": ":amd:",
+    "emojiUrl": "/emojis/amd.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 22,
+    "emojiTitle": ":amazon:",
+    "emojiUrl": "/emojis/amazon.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 23,
+    "emojiTitle": ":android:",
+    "emojiUrl": "/emojis/android.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 24,
+    "emojiTitle": ":golang:",
+    "emojiUrl": "/emojis/golang.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 25,
+    "emojiTitle": ":blob-salute:",
+    "emojiUrl": "/emojis/blob_salute.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 26,
+    "emojiTitle": ":blob-dance:",
+    "emojiUrl": "/emojis/blob-dance.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 27,
+    "emojiTitle": ":sadblob:",
+    "emojiUrl": "/emojis/sadblob.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 28,
+    "emojiTitle": ":blob-aww:",
+    "emojiUrl": "/emojis/blob_aww.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 29,
+    "emojiTitle": ":blue-blob-jump:",
+    "emojiUrl": "/emojis/blueblob_jump.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 30,
+    "emojiTitle": ":party-blob:",
+    "emojiUrl": "/emojis/party-blob.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 31,
+    "emojiTitle": ":fb-angry:",
+    "emojiUrl": "/emojis/fb-angry.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 32,
+    "emojiTitle": ":fb-wow:",
+    "emojiUrl": "/emojis/fbwow.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": 33,
+    "emojiTitle": ":banana-dance-duo:",
+    "emojiUrl": "/emojis/bananadance_duo.gif",
+    "isAnimated": false,
+    "isPremium": true
+  }
+]
