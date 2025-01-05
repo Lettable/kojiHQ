@@ -172,6 +172,7 @@ export default function ForumView() {
         isDarkTheme={isDarkTheme}
         toggleTheme={toggleTheme}
         isLoggedIn={isLoggedIn}
+        isPremium={currentUser?.isPremium}
       />
 
       {/* Hero Section */}

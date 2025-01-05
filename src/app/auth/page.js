@@ -66,6 +66,7 @@ export default function AuthPage() {
 
       if (response.ok) {
         localStorage.setItem('accessToken', data.accessToken)
+        
         setMessage({ type: 'success', text: 'Logged in successfully!' })
         router.push('/')
       } else {
@@ -130,6 +131,7 @@ export default function AuthPage() {
 
       if (response.ok) {
         localStorage.setItem('accessToken', data.accessToken)
+        localStorage.setItem('theme', 'dark')
         setMessage({ type: 'success', text: 'Account created successfully!' })
         router.push('/')
       } else {

@@ -615,7 +615,7 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 bg-zinc-900/50 p-5 rounded-xl md:grid-cols-3 gap-4">
               <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white p-3 hover:bg-zinc-800/50 border-0 shadow-lg cursor-pointer hover:scale-105 transition-transform`}
-                onClick={() => window.location.href = '/marketplace'}>
+                onClick={() => window.location.href = '/market'}>
                 <CardContent className="flex flex-col items-center justify-center p-6">
                   <CoinsIcon className="h-12 w-12 mb-4" />
                   <h3 className="text-xl font-semibold">Marketplace</h3>
