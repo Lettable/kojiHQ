@@ -16,6 +16,8 @@ import { FaEthereum } from 'react-icons/fa'
 import ReactMarkdown from 'react-markdown'
 import { motion, AnimatePresence } from 'framer-motion'
 import { jwtDecode } from 'jwt-decode'
+import remarkGfm from 'remark-gfm'
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 export default function ThreadView() {
     const [currentUser, setCurrentUser] = useState(null)
@@ -80,7 +82,7 @@ export default function ThreadView() {
         }
         getCurrentUser()
 
-        const threadId = pathname.split('/')
+        const threadId = pathname.split('/')[2]
         if (threadId) {
             fetchThreadById(threadId)
             fetchPosts(threadId)
@@ -159,7 +161,7 @@ export default function ThreadView() {
             if (!response.ok) {
                 throw new Error('Failed to submit reply')
             }
-            
+
             const ws = new WebSocket('wss://kojihq-ws.onrender.com');
             ws.onopen = () => {
                 ws.send(JSON.stringify({
@@ -237,6 +239,7 @@ export default function ThreadView() {
                 isDarkTheme={isDarkTheme}
                 toggleTheme={() => setIsDarkTheme(!isDarkTheme)}
                 isLoggedIn={isLoggedIn}
+                isPremium={currentUser?.isPremium}
             />
 
             <div className="container mx-auto text-white px-4 py-8">
@@ -245,7 +248,7 @@ export default function ThreadView() {
                     <div className="lg:w-3/4 space-y-6">
                         {/* Thread Content */}
                         <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0`}>
-                            <CardContent className="p-6">
+                            <CardContent className="p-6 pb-1">
                                 <div className="flex items-center text-white justify-between mb-4">
                                     <div className="flex items-center text-white space-x-4">
                                         <Avatar className="w-10 h-10">
@@ -258,19 +261,6 @@ export default function ThreadView() {
                                         </div>
                                     </div>
                                     <div className="flex items-center space-x-4 text-sm">
-                                        {/* <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => handleLike('thread', thread._id)}
-                                            className={`${
-                                                thread.likes.includes(currentUser?._id) 
-                                                ? 'text-yellow-500' 
-                                                : 'text-gray-400'
-                                            }`}
-                                        >
-                                            <Heart className="w-4 h-4 mr-1" />
-                                            {thread.likes.length}
-                                        </Button> */}
                                         <span className="flex items-center text-gray-400">
                                             <Eye className="w-4 h-4 mr-1" />
                                             {thread.views}
@@ -282,11 +272,22 @@ export default function ThreadView() {
                                     </div>
                                 </div>
 
-                                <h1 className="text-3xl text-white font-bold mb-6">{thread.title}</h1>
+                                <h1 className="text-3xl text-white text-center justify-center mt-2 items-center font-bold mb-6">{thread.title}</h1>
 
                                 <div className={`prose ${isDarkTheme ? 'prose-invert' : ''} max-w-none mb-6`}>
-                                    <ReactMarkdown>{thread.content}</ReactMarkdown>
+                                    <MarkdownPreview
+                                    style={{ backgroundColor: 'rgba(24, 24, 27, 0.5)' }}
+                                        className="m-0 bg-[#0d1117] text-[#c9d1d9] p-4 rounded-md markdown-body"
+                                        source={thread.content}
+                                    />
                                 </div>
+
+                                {/* <div className="markdown-body">
+                                    <MarkdownPreview
+                                        className="m-0 bg-black fill-black text-[#c9d1d9] p-4 rounded-md"
+                                        source={thread.content}
+                                    />
+                                </div> */}
 
                                 {thread.attachments.length > 0 && (
                                     <div className="space-y-2">
@@ -338,13 +339,13 @@ export default function ThreadView() {
 
                         <div className="space-y-4 text-white">
                             {posts.length === 0 && <AnimatePresence>
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0 }}
-                            >
-                                <p className='flex items-center text-white justify-center text-xl mt-30 pt-30'>No Posts yet!</p>
-                            </motion.div>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0 }}
+                                >
+                                    <p className='flex items-center text-white justify-center text-xl mt-30 pt-30'>No Posts yet!</p>
+                                </motion.div>
                             </AnimatePresence>}
 
                             <AnimatePresence>
@@ -377,7 +378,7 @@ export default function ThreadView() {
                                                                 </span>
                                                             </div>
                                                             <div className={`prose ${isDarkTheme ? 'prose-invert' : ''} max-w-none text-white mt-2`}>
-                                                                <ReactMarkdown>{post.content}</ReactMarkdown>
+                                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
                                                             </div>
                                                             <div className="flex items-center mt-4 space-x-4">
                                                                 {/* <Button

@@ -34,7 +34,7 @@ export default function ForumView() {
 
   const router = useRouter()
   const pathname = usePathname()
-  const forumId = pathname.split('/')
+  const forumId = pathname.split('/')[2]
 
   useEffect(() => {
     const fetchCryptoPrices = async () => {
@@ -78,77 +78,67 @@ export default function ForumView() {
       }
     }
 
-    getCurrentUser()
-    const storedTheme = localStorage.getItem('theme')
-    setIsDarkTheme(storedTheme ? storedTheme === 'dark' : true)
-
-    if (forumId) {
-      fetchForumData()
-      fetchThreads()
-    } else {
-      setError('No forum ID provided')
-      setIsLoading(false)
-    }
-  }, [forumId])
-
-  const fetchForumData = async () => {
-    try {
-      const response = await fetch(`/api/forum-action?forumId=${forumId}`, {
-        headers: {
-          'x-auth-token': `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
-      if (!response.ok) {
-        throw new Error('Failed to fetch forum data')
-      }
-      const data = await response.json()
-      setForumData(data)
-    } catch (error) {
-      console.error('Error fetching forum data:', error)
-      setError('Failed to load forum data')
-    }
-  }
-
-  const fetchThreads = async () => {
-    try {
-      const response = await fetch(`/api/thread-action?forumId=${forumId}&page=${currentPage}`, {
-        headers: {
-          'x-auth-token': `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
-      if (!response.ok) {
-        throw new Error('Failed to fetch threads')
-      }
-      const data = await response.json()
-      setThreads(data.threads)
-      setTotalPages(data.pagination.totalPages)
-      setIsLoading(false)
-    } catch (error) {
-      console.error('Error fetching threads:', error)
-      setError('Failed to load threads')
-      setIsLoading(false)
-    }
-  }
+    getCurrentUser();
+    const storedTheme = localStorage.getItem('theme');
+    setIsDarkTheme(storedTheme ? storedTheme === 'dark' : true);
+  }, [forumId]);
 
   useEffect(() => {
-    if (forumId) {
-      fetchThreads()
+    const fetchForumData = async () => {
+      if (!forumId) return;
+
+      try {
+        const response = await fetch(`/api/forum-action?forumId=${forumId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch forum data');
+        }
+        const data = await response.json();
+        setForumData(data);
+      } catch (error) {
+        console.error('Error fetching forum data:', error);
+        setError('Failed to load forum data');
+      }
     }
-  }, [currentPage, sortBy, forumId])
+
+    fetchForumData();
+  }, [forumId]);
+
+  useEffect(() => {
+    const fetchThreads = async () => {
+      if (!forumId) return;
+
+      try {
+        const response = await fetch(`/api/thread-action?forumId=${forumId}&page=${currentPage}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch threads');
+        }
+        const data = await response.json();
+        setThreads(data.threads);
+        setTotalPages(data.pagination.totalPages);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching threads:', error);
+        setError('Failed to load threads');
+        setIsLoading(false);
+      }
+    };
+
+    fetchThreads();
+  }, [forumId, currentPage]); 
 
   const handleCreateThread = () => {
-    router.push(`/create-thread?forumId=${forumId}`)
+    router.push(`/create-thread/${forumId}`);
   }
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   }
 
   const toggleTheme = () => {
-    const newTheme = !isDarkTheme
-    setIsDarkTheme(newTheme)
-    localStorage.setItem('theme', newTheme ? 'dark' : 'light')
+    const newTheme = !isDarkTheme;
+    setIsDarkTheme(newTheme);
+    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
   }
 
   if (isLoading) {

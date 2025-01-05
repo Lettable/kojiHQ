@@ -15,6 +15,9 @@ import Header from '@/partials/Header'
 import ReactMarkdown from 'react-markdown'
 import { jwtDecode } from 'jwt-decode'
 import uploadFile from '@/lib/utils/UploadFile'
+import ReactMarkdownEditorLite from 'react-markdown-editor-lite';
+import 'react-markdown-editor-lite/lib/index.css';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 export default function CreateThread() {
     const [currentUser, setCurrentUser] = useState(null)
@@ -68,7 +71,7 @@ export default function CreateThread() {
         fetchForums()
 
 
-        const forumId = pathname.split('/')
+        const forumId = pathname.split('/')[2]
         if (forumId) {
             fetchForumById(forumId)
         }
@@ -114,6 +117,11 @@ export default function CreateThread() {
         const files = Array.from(event.target.files)
         setAttachments(files)
     }
+
+    const handleEditorChange = ({ html, text }) => {
+        setContent(text);
+        // setContent(e.target.value)
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -182,6 +190,7 @@ export default function CreateThread() {
                 isDarkTheme={isDarkTheme}
                 toggleTheme={toggleTheme}
                 isLoggedIn={isLoggedIn}
+                isPremium={currentUser && currentUser.isPremium}
             />
 
             <main className="container mx-auto px-4 py-8">
@@ -239,17 +248,26 @@ export default function CreateThread() {
                                         <TabsTrigger value="preview">Preview</TabsTrigger>
                                     </TabsList>
                                     <TabsContent value="write">
-                                        <Textarea
+                                        {/* <Textarea
                                             id="content"
                                             value={content}
                                             onChange={(e) => setContent(e.target.value)}
                                             className={`w-full h-64 ${isDarkTheme ? 'bg-zinc-800 border-0 text-white' : 'bg-white border-0 text-black'}`}
                                             placeholder="Write your thread content here (Markdown supported)"
-                                        />
+                                        /> */}
+                                        <div className="markdown-editor-container">
+                                            <ReactMarkdownEditorLite
+                                                value={content}
+                                                onChange={handleEditorChange}
+                                                className={`w-full h-64 ${isDarkTheme ? 'bg-zinc-800 border-0 text-black' : 'bg-white border-0 text-black'}`}
+                                            />
+                                        </div>
+
                                     </TabsContent>
                                     <TabsContent value="preview">
                                         <ScrollArea className={`w-full h-64 p-4 rounded-md ${isDarkTheme ? 'bg-zinc-800' : 'bg-gray-100'}`}>
-                                            <ReactMarkdown>{content}</ReactMarkdown>
+                                        <MarkdownPreview style={{ backgroundColor: '#27272a' }} className='m-6 bg-[#0d1117] ' source={content} />
+
                                         </ScrollArea>
                                     </TabsContent>
                                 </Tabs>
