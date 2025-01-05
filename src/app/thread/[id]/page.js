@@ -248,7 +248,7 @@ export default function ThreadView() {
                     <div className="lg:w-3/4 space-y-6">
                         {/* Thread Content */}
                         <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0`}>
-                            <CardContent className="p-6 pb-1">
+                            <CardContent className="p-6 pb-4">
                                 <div className="flex items-center text-white justify-between mb-4">
                                     <div className="flex items-center text-white space-x-4">
                                         <Avatar className="w-10 h-10">

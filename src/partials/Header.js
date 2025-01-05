@@ -23,6 +23,10 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
     router.push('/auth');
   };
 
+  const handleCreateThread = () => {
+    router.push('/create-thread/6777b1e1da5ff8bd42fbbbd8')
+  }
+
   const handleAvatarClick = () => {
     router.push(`/user/${userId}`);
   };
@@ -122,25 +126,33 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
           </Button>
         )}
 
-        <Button onClick={handleSubmit} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
-          + SUBMIT A PRODUCT
-        </Button>
+        {isLoggedIn && (
+          <>
+            <Button onClick={handleCreateThread} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
+              Create Thread
+            </Button>
+
+            <Button onClick={handleSubmit} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
+              + SUBMIT A PRODUCT
+            </Button>
+          </>
+        )}
 
         {isLoggedIn && (
           <div
-          onClick={handleAvatarClick}
-          className="hidden md:flex items-center justify-center w-10 h-10 rounded-full overflow-hidden cursor-pointer relative"
-        ><img
-            src={avatar}
-            alt="User Avatar"
-            className="object-cover w-full h-full border hover:border-2 hover:border-yellow-500"
-          />
+            onClick={handleAvatarClick}
+            className="hidden md:flex items-center justify-center w-10 h-10 rounded-full overflow-hidden cursor-pointer relative"
+          ><img
+              src={avatar}
+              alt="User Avatar"
+              className="object-cover w-full h-full border hover:border-2 hover:border-yellow-500"
+            />
           </div>
         )}
         {!isLoggedIn && (
           <Button onClick={handleGoLogin} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
-          Login / Register
-        </Button>
+            Login / Register
+          </Button>
         )}
       </>
     );
