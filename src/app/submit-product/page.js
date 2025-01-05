@@ -1089,7 +1089,7 @@ export default function DigitalProductSubmission() {
                     description: "Your digital product has been submitted successfully",
                     variant: "success",
                 })
-                router.push(`/product/${response.product._id}`)
+                router.push(`/feed`)
             } else {
                 toast({
                     title: "Error",

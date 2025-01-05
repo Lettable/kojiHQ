@@ -16,7 +16,7 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
   const router = useRouter();
 
   const handleSubmit = () => {
-    router.push('/submit-project');
+    router.push('/submit-product');
   };
 
   const handleGoLogin = () => {
