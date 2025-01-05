@@ -97,11 +97,11 @@ export default function Marketplace() {
         setIsDarkTheme(storedTheme === 'dark');
     }, []);
 
-    const toggleTheme = () => {
-        const newTheme = !isDarkTheme;
-        setIsDarkTheme(newTheme);
-        localStorage.setItem('theme', newTheme ? 'dark' : 'light');
-    };
+    // const toggleTheme = () => {
+    //     const newTheme = !isDarkTheme;
+    //     setIsDarkTheme(newTheme);
+    //     localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+    // };
 
     const sendDiscordNotification = async () => {
         if (!currentUserId) return;
