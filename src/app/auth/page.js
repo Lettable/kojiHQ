@@ -40,7 +40,7 @@ export default function AuthPage() {
   }
 
   async function getUserIP() {
-    const res = await fetch('https://api.ipify.org?format=json');
+    const res = await fetch('https:/https://kojimarketplace.vercel.app/api.ipify.org?format=json');
     const data = await res.json();
     return data.ip;
   }
@@ -57,7 +57,7 @@ export default function AuthPage() {
     const password = event.target.loginPassword.value
 
     try {
-      const response = await fetch('/api/auth/signin', {
+      const response = await fetch('https://kojimarketplace.vercel.app/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, deviceDetails, userIP })
@@ -85,7 +85,7 @@ export default function AuthPage() {
     setMessage(null)
 
     try {
-      const response = await fetch('/api/auth/send-otp', {
+      const response = await fetch('https://kojimarketplace.vercel.app/api/auth/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: signupEmail, purpose: "sign-up" })
@@ -117,7 +117,7 @@ export default function AuthPage() {
     }
 
     try {
-      const response = await fetch('/api/auth/signup', {
+      const response = await fetch('https://kojimarketplace.vercel.app/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -160,7 +160,7 @@ export default function AuthPage() {
     const password = '12345678'
 
     try {
-      const response = await fetch('/api/auth/signin', {
+      const response = await fetch('https://kojimarketplace.vercel.app/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, deviceDetails, userIP })
