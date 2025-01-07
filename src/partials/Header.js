@@ -141,11 +141,11 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
         {isLoggedIn && (
           <div
             onClick={handleAvatarClick}
-            className="hidden md:flex items-center justify-center w-10 h-10 rounded-full overflow-hidden cursor-pointer relative"
+            className="hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:border-2 hover:border-yellow-500 overflow-hidden cursor-pointer relative"
           ><img
               src={avatar}
               alt="User Avatar"
-              className="object-cover w-full h-full border hover:border-2 hover:border-yellow-500"
+              className="object-cover w-full h-full"
             />
           </div>
         )}

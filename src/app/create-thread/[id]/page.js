@@ -18,6 +18,8 @@ import uploadFile from '@/lib/utils/UploadFile'
 import ReactMarkdownEditorLite from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 import MarkdownPreview from '@uiw/react-markdown-preview';
+import { Toaster } from '@/components/ui/toaster'
+import { useToast } from '@/hooks/use-toast'
 
 export default function CreateThread() {
     const [currentUser, setCurrentUser] = useState(null)
@@ -33,7 +35,8 @@ export default function CreateThread() {
     const [authToken, setAuthToken] = useState('');
     const params = useParams();
     const router = useRouter();
-    const pathname = usePathname()
+    const pathname = usePathname();
+    const { toast } = useToast();
 
     useEffect(() => {
         const getCurrentUser = () => {
@@ -44,6 +47,11 @@ export default function CreateThread() {
                 setCurrentUser(decodedToken);
                 setIsLoggedIn(true);
             } else {
+                toast({
+                    title: "Warning",
+                    description: "You are not logged In.",
+                    variant: "destructive",
+                })
                 setCurrentUser(null);
                 setIsLoggedIn(false);
             }
@@ -128,6 +136,14 @@ export default function CreateThread() {
         setIsSubmitting(true)
 
         try {
+            if (!currentUser) {
+                toast({
+                    title: "Warning",
+                    description: "You are not logged In.",
+                    variant: "destructive",
+                })
+                return
+            }
             const uploadPromises = attachments.map(async (file) => {
                 try {
                     const fileDetails = await uploadFile(file)
@@ -364,6 +380,7 @@ export default function CreateThread() {
                     </div>
                 </div>
             </main>
+            <Toaster />
         </div>
     )
 }

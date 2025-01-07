@@ -274,22 +274,37 @@ export default function ThreadView() {
 
                                 <h1 className="text-3xl text-white text-center justify-center mt-2 items-center font-bold mb-6">{thread.title}</h1>
 
-                                <div className={`prose ${isDarkTheme ? 'prose-invert' : ''} max-w-none mb-6`}>
+                                {/* <div className={`prose ${isDarkTheme ? 'prose-invert' : ''} max-w-none mb-6`}>
                                     <MarkdownPreview
                                     style={{ backgroundColor: 'rgba(24, 24, 27, 0.5)' }}
                                         className="m-0 bg-[#0d1117] text-[#c9d1d9] p-4 rounded-md markdown-body"
                                         source={thread.content}
                                     />
-                                </div>
-
-                                {/* <div className="markdown-body">
-                                    <MarkdownPreview
-                                        className="m-0 bg-black fill-black text-[#c9d1d9] p-4 rounded-md"
-                                        source={thread.content}
-                                    />
                                 </div> */}
 
-                                {thread.attachments.length > 0 && (
+                                {currentUser ? (
+                                    <div className={`prose ${isDarkTheme ? 'prose-invert' : ''} max-w-none mb-6`}>
+                                        <MarkdownPreview
+                                            style={{ backgroundColor: 'rgba(24, 24, 27, 0.5)' }}
+                                            className="m-0 bg-[#0d1117] text-[#c9d1d9] p-4 rounded-md markdown-body"
+                                            source={thread.content}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center p-6 bg-zinc-800/50 text-[#c9d1d9] rounded-md">
+                                        <p className="text-lg font-semibold">🔒 Please sign in to view this thread</p>
+                                        <p className="text-sm text-gray-400">It only takes 30 seconds to create an account!</p>
+                                        {/* <button onClick={() => { window.location.href = '/auth'; }} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500">
+                                            Sign In / Register
+                                        </button> */}
+                                        <Button onClick={() => { window.location.href = '/auth'; }} className={`${isDarkTheme ? 'bg-zinc-800/50 mt-4 px-4 py-2 hover:bg-zinc-800/20 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
+                                            Login / Register
+                                        </Button>
+                                    </div>
+                                )}
+
+
+                                {currentUser && thread.attachments.length > 0 && (
                                     <div className="space-y-2">
                                         <h3 className="text-lg text-white font-semibold mb-2">Attachments</h3>
                                         {thread.attachments.map((file) => (
@@ -338,15 +353,31 @@ export default function ThreadView() {
                         </div>
 
                         <div className="space-y-4 text-white">
-                            {posts.length === 0 && <AnimatePresence>
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0 }}
-                                >
-                                    <p className='flex items-center text-white justify-center text-xl mt-30 pt-30'>No Posts yet!</p>
-                                </motion.div>
-                            </AnimatePresence>}
+                            <AnimatePresence>
+                                {posts.length === 0 && currentUser && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0 }}
+                                    >
+                                        <p className="flex items-center text-white justify-center text-xl mt-30 pt-30">
+                                            No posts found!
+                                        </p>
+                                    </motion.div>
+                                )}
+
+                                {!currentUser && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0 }}
+                                    >
+                                        <p className="flex items-center text-white justify-center text-xl mt-30 pt-30">
+                                            Please log in to see the posts.
+                                        </p>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
 
                             <AnimatePresence>
                                 {posts.length > 0 && sortPosts(posts).map((post) => (
