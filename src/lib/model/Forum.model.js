@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { connectDB } from "../config/db";
 
 const ForumSchema = new mongoose.Schema({
   name: {
@@ -30,4 +31,5 @@ const ForumSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.models.Forum || mongoose.model('Forum', ForumSchema);
+const connection = await connectDB();
+export default connection.models.Forum || connection.model('Forum', ForumSchema);

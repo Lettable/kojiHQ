@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const postSchema = new mongoose.Schema(
   {
@@ -48,4 +50,4 @@ const postSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.models.Post || mongoose.model('Post', postSchema);
+export default connection.models.Post || connection.model('Post', postSchema);

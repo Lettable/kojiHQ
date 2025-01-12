@@ -4,29 +4,32 @@ const API_KEY = process.env.CRYPTOMUS_API_KEY;
 const MERCHANT_ID = '4884514a-4a42-466f-a231-d1534b6bb9e4';
 const CRYPTOMUS_BASE_URL = process.env.CRYPTOMUS_API_BASE_URL ||'https://api.cryptomus.com/v1/payment';
 
-function DecodeUniqueOID(UniqueOID, length) {
-  const timestampLength = length;
+function DecodeUniqueOID(UniqueOID) {
+  const parts = UniqueOID.split('-');
 
-  const timestamp = UniqueOID.slice(-timestampLength);
-  const userId = UniqueOID.slice(0, UniqueOID.length - timestampLength);
+  if (parts.length !== 3) {
+      throw new Error("Invalid UniqueOID format");
+  }
 
   return {
-      timestamp: parseInt(timestamp),
-      userId: userId
+      userId: parts[0],
+      telegramUID: parts[1],
+      timestamp: parseInt(parts[2]),
   };
 }
 
 export async function POST(req) {
   try {
-    const { name, description, amount, currency, userId, redirectUrl } = await req.json();
+      const { name, description, amount, currency, userId, redirectUrl, telegramUID } = await req.json();
 
-    const CurrentTime = Date.now()
-    const UniqueOID = `${userId}${CurrentTime}`
-    const DecodedData = DecodeUniqueOID(UniqueOID, CurrentTime.toString().length)
-    console.log('Original UID', userId)
-    console.log('TimeStamp', CurrentTime)
-    console.log('Unique OID', UniqueOID)
-    console.log('Decoded OID', DecodedData)
+      const UniqueOID = EncodeUniqueOID(userId, telegramUID);
+      const DecodedData = DecodeUniqueOID(UniqueOID);
+
+      console.log('Original UID:', userId);
+      console.log('Telegram UID:', telegramUID);
+      console.log('Timestamp:', DecodedData.timestamp);
+      console.log('Unique OID:', UniqueOID);
+      console.log('Decoded OID:', DecodedData);
 
 
     const chargeData = {

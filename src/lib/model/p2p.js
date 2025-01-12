@@ -8,11 +8,13 @@
 //   timestamp: { type: Date, default: Date.now },
 // });
 
-// const P2PMessage = mongoose.models.P2PMessage || mongoose.model("P2PMessage", P2pSchema);
+// const P2PMessage = connection.models.P2PMessage || connection.model("P2PMessage", P2pSchema);
 // export default P2PMessage;
 
 
 import mongoose from "mongoose";
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const P2pSchema = new mongoose.Schema({
   senderId: {
@@ -45,5 +47,5 @@ const P2pSchema = new mongoose.Schema({
   },
 });
 
-const P2PMessage = mongoose.models.P2PMessage || mongoose.model("P2PMessage", P2pSchema);
+const P2PMessage = connection.models.P2PMessage || connection.model("P2PMessage", P2pSchema);
 export default P2PMessage;

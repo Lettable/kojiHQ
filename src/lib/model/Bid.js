@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { connectDB } from "../config/db";
 
 const BidSchema = new mongoose.Schema({
   projectId: {
@@ -21,4 +22,6 @@ const BidSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.models.Bid || mongoose.model('Bid', BidSchema);
+
+const connection = await connectDB();
+export default connection.models.Bid || connection.model('Bid', BidSchema);

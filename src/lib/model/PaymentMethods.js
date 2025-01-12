@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const PaymentMethodSchema = new mongoose.Schema({
     userId: {
@@ -35,4 +37,4 @@ const PaymentMethodSchema = new mongoose.Schema({
     },
 });
 
-export default mongoose.models.PaymentMethod || mongoose.model('PaymentMethod', PaymentMethodSchema);
+export default connection.models.PaymentMethod || connection.model('PaymentMethod', PaymentMethodSchema);

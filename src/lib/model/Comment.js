@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-
-// Define the reply schema
+import { connectDB } from "../config/db";
 
 const secondsubreplySchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -10,8 +9,8 @@ const secondsubreplySchema = new mongoose.Schema({
     votes: { type: Number, default: 0 },
     timestamp: { type: Date, default: Date.now },
     replies: [{
-        type: mongoose.Schema.Types.Mixed, // Can store a subdocument or just data
-        default: [] // Replies can be subdocuments or just regular data
+        type: mongoose.Schema.Types.Mixed,
+        default: [] 
     }]
 }, { _id: true });
 
@@ -35,7 +34,6 @@ const replySchema = new mongoose.Schema({
     replies: [subreplySchema],
 }, { _id: true });
 
-// Define the main comment schema
 const commentSchema = new mongoose.Schema({
     projectId: { type: mongoose.Schema.Types.ObjectId, ref: 'Project', required: true },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -47,4 +45,5 @@ const commentSchema = new mongoose.Schema({
     timestamp: { type: Date, default: Date.now },
 }, { timestamps: true });
 
-module.exports = mongoose.models.Comment || mongoose.model('Comment', commentSchema);
+const connection = await connectDB();
+export default connection.models.Comment || connection.model('Comment', commentSchema);

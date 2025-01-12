@@ -128,10 +128,12 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
 
         {isLoggedIn && (
           <>
+            <Button onClick={() => { router.push('/ad-bot') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
+              Ad Bot
+            </Button>
             <Button onClick={handleCreateThread} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
               Create Thread
             </Button>
-
             <Button onClick={handleSubmit} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
               + SUBMIT A PRODUCT
             </Button>

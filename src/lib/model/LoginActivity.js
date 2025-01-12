@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
+import { connectDB } from "../config/db";
 
+const connection = await connectDB();
 const LoginActivitySchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -20,7 +22,7 @@ const LoginActivitySchema = new mongoose.Schema({
 },{ timestamps: true });
 
 const LoginActivity =
-  mongoose.models.LoginActivity ||
-  mongoose.model("LoginActivity", LoginActivitySchema);
+  connection.models.LoginActivity ||
+  connection.model("LoginActivity", LoginActivitySchema);
 
 export default LoginActivity;

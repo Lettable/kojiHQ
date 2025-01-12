@@ -1,23 +1,24 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://pythoncux:pythoncux@cluster0.tl7krxg.mongodb.net/projectify";
+const connections = {};
 
-if (!MONGO_URI) {
-  throw new Error('Please define the MONGO_URI environment variable inside .env.local');
-}
+export const connectDB = async (dbName = "KojiHQ") => {
+  if (connections[dbName]) {
+    console.log(`Using existing connection to ${dbName}`);
+    return connections[dbName];
+  }
 
-export const connectDB = async () => {
+  const MONGO_URI = `mongodb+srv://pythoncux:pythoncux@cluster0.tl7krxg.mongodb.net/${dbName}`;
+
   try {
-    if (mongoose.connection.readyState >= 1) {
-      console.log('Already connected to the database.');
-      return;
-    }
-    mongoose.set('strictQuery', true);
-    await mongoose.connect(MONGO_URI);
+    mongoose.set("strictQuery", true);
+    const newConnection = await mongoose.createConnection(MONGO_URI);
 
-    console.log('Database connected');
+    connections[dbName] = newConnection;
+    console.log(`Connected to database: ${dbName}`);
+    return newConnection;
   } catch (error) {
-    console.error('Error connecting to the database:', error);
+    console.error(`Error connecting to database ${dbName}:`, error);
     process.exit(1);
   }
 };

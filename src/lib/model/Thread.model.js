@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const threadSchema = new mongoose.Schema(
   {
@@ -83,4 +85,4 @@ const threadSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.models.Thread || mongoose.model('Thread', threadSchema);
+export default connection.models.Thread || connection.model('Thread', threadSchema);

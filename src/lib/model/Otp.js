@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const otpSchema = new mongoose.Schema({
   requestedByEmail: {
@@ -27,4 +29,4 @@ const otpSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.models.OTPs || mongoose.model("OTPs", otpSchema);
+export default connection.models.OTPs || connection.model("OTPs", otpSchema);

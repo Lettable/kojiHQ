@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const NotificationSchema = new mongoose.Schema({
   senderId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
@@ -10,4 +12,4 @@ const NotificationSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.models.Notification || mongoose.model("Notification", NotificationSchema);
+export default connection.models.Notification || connection.model("Notification", NotificationSchema);

@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const StaffSchema = new mongoose.Schema({
     userId: {
@@ -15,6 +17,6 @@ const StaffSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const Staff = mongoose.models.Staffs || mongoose.model('Staffs', StaffSchema);
+const Staff = connection.models.Staffs || connection.model('Staffs', StaffSchema);
 
 export default Staff

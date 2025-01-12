@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+import { connectDB } from "../config/db";
 
 const announcementSchema = new mongoose.Schema({
     title: {
@@ -15,5 +16,6 @@ const announcementSchema = new mongoose.Schema({
     }
 });
 
-const AnnouncementModel = mongoose.models.Announcement || mongoose.model('Announcement', announcementSchema);
+const connection = await connectDB();
+const AnnouncementModel = connection.models.Announcement || connection.model('Announcement', announcementSchema);
 export default AnnouncementModel;

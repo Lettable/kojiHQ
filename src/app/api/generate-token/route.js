@@ -51,6 +51,7 @@ export async function POST(req) {
         username: user.username,
         email: user.email,
         profilePic: user.profilePic,
+        telegramUID: user.telegramUID,
         isPremium: user.isPremium,
       },
       JWT_SECRET,

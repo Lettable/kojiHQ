@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -30,6 +32,12 @@ const UserSchema = new mongoose.Schema({
     required: function () {
       return !this.discordId;
     },
+  },
+  telegramUID: {
+    type: String,
+    required: false,
+    unique: true,
+    trim: true
   },
   profilePic: {
     type: String,
@@ -141,5 +149,5 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-const User = mongoose.models.User || mongoose.model('User', UserSchema);
+const User = connection.models.User || connection.model('User', UserSchema);
 export default User;

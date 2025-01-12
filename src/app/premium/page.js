@@ -39,6 +39,7 @@ const PremiumSubscription = () => {
                 currency: 'USD',
                 userId: currentUser.userId,
                 email: currentUser.email,
+                telegramUID: currentUser.telegramUID,
                 redirectUrl: window.location.href,
             }),
         });

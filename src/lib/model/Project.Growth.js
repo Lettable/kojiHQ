@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const GrowthSchema = new mongoose.Schema({
   projects: {
@@ -7,4 +9,4 @@ const GrowthSchema = new mongoose.Schema({
   }
 },{ timestamps: true });
 
-export default mongoose.model.GrowthSchema || mongoose.model('Growth', GrowthSchema);
+export default connection.model.GrowthSchema || connection.model('Growth', GrowthSchema);

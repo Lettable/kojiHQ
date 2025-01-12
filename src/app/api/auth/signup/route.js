@@ -15,7 +15,7 @@ export async function POST(request) {
   try {
     await connectDB();
 
-    const { username, email, password, otp } = await request.json();
+    const { username, email, password, otp, telegramUID } = await request.json();
 
     if (!username || !email || !password || !otp) {
       return NextResponse.json(
@@ -61,6 +61,7 @@ export async function POST(request) {
       username,
       email,
       passwordHash,
+      telegramUID,
       profilePic: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2-flKQOIE8ribInudJWpIsy94v1B7LMCemuBf8RcjpIY1Pt3hLHZR5r78rXBFW0cIhVg&usqp=CAU',
       bio: 'Edit your bio...',
       intractedWith: [],
@@ -77,6 +78,7 @@ export async function POST(request) {
         username: newUser.username,
         email: newUser.email,
         profilePic: newUser.profilePic,
+        telegramUID: telegramUID,
         isPremium: false,
       },
       JWT_SECRET,

@@ -29,7 +29,7 @@
 //   },
 // });
 
-// export default mongoose.models.Message || mongoose.model('Message', MessageSchema);
+// export default connection.models.Message || connection.model('Message', MessageSchema);
 
 
 // import mongoose from "mongoose";
@@ -52,12 +52,14 @@
 //   }
 // );
 
-// const Message = mongoose.models.Message || mongoose.model("Message", messageSchema);
+// const Message = connection.models.Message || connection.model("Message", messageSchema);
 
 // export default Message;
 
 
 import mongoose from "mongoose";
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const messageSchema = new mongoose.Schema({
   username: { type: String, required: true },
@@ -68,4 +70,4 @@ const messageSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now }
 });
 
-export default mongoose.models.Message || mongoose.model('Message', messageSchema);
+export default connection.models.Message || connection.model('Message', messageSchema);

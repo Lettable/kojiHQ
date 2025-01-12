@@ -10,6 +10,8 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import Link from 'next/link'
+import { FaQuestionCircle, FaRegQuestionCircle } from 'react-icons/fa'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { FaDiscord } from "react-icons/fa"
 
 export default function AuthPage() {
@@ -21,6 +23,7 @@ export default function AuthPage() {
   const [signupEmail, setSignupEmail] = useState('')
   const [signupOtp, setSignupOtp] = useState('')
   const [signupUsername, setSignupUsername] = useState('')
+  const [signupTelegramUID, setSignupTelegramUID] = useState('')
   const [signupPassword, setSignupPassword] = useState('')
   const router = useRouter()
 
@@ -123,6 +126,7 @@ export default function AuthPage() {
         body: JSON.stringify({
           username: signupUsername,
           email: signupEmail,
+          telegramUID: signupTelegramUID,
           password: signupPassword,
           otp: signupOtp
         })
@@ -148,7 +152,7 @@ export default function AuthPage() {
   //   localStorage.setItem('accessToken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzMyMWMyNjIxMGUzZjdjZjBiNGExMjQiLCJ1c2VybmFtZSI6Ikd1ZXN0IiwiZW1haWwiOiJndWVzdEBzaWRlcHJvamVjdG9yLnZlcmNlbC5hcHAiLCJwcm9maWxlUGljIjoiaHR0cHM6Ly9lbmNyeXB0ZWQtdGJuMC5nc3RhdGljLmNvbS9pbWFnZXM_cT10Ym46QU5kOUdjUzItZmxLUU9JRThyaWJJbnVkSldwSXN5OTR2MUI3TE1DZW11QmY4UmNqcElZMVB0M2hMSFpSNXI3OHJYQkZXMGNJaFZnJnVzcXA9Q0FVIiwiaWF0Ijo5OTMxMzM3MjU4LCJleHAiOjk5MzE5NDIwNTh9.HlX4eyQhdaP_HwKEEf-aZOxyJ57jncvMxHfsBqm8s7o')
   //   router.push('/')
   // }
-  
+
   const continueAsGuest = async (event) => {
     event.preventDefault()
     setMessage(null)
@@ -253,15 +257,15 @@ export default function AuthPage() {
                     whileTap={{ scale: 0.98 }}
                     className="mt-3"
                   >
-                  <Button
-                    className="bg-[#5865F2] hover:bg-[#4752C4] w-full text-white flex items-center justify-center"
-                    asChild
-                  >
-                    <a href="https://discord.com/oauth2/authorize?client_id=1325208183215620226&response_type=code&redirect_uri=https%3A%2F%2Fkojimarketplace.vercel.app%2Fapi%2Fdiscord&scope=identify+email">
-                    <FaDiscord className="h-5 w-5" />
-                      Go with Discord
-                    </a>
-                  </Button>
+                    <Button
+                      className="bg-[#5865F2] hover:bg-[#4752C4] w-full text-white flex items-center justify-center"
+                      asChild
+                    >
+                      <a href="https://discord.com/oauth2/authorize?client_id=1325208183215620226&response_type=code&redirect_uri=https%3A%2F%2Fkojimarketplace.vercel.app%2Fapi%2Fdiscord&scope=identify+email">
+                        <FaDiscord className="h-5 w-5" />
+                        Go with Discord
+                      </a>
+                    </Button>
                   </motion.div>
                 </form>
               </TabsContent>
@@ -277,6 +281,49 @@ export default function AuthPage() {
                           type="email"
                           value={signupEmail}
                           onChange={(e) => setSignupEmail(e.target.value)}
+                          required
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="signupUsername" className="text-white">Username</Label>
+                        <Input
+                          id="signupUsername"
+                          value={signupUsername}
+                          onChange={(e) => setSignupUsername(e.target.value)}
+                          required
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="signupTelegramUID" className="text-white mb-1 flex items-center gap-1">
+                          Telegram UID
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <FaRegQuestionCircle className='mb-[1px]' />
+                              </TooltipTrigger>
+                              <TooltipContent className="text-xs">
+                                {"We need your Telegram User Id to link your Telegram ID with our forum, Don't worry it's safe. get it by using rose bot."}
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </Label>
+                        <Input
+                          id="signupTelegramUID"
+                          value={signupTelegramUID}
+                          onChange={(e) => setSignupTelegramUID(e.target.value)}
+                          required
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="signupPassword" className="text-white">Password</Label>
+                        <Input
+                          id="signupPassword"
+                          type="password"
+                          value={signupPassword}
+                          onChange={(e) => setSignupPassword(e.target.value)}
                           required
                           className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                         />
@@ -305,27 +352,6 @@ export default function AuthPage() {
                           id="signupOtp"
                           value={signupOtp}
                           onChange={(e) => setSignupOtp(e.target.value)}
-                          required
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="signupUsername" className="text-white">Username</Label>
-                        <Input
-                          id="signupUsername"
-                          value={signupUsername}
-                          onChange={(e) => setSignupUsername(e.target.value)}
-                          required
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="signupPassword" className="text-white">Password</Label>
-                        <Input
-                          id="signupPassword"
-                          type="password"
-                          value={signupPassword}
-                          onChange={(e) => setSignupPassword(e.target.value)}
                           required
                           className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                         />

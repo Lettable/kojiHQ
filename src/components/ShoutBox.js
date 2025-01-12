@@ -76,6 +76,7 @@ export default function Shoutbox() {
   const [posts, setPost] = useState()
   const scrollAreaRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [callpage, setCallPage] = useState(false)
   const wsRef = useRef(null);
   const usernameRef = useRef('');
   const audioRef = useRef(null);

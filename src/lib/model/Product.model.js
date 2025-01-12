@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const productSchema = new mongoose.Schema(
   {
@@ -110,4 +112,4 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.models.Product || mongoose.model('Product', productSchema);
+export default connection.models.Product || connection.model('Product', productSchema);
