@@ -71,7 +71,7 @@ const EnhancedCallPage = () => {
     }, [])
 
     const initializeWebSocket = (userId) => {
-        webSocketRef.current = new WebSocket(`ws://kojihq-ws.onrender.com/voice?userId=${userId}`)
+        webSocketRef.current = new WebSocket(`wss://kojihq-ws.onrender.com/voice?userId=${userId}`)
 
         webSocketRef.current.onopen = () => {
             console.log('WebSocket connection established')
