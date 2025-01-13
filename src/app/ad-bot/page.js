@@ -368,6 +368,7 @@ export default function AdManagementPage() {
   const [showFullToken, setShowFullToken] = useState(false)
   const [newAdContent, setNewAdContent] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
+  const [tgUid, setTgUid] = useState('')
   const [adHistory, setAdHistory] = useState([])
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [authToken, setAuthToken] = useState('')
@@ -383,6 +384,7 @@ export default function AdManagementPage() {
         try {
           const decodedToken = jwtDecode(token)
           const telegramUID = decodedToken.telegramUID
+          setTgUid(telegramUID)
           const response = await fetch(`/api/tg-user?id=${telegramUID}`)
           if (!response.ok) throw new Error('Failed to fetch user data')
           const userData = await response.json()
@@ -634,8 +636,8 @@ export default function AdManagementPage() {
                     </TooltipProvider>
                   </CardTitle>
                   <div className="flex items-center gap-2">
-                    <Input value={`https://kojiforum.com/ref/${currentUser?.username}`} readOnly className={isDarkTheme ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-gray-300'} />
-                    <Button size="icon" onClick={() => copyToClipboard(`https://kojiforum.com/ref/${currentUser?.username}`)}>
+                    <Input value={`https://t.me/LettableBot?start=${tgUid}`} readOnly className={isDarkTheme ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-gray-300'} />
+                    <Button size="icon" onClick={() => copyToClipboard(`https://t.me/LettableBot?start=${tgUid}`)}>
                       <Copy className="h-4 w-4" />
                     </Button>
                   </div>

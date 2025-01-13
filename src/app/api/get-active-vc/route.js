@@ -13,17 +13,15 @@ import { NextResponse } from "next/server";
  */
 
 export async function GET(req) {
-    await connectDB();
-
     try {
+        await connectDB();
+
         const activeUsers = await ActiveVoiceUser.find({}, { _id: 0, userId: 1 });
 
         if (!activeUsers.length) {
             return NextResponse.json({ success: true, activeUsers: [] }, { status: 200 });
         }
-
         const userIds = activeUsers.map(user => user.userId);
-
         const users = await User.find(
             { _id: { $in: userIds } },
             { username: 1, profilePic: 1, statusEmoji: 1 }
@@ -32,7 +30,11 @@ export async function GET(req) {
         return NextResponse.json({ success: true, activeUsers: users }, { status: 200 });
 
     } catch (error) {
-        console.error("Error fetching active voice users:", error);
-        return NextResponse.json({ success: false, message: "Server error", error: error.message }, { status: 500 });
+        console.error("Error fetching active voice users:", error.stack);
+
+        return NextResponse.json(
+            { success: false, message: "Server error", error: error.message },
+            { status: 500 }
+        );
     }
 }

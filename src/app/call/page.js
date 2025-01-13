@@ -11,6 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Mic, MicOff, Video, VideoOff, PhoneOff, Volume2, VolumeX, UserMinus, User, Settings, Shield, MonitorUp } from 'lucide-react'
 import Shoutbox from '@/components/ShoutBox'
 import { jwtDecode } from 'jwt-decode'
+import VideoCall from '@/components/VideoCall'
 
 const EnhancedCallPage = () => {
     const [participants, setParticipants] = useState([])
@@ -169,7 +170,7 @@ const EnhancedCallPage = () => {
         pc.ontrack = (event) => {
             const participant = participants.find(p => p.userId === userId)
             if (participant) {
-                setParticipants(prev => prev.map(p => 
+                setParticipants(prev => prev.map(p =>
                     p.userId === userId ? { ...p, stream: event.streams[0] } : p
                 ))
             }
@@ -314,7 +315,7 @@ const EnhancedCallPage = () => {
         <div className="flex flex-col h-screen bg-black text-white">
             <div className="flex-1 flex overflow-hidden">
                 <div className="flex-1 p-4 flex w-10 flex-col">
-                    <div className="flex-1 relative bg-white/10 rounded-lg overflow-hidden mb-4">
+                    {/* <div className="flex-1 relative bg-white/10 rounded-lg overflow-hidden mb-4">
                         <AnimatePresence>
                             {participants.map((user) => (
                                 user.userId === activeStreamerId && (
@@ -374,100 +375,94 @@ const EnhancedCallPage = () => {
                                                     }}
                                                     transition={{ duration: 0.2 }}
                                                     className="absolute inset-0 rounded-full border-2 border-transparent"
-                                />
-                            )}
-                        </div>
+                                                />
+                                            )}
+                                        </div>
 
-                        <div className="mt-0 text-sm text-gray-300 text-center truncate w-16">
-                            {user.username}
-                        </div>
+                                        <div className="mt-0 text-sm text-gray-300 text-center truncate w-16">
+                                            {user.username}
+                                        </div>
 
-                        <div className="absolute bottom-1 right-1 flex gap-1">
-                            {user.isStreaming && (
-                                <div className="bg-red-500 rounded-full p-1">
-                                    <Video size={12} />
-                                </div>
-                            )}
-                            {user.isMuted && (
-                                <div className="bg-gray-800 rounded-full p-1">
-                                    <MicOff size={12} />
-                                </div>
-                            )}
-                        </div>
-                    </motion.div>
-                ))}
+                                        <div className="absolute bottom-1 right-1 flex gap-1">
+                                            {user.isStreaming && (
+                                                <div className="bg-red-500 rounded-full p-1">
+                                                    <Video size={12} />
+                                                </div>
+                                            )}
+                                            {user.isMuted && (
+                                                <div className="bg-gray-800 rounded-full p-1">
+                                                    <MicOff size={12} />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </ScrollArea>
+                    </div>
+                    <div className="flex justify-center mt-4 space-x-4">
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button onClick={toggleMute} variant={isMuted ? "destructive" : "secondary"} className="rounded-full">
+                                        {isMuted ? <MicOff /> : <Mic />}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>{isMuted ? 'Unmute' : 'Mute'} Microphone</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button onClick={toggleVideo} variant={isVideoOn ? "secondary" : "destructive"} className="rounded-full">
+                                        {isVideoOn ? <Video /> : <VideoOff />}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>{isVideoOn ? 'Turn Off' : 'Turn On'} Video</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button onClick={toggleScreenShare} variant={isScreenSharing ? "destructive" : "secondary"} className="rounded-full">
+                                        <MonitorUp />
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>{isScreenSharing ? 'Stop' : 'Start'} Screen Sharing</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button onClick={handleJoinLeave} variant={isJoined ? "destructive" : "default"} className="rounded-full">
+                                        {isJoined ? <PhoneOff /> : 'Join Call'}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>{isJoined ? 'Leave' : 'Join'} Call</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div> */}
+
+                    <div style={{ height: "100vh", width: "100vw" }}>
+                        <VideoCall />
+                    </div>
+                </div>
+                <div className="w-[400px] bg-zinc-800/50 p-4 overflow-hidden flex flex-col">
+                    <h2 className="text-xl font-bold mb-4">Chat</h2>
+                    <Shoutbox callpageProp={true} />
+                </div>
             </div>
-        </ScrollArea>
-    </div>
-    <div className="flex justify-center mt-4 space-x-4">
-        <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <Button onClick={toggleMute} variant={isMuted ? "destructive" : "secondary"} className="rounded-full">
-                        {isMuted ? <MicOff /> : <Mic />}
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                    <p>{isMuted ? 'Unmute' : 'Mute'} Microphone</p>
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <Button onClick={toggleVideo} variant={isVideoOn ? "secondary" : "destructive"} className="rounded-full">
-                        {isVideoOn ? <Video /> : <VideoOff />}
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                    <p>{isVideoOn ? 'Turn Off' : 'Turn On'} Video</p>
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <Button onClick={toggleScreenShare} variant={isScreenSharing ? "destructive" : "secondary"} className="rounded-full">
-                        <MonitorUp />
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                    <p>{isScreenSharing ? 'Stop' : 'Start'} Screen Sharing</p>
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <Button onClick={handleJoinLeave} variant={isJoined ? "destructive" : "default"} className="rounded-full">
-                        {isJoined ? <PhoneOff /> : 'Join Call'}
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                    <p>{isJoined ? 'Leave' : 'Join'} Call</p>
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
-    </div>
-</div>
-<div className="w-[400px] bg-zinc-800/50 p-4 overflow-hidden flex flex-col">
-    <h2 className="text-xl font-bold mb-4">Chat</h2>
-    <Shoutbox callpageProp={true} />
-</div>
-</div>
-{isScreenSharing && (
-<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div className="bg-zinc-800 p-4 rounded-lg">
-        <h3 className="text-xl font-bold mb-2">Screen Share</h3>
-        <video ref={screenShareRef} autoPlay playsInline className="w-full max-h-[80vh] object-contain" />
-        <Button onClick={toggleScreenShare} variant="destructive" className="mt-4">
-            Stop Sharing
-        </Button>
-    </div>
-</div>
-)}
-</div>
-)
+
+        </div>
+    )
 }
 
 export default EnhancedCallPage
