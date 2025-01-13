@@ -455,10 +455,10 @@ const EnhancedCallPage = () => {
                         <VideoCall />
                     </div>
                 </div>
-                <div className="w-[400px] bg-zinc-800/50 p-4 overflow-hidden flex flex-col">
+                {/* <div className="w-[400px] bg-zinc-800/50 p-4 overflow-hidden flex flex-col">
                     <h2 className="text-xl font-bold mb-4">Chat</h2>
                     <Shoutbox callpageProp={true} />
-                </div>
+                </div> */}
             </div>
 
         </div>
