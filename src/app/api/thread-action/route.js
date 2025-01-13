@@ -4,6 +4,7 @@ import Thread from '@/lib/model/Thread.model';
 import PostModel from '@/lib/model/Post.model';
 import User from '@/lib/model/User.model';
 
+
 export async function GET(req) {
     await connectDB();
 
