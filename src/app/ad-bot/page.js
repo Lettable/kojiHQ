@@ -392,7 +392,7 @@ export default function AdManagementPage() {
           const userData = await response.json()
           setCurrentUser({ ...userData, isPremium: decodedToken.isPremium })
           setIsLoggedIn(true)
-          setIsAdRunning(userData.is_running)
+          setIsAdRunning(userData.is_activated)
         } catch (error) {
           console.error('Error fetching user data:', error)
           toast({
