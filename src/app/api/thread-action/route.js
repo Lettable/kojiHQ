@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/config/db';
-import Thread from '@/lib/model/Thread.model.js';
+import Thread from '@/lib/model/Thread.model';
 import PostModel from '@/lib/model/Post.model';
+import User from '@/lib/model/User.model';
 
 export async function GET(req) {
     await connectDB();
@@ -16,7 +17,7 @@ export async function GET(req) {
             isPinned: true,
             status: 'active'
         })
-        .populate('userId', 'username profilePic')
+        .populate({ path: 'userId', model: 'User', select: 'username profilePic' })
         .sort({ createdAt: -1 });
 
         const skip = (page - 1) * limit;
@@ -25,7 +26,7 @@ export async function GET(req) {
             isPinned: false,
             status: 'active'
         })
-        .populate('userId', 'username profilePic')
+        .populate({ path: 'userId', model: 'User', select: 'username profilePic' })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit);
