@@ -415,7 +415,7 @@ export default function AdManagementPage() {
     const fetchAdHistory = async () => {
       try {
         const telegramUID = jwtDecode(localStorage.getItem('accessToken')).telegramUID
-        const response = await fetch(`/api/ad-history?id=${telegramUID}`)
+        const response = await fetch(`/api/tg-ad-history?id=${telegramUID}`)
         if (!response.ok) throw new Error('Failed to fetch ad history')
         const history = await response.json()
         setAdHistory(history)
