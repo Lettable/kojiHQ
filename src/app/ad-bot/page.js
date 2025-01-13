@@ -369,6 +369,7 @@ export default function AdManagementPage() {
   const [newAdContent, setNewAdContent] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [tgUid, setTgUid] = useState('')
+  const [username, setUsername] = useState('')
   const [adHistory, setAdHistory] = useState([])
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [authToken, setAuthToken] = useState('')
@@ -385,6 +386,7 @@ export default function AdManagementPage() {
           const decodedToken = jwtDecode(token)
           const telegramUID = decodedToken.telegramUID
           setTgUid(telegramUID)
+          setUsername(decodedToken.username)
           const response = await fetch(`/api/tg-user?id=${telegramUID}`)
           if (!response.ok) throw new Error('Failed to fetch user data')
           const userData = await response.json()
@@ -615,11 +617,11 @@ export default function AdManagementPage() {
               <CardContent className="space-y-4">
                 <div>
                   <p className="text-sm text-gray-400">Username</p>
-                  <p className="font-medium">{currentUser?.username}</p>
+                  <p className="font-medium">{username}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-400">Telegram ID</p>
-                  <p className="font-medium">{currentUser?.telegramUID}</p>
+                  <p className="font-medium">{tgUid}</p>
                 </div>
                 <div>
                   <CardTitle className="flex items-center gap-1">
