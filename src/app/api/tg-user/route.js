@@ -20,7 +20,7 @@ export async function GET(req) {
         return NextResponse.json({
             user_id: user.user_id,
             token: user.token || "No Token",
-            is_activated: user.is_activated,
+            is_activated: user.is_running,
             credits: user.credits || 1,
             totalAdsSent: forwardedCount || 1
         });

@@ -660,7 +660,7 @@ export default function AdManagementPage() {
                   </CardTitle>
                   <div className="flex items-center gap-2">
                     <Input
-                      value={showFullToken ? currentUser?.token : `${currentUser?.token?.slice(0, 20)}*************`}
+                      value={showFullToken ? currentUser?.token : `${currentUser?.token?.slice(0, 7)}*************`}
                       readOnly
                       className={isDarkTheme ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-gray-300'}
                     />
