@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import "../style/globals.css";
 import Head from 'next/head';
+import Script from "next/script";
 // import { Analytics } from "@vercel/analytics/react"
 
 const geistSans = localFont({
@@ -39,10 +40,12 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <Head>
         <meta name="cryptomus" content="4884514a" />
+        
       </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Script src="https://8x8.vc/vpaas-magic-cookie-e1caf5543ce644e7a0e4632ef7b0229a/external_api.js" strategy="lazyOnload" />
         {children}
         <SpeedInsights />
         {/* <Analytics /> */}
