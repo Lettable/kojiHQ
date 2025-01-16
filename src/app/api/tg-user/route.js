@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { Users, Forward } from "@/lib/model/Ads.model.js";
+import Users from "@/lib/model/adUser.model.js";
+import Forwarded from "@/lib/model/adForwarded.model.js";
+import { connectDB } from "@/lib/config/db";
 
 export async function GET(req) {
     try {
@@ -14,15 +16,15 @@ export async function GET(req) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        const forwardData = await Forward.findOne({ user_id });
+        const forwardData = await Forwarded.findOne({ user_id: user_id });
         const forwardedCount = forwardData ? forwardData.count : 0;
 
         return NextResponse.json({
             user_id: user.user_id,
             token: user.token || "No Token",
-            is_activated: user.is_running,
-            credits: user.credits || 1,
-            totalAdsSent: forwardedCount || 1
+            is_running: user.is_running,
+            credits: user.credits,
+            totalAdsSent: forwardedCount
         });
 
     } catch (error) {

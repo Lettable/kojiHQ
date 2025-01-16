@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Ads } from "@/lib/model/Ads.model.js";
+import AdHistory from "@/lib/model/Ads.model.js";
 
 export async function GET(req) {
     try {
@@ -9,7 +9,7 @@ export async function GET(req) {
             return NextResponse.json({ error: "User ID is required" }, { status: 400 });
         }
 
-        const adsHistory = await Ads.find({ user_id }).sort({ createdAt: -1 });
+        const adsHistory = await AdHistory.find({ user_id: user_id }).sort({ createdAt: -1 });
 
         if (!adsHistory.length) {
             return NextResponse.json({ error: "No ad history found" }, { status: 404 });
