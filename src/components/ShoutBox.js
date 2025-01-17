@@ -11,6 +11,7 @@ import { AlertTriangle, Send } from 'lucide-react';
 import EnhancedEmojiPicker from '@/components/EmojiPicker';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import LoadingIndicator from '@/components/LoadingIndicator';
 
 const renderTextWithEmojis = (text, emojis) => {
   if (!text || typeof text !== 'string') return text || '';
@@ -82,6 +83,7 @@ export default function Shoutbox() {
   const audioRef = useRef(null);
   const router = useRouter();
   const [isDarkTheme, setIsDarkTheme] = useState(true);
+  const [isWebSocketConnected, setIsWebSocketConnected] = useState(false);
 
   const scrollToBottom = useCallback(() => {
     if (scrollAreaRef.current) {
@@ -99,6 +101,7 @@ export default function Shoutbox() {
 
     wsRef.current.onopen = () => {
       console.log('WebSocket connected');
+      setIsWebSocketConnected(true);
     };
 
     wsRef.current.onmessage = (event) => {
@@ -126,8 +129,6 @@ export default function Shoutbox() {
           }
         }
 
-
-
         if (!newMessage.type) {
           setMessages((prev) => [
             ...prev,
@@ -149,17 +150,23 @@ export default function Shoutbox() {
 
     wsRef.current.onclose = (event) => {
       console.log('WebSocket disconnected', event.reason);
+      setIsWebSocketConnected(false);
       setTimeout(connectWebSocket, 5000);
     };
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const [emojisResponse, messagesResponse] = await Promise.all([
           fetch('/api/emojis'),
           fetch('/api/messages')
         ]);
+
+        if (!emojisResponse.ok || !messagesResponse.ok) {
+          throw new Error('Failed to fetch emojis or messages');
+        }
 
         const emojisData = await emojisResponse.json();
         const messagesData = await messagesResponse.json();
@@ -174,6 +181,9 @@ export default function Shoutbox() {
           setUser(decoded);
 
           const authResponse = await fetch(`/api/check-authorization?userId=${decoded.userId}`);
+          if (!authResponse.ok) {
+            throw new Error('Failed to check authorization');
+          }
           const authData = await authResponse.json();
           setUser(prev => ({ ...prev, isAuthorized: authData.isAuthorized }));
         }
@@ -187,7 +197,6 @@ export default function Shoutbox() {
     fetchData();
     connectWebSocket();
 
-    // Get theme from localStorage
     const storedTheme = localStorage.getItem('theme');
     setIsDarkTheme(storedTheme ? storedTheme === 'dark' : true);
 
@@ -238,43 +247,47 @@ export default function Shoutbox() {
       <main className="flex-grow flex flex-col overflow-hidden">
         <ScrollArea className="flex-grow" ref={scrollAreaRef} style={{ height: '500px' }}>
           <div className="p-4 space-y-4">
-            <AnimatePresence>
-              {messages.map((message) => (
-                <motion.div
-                  key={message._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  className={`flex items-start space-x-3 ${message.userId === user?.userId ? 'justify-end' : 'justify-start'}`}
-                >
-                  {message.userId !== user?.userId && (
-                    <Link href={`/user/${message.userId}`}>
-                      <img
-                        src={message.profilePic || '/placeholder.svg?height=32&width=32'}
-                        alt={message.username}
-                        className="w-8 h-8 rounded-full cursor-pointer"
-                      />
-                    </Link>
-                  )}
-                  <div className={`flex flex-col ${message.userId === user?.userId ? 'items-end' : 'items-start'}`}>
-                    <div className={`px-4 py-2 rounded-lg max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg ${message.userId === user?.userId
-                      ? 'bg-blue-600 text-white'
-                      : isDarkTheme
-                        ? 'bg-zinc-800 text-white'
-                        : 'bg-zinc-200 text-black'
-                      }`}>
-                      {message.userId !== user?.userId && (
-                        <p className={`font-semibold text-xs ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'}`}>{message.username}</p>
-                      )}
-                      <p className="text-sm break-words">{renderTextWithEmojis(message.content, emojis)}</p>
+            {isLoading ? (
+              <LoadingIndicator />
+            ) : (
+              <AnimatePresence>
+                {messages.map((message) => (
+                  <motion.div
+                    key={message._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className={`flex items-start space-x-3 ${message.userId === user?.userId ? 'justify-end' : 'justify-start'}`}
+                  >
+                    {message.userId !== user?.userId && (
+                      <Link href={`/user/${message.userId}`}>
+                        <img
+                          src={message.profilePic || '/placeholder.svg?height=32&width=32'}
+                          alt={message.username}
+                          className="w-8 h-8 rounded-full cursor-pointer"
+                        />
+                      </Link>
+                    )}
+                    <div className={`flex flex-col ${message.userId === user?.userId ? 'items-end' : 'items-start'}`}>
+                      <div className={`px-4 py-2 rounded-lg max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg ${message.userId === user?.userId
+                        ? 'bg-blue-600 text-white'
+                        : isDarkTheme
+                          ? 'bg-zinc-800 text-white'
+                          : 'bg-zinc-200 text-black'
+                        }`}>
+                        {message.userId !== user?.userId && (
+                          <p className={`font-semibold text-xs ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'}`}>{message.username}</p>
+                        )}
+                        <p className="text-sm break-words">{renderTextWithEmojis(message.content, emojis)}</p>
+                      </div>
+                      <span className={`text-xs ${isDarkTheme ? 'text-gray-400' : 'text-gray-500'} mt-1`}>
+                        {formatTimestamp(message.createdAt)}
+                      </span>
                     </div>
-                    <span className={`text-xs ${isDarkTheme ? 'text-gray-400' : 'text-gray-500'} mt-1`}>
-                      {formatTimestamp(message.createdAt)}
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            )}
             {posts && posts.map((post) => (
               <p className='bg-zinc-600/50 text-gray-200 rounded-lg items-center justify-center text-center text-sm' key={post._id}>New Post: {post.content}</p>
             ))}
@@ -329,51 +342,54 @@ export default function Shoutbox() {
         )} */}
 
 
-        {user ? (
-          user.isAuthorized ? (
-            <div className={`border-t ${isDarkTheme ? 'border-white/10' : 'border-black/10'} p-4`}>
-              <div className="flex items-center space-x-2 min-h-[31px] max-h-[41px] ">
-                <Textarea
-                  placeholder="Type your message..."
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  className={`flex-grow min-h-[31px] max-h-[41px] resize-none ${isDarkTheme
-                    ? 'bg-white/5 border-white/10 focus:border-yellow-400/50'
-                    : 'bg-black/5 border-black/10 focus:border-yellow-600/50'
-                    } rounded-full py-2 px-4`}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      sendMessage();
-                    }
-                  }}
-                />
-                <EnhancedEmojiPicker onEmojiSelect={handleEmojiSelect} isDarkTheme={isDarkTheme} />
-                <Button
-                  onClick={sendMessage}
-                  disabled={!newMessage.trim()}
-                  className="bg-yellow-600 hover:bg-yellow-700 rounded-full p-auto"
-                >
-                  <Send className="h-auto w-auto" />
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className={`border-t ${isDarkTheme ? 'border-white/10' : 'border-black/10'} p-4`}>
+        <div className={`border-t ${isDarkTheme ? 'border-white/10' : 'border-black/10'} p-4`}>
+          {isWebSocketConnected ? (
+            user ? (
+              user.isAuthorized ? (
+                <div className="flex items-center space-x-2 min-h-[31px] max-h-[41px] ">
+                  <Textarea
+                    placeholder="Type your message..."
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    className={`flex-grow min-h-[31px] max-h-[41px] resize-none ${isDarkTheme
+                      ? 'bg-white/5 border-white/10 focus:border-yellow-400/50'
+                      : 'bg-black/5 border-black/10 focus:border-yellow-600/50'
+                      } rounded-full py-2 px-4`}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                      }
+                    }}
+                  />
+                  <EnhancedEmojiPicker onEmojiSelect={handleEmojiSelect} isDarkTheme={isDarkTheme} />
+                  <Button
+                    onClick={sendMessage}
+                    disabled={!newMessage.trim()}
+                    className="bg-yellow-600 hover:bg-yellow-700 rounded-full p-auto"
+                  >
+                    <Send className="h-auto w-auto" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center space-x-2 text-yellow-400">
+                  <AlertTriangle className="w-4 h-4" />
+                  <p>You may have done something unusual. It should be fixed soon, or contact support.</p>
+                </div>
+              )
+            ) : (
               <div className="flex items-center justify-center space-x-2 text-yellow-400">
                 <AlertTriangle className="w-4 h-4" />
-                <p>You may have done something unusual. It should be fixed soon, or contact support.</p>
+                <p>Please sign in to participate in the chat</p>
               </div>
-            </div>
-          )
-        ) : (
-          <div className={`border-t ${isDarkTheme ? 'border-white/10' : 'border-black/10'} p-4`}>
+            )
+          ) : (
             <div className="flex items-center justify-center space-x-2 text-yellow-400">
               <AlertTriangle className="w-4 h-4" />
-              <p>Please sign in to participate in the chat</p>
+              <p>Connecting to chat... Please wait.</p>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
       </main>
       <style jsx global>{`

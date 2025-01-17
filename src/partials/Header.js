@@ -36,11 +36,11 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
   };
 
   useEffect(() => {
-    const fetchNotifications = async () => {
+    const fetchNotifications = async (userId) => {
       try {
         const response = await fetch('/api/get-notification', {
           method: 'POST',
-          body: JSON.stringify({ userId }),
+          body: JSON.stringify({ userId: userId }),
           headers: {
             'Content-Type': 'application/json',
           },
@@ -57,7 +57,7 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
       }
     };
 
-    fetchNotifications();
+    fetchNotifications(userId);
   }, [userId]);
 
   const renderHeaderButtons = () => {
