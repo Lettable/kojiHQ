@@ -754,7 +754,6 @@ export default function Shoutbox() {
             </div>
           )}
         </div>
-
       </main>
       <style jsx global>{`
         .mention {
