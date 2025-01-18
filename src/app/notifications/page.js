@@ -234,7 +234,7 @@ export default function NotificationsPage() {
                 setIsLoggedIn(true);
                 return decodedToken.userId
             } else {
-                setCurrentUser(null);
+                setCurrentUserId(null);
                 setIsLoggedIn(false);
                 router.push('/auth');
             }
