@@ -42,6 +42,7 @@
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.454.0",
+    "markdown-it": "^14.1.0",
     "meta-fetcher": "^3.1.1",
     "mongoose": "^8.9.2",
     "next": "^15.0.3",

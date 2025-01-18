@@ -18,6 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { jwtDecode } from 'jwt-decode'
 import remarkGfm from 'remark-gfm'
 import MarkdownPreview from '@uiw/react-markdown-preview';
+import MarkdownWithEmojis from '@/partials/MarkdownWithEmojis'
 
 export default function ThreadView() {
     const [currentUser, setCurrentUser] = useState(null)
@@ -63,7 +64,7 @@ export default function ThreadView() {
         };
 
         fetchCryptoPrices();
-        const interval = setInterval(fetchCryptoPrices, 3000);
+        const interval = setInterval(fetchCryptoPrices, 50000);
 
         return () => clearInterval(interval);
     }, []);
@@ -284,19 +285,18 @@ export default function ThreadView() {
 
                                 {currentUser ? (
                                     <div className={`prose ${isDarkTheme ? 'prose-invert' : ''} max-w-none mb-6`}>
-                                        <MarkdownPreview
+                                        {/* <MarkdownPreview
                                             style={{ backgroundColor: 'rgba(24, 24, 27, 0.5)' }}
                                             className="m-0 bg-[#0d1117] text-[#c9d1d9] p-4 rounded-md markdown-body"
                                             source={thread.content}
-                                        />
+                                        /> */}
+                                        <MarkdownWithEmojis content={thread.content} />
                                     </div>
                                 ) : (
                                     <div className="flex flex-col items-center justify-center p-6 bg-zinc-800/50 text-[#c9d1d9] rounded-md">
                                         <p className="text-lg font-semibold">🔒 Please sign in to view this thread</p>
                                         <p className="text-sm text-gray-400">It only takes 30 seconds to create an account!</p>
-                                        {/* <button onClick={() => { window.location.href = '/auth'; }} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500">
-                                            Sign In / Register
-                                        </button> */}
+                                        
                                         <Button onClick={() => { window.location.href = '/auth'; }} className={`${isDarkTheme ? 'bg-zinc-800/50 mt-4 px-4 py-2 hover:bg-zinc-800/20 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
                                             Login / Register
                                         </Button>

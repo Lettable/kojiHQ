@@ -20,6 +20,8 @@ import 'react-markdown-editor-lite/lib/index.css';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { Toaster } from '@/components/ui/toaster'
 import { useToast } from '@/hooks/use-toast'
+import MarkdownWithEmojis from '@/partials/MarkdownWithEmojis'
+import EnhancedEmojiPicker from '@/components/EmojiPicker'
 
 export default function CreateThread() {
     const [currentUser, setCurrentUser] = useState(null)
@@ -125,6 +127,17 @@ export default function CreateThread() {
         const files = Array.from(event.target.files)
         setAttachments(files)
     }
+
+    const handleEmojiSelect = (emojiTitle) => {
+        const editor = document.querySelector('.markdown-editor-container textarea');
+        if (editor) {
+            const cursorPosition = editor.selectionStart;
+            const textBeforeCursor = content.slice(0, cursorPosition);
+            const textAfterCursor = content.slice(cursorPosition);
+    
+            setContent(`${textBeforeCursor} ${emojiTitle} ${textAfterCursor}`);
+        }
+    };
 
     const handleEditorChange = ({ html, text }) => {
         setContent(text);
@@ -264,26 +277,36 @@ export default function CreateThread() {
                                         <TabsTrigger value="preview">Preview</TabsTrigger>
                                     </TabsList>
                                     <TabsContent value="write">
-                                        {/* <Textarea
-                                            id="content"
-                                            value={content}
-                                            onChange={(e) => setContent(e.target.value)}
-                                            className={`w-full h-64 ${isDarkTheme ? 'bg-zinc-800 border-0 text-white' : 'bg-white border-0 text-black'}`}
-                                            placeholder="Write your thread content here (Markdown supported)"
-                                        /> */}
-                                        <div className="markdown-editor-container">
-                                            <ReactMarkdownEditorLite
-                                                value={content}
-                                                onChange={handleEditorChange}
-                                                className={`w-full h-64 ${isDarkTheme ? 'bg-zinc-800 border-0 text-black' : 'bg-white border-0 text-black'}`}
+                                        <div className="flex items-start space-x-4">
+                                            <div className="markdown-editor-container flex-1">
+                                                <ReactMarkdownEditorLite
+                                                    value={content}
+                                                    onChange={handleEditorChange}
+                                                    className="w-full h-64 bg-zinc-800 text-white border-0"
+                                                    style={{ backgroundColor: '#27272a' }}
+                                                    config={{
+                                                        view: {
+                                                            menu: true,
+                                                            md: true,
+                                                            html: false,
+                                                        },
+                                                        theme: 'dark',
+                                                    }}
+                                                />
+                                            </div>
+
+                                            <EnhancedEmojiPicker
+                                                className="w-1/3 mt-1 ml-1"
+                                                onEmojiSelect={handleEmojiSelect}
+                                                isDarkTheme={isDarkTheme}
                                             />
                                         </div>
-
                                     </TabsContent>
-                                    <TabsContent value="preview">
-                                        <ScrollArea className={`w-full h-64 p-4 rounded-md ${isDarkTheme ? 'bg-zinc-800' : 'bg-gray-100'}`}>
-                                        <MarkdownPreview style={{ backgroundColor: '#27272a' }} className='m-6 bg-[#0d1117] ' source={content} />
 
+                                    <TabsContent value="preview">
+                                        <ScrollArea className={`w-full h-64 p-0 rounded-md ${isDarkTheme ? 'bg-zinc-800' : 'bg-gray-100'}`}>
+                                            {/* <MarkdownPreview style={{ backgroundColor: '#27272a' }} className='m-6 bg-[#0d1117] ' source={content} /> */}
+                                            <MarkdownWithEmojis style={{ backgroundColor: '#27272a' }} className='m-6 bg-[#0d1117] ' content={content} />
                                         </ScrollArea>
                                     </TabsContent>
                                 </Tabs>
