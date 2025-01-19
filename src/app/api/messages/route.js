@@ -97,14 +97,12 @@ export async function GET() {
   try {
     await connectDB();
 
-    // Fetch the latest 30 messages sorted by createdAt in descending order
     const messages = await Message.find()
       .sort({ createdAt: -1 })
       .limit(30)
-      .lean(); // Use lean for better performance since we don't need Mongoose methods
+      .lean();
 
     const formatedMessages = messages.reverse();
-    // Fetch the latest user details for each message
     const updatedMessages = await Promise.all(
       formatedMessages.map(async (message) => {
         const user = await User.findById(message.userId).lean();
@@ -112,8 +110,9 @@ export async function GET() {
           _id: message._id,
           content: message.content,
           userId: message.userId,
-          username: user?.username || "Unknown User", // Fallback if user not found
-          profilePic: user?.profilePic || null, // Fallback to null if no profile pic
+          usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
+          username: user?.username || "Unknown User",
+          profilePic: user?.profilePic || null,
           createdAt: message.createdAt,
           updatedAt: message.updatedAt,
         };

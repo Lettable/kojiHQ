@@ -1,8 +1,7 @@
 import { connectDB } from '@/lib/config/db';
 import PostModel from '@/lib/model/Post.model.js';
-import { verifyToken } from '@/lib/utils/auth/Token';
+import UserModel from '@/lib/model/User.model.js';
 import { NextResponse } from 'next/server';
-import { headers } from "next/headers";
 
 export async function GET(req) {
     await connectDB();
@@ -15,25 +14,24 @@ export async function GET(req) {
     }
 
     if (postId) {
-        const post = await PostModel.findById(postId)
-            .populate({
-                path: 'userId',
-                select: '_id username profilePic',
-                model: 'User'
-            })
-            .lean();
+        const post = await PostModel.findById(postId).lean();
 
         if (!post) {
             return NextResponse.json({ message: 'Post not found' }, { status: 404 });
         }
 
+        const user = await UserModel.findById(post.userId)
+            .select('_id username profilePic usernameEffect')
+            .lean();
+
         const formattedPost = {
             _id: post._id,
             content: post.content,
             author: {
-                _id: post.userId._id,
-                username: post.userId.username,
-                profilePic: post.userId.profilePic
+                _id: user._id,
+                username: user.username,
+                profilePic: user.profilePic,
+                usernameEffect: user.usernameEffect ? user.usernameEffect : 'regular-effect'
             },
             createdAt: post.createdAt,
             likes: post.likes || [],
@@ -42,25 +40,26 @@ export async function GET(req) {
 
         return NextResponse.json(formattedPost, { status: 200 });
     } else {
-        const posts = await PostModel.find({ threadId })
-            .populate({
-                path: 'userId',
-                select: '_id username profilePic',
-                model: 'User'
-            })
-            .lean();
+        const posts = await PostModel.find({ threadId }).lean();
 
-        const formattedPosts = posts.map(post => ({
-            _id: post._id,
-            content: post.content,
-            author: {
-                _id: post.userId._id,
-                username: post.userId.username,
-                profilePic: post.userId.profilePic
-            },
-            createdAt: post.createdAt,
-            likes: post.likes || [],
-            replyPost: post.replyPostId || null
+        const formattedPosts = await Promise.all(posts.map(async post => {
+            const user = await UserModel.findById(post.userId)
+                .select('_id username profilePic usernameEffect')
+                .lean();
+
+            return {
+                _id: post._id,
+                content: post.content,
+                author: {
+                    _id: user._id,
+                    username: user.username,
+                    profilePic: user.profilePic,
+                    usernameEffect: user.usernameEffect ? user.usernameEffect : 'regular-effect'
+                },
+                createdAt: post.createdAt,
+                likes: post.likes || [],
+                replyPost: post.replyPostId || null
+            };
         }));
 
         return NextResponse.json(formattedPosts, { status: 200 });
@@ -73,7 +72,7 @@ export async function POST(req) {
     const { userId, threadId, content, replyPostId } = await req.json();
 
     if (!threadId || !content) {
-        return NextResponse.json({ message: 'Thread ID, and Content are required' }, { status: 400 });
+        return NextResponse.json({ message: 'Thread ID and Content are required' }, { status: 400 });
     }
 
     const newPost = new PostModel({
@@ -85,28 +84,27 @@ export async function POST(req) {
 
     await newPost.save();
 
-    const populatedPost = await PostModel.findById(newPost._id)
-        .populate({
-            path: 'userId',
-            select: '_id username profilePic',
-            model: 'User'
-        })
+    const populatedPost = await PostModel.findById(newPost._id).lean();
+
+    const user = await UserModel.findById(populatedPost.userId)
+        .select('_id username profilePic usernameEffect')
         .lean();
 
     const formattedPost = {
         _id: populatedPost._id,
         content: populatedPost.content,
         author: {
-            _id: populatedPost.userId._id,
-            username: populatedPost.userId.username,
-            profilePic: populatedPost.userId.profilePic
+            _id: user._id,
+            username: user.username,
+            profilePic: user.profilePic,
+            usernameEffect: user.usernameEffect ? user.usernameEffect : 'regular-effect'
         },
         createdAt: populatedPost.createdAt,
         likes: populatedPost.likes || [],
         replyPost: populatedPost.replyPostId || null
     };
 
-    const ws = new WebSocket('ws://localhost:5000');
+    const ws = new WebSocket('wss://koji-ws.onrender.com');
     ws.onopen = () => {
         ws.send(JSON.stringify({
             type: 'post',

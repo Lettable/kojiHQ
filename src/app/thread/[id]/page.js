@@ -257,7 +257,7 @@ export default function ThreadView() {
                                             <AvatarFallback>{thread.author.username}</AvatarFallback>
                                         </Avatar>
                                         <div>
-                                            <h2 className="text-lg font-semibold">{thread.author.username}</h2>
+                                            <h2 className={`text-lg font-semibold ${thread.author.usernameEffect}`}>{thread.author.username}</h2>
                                             <p className="text-sm text-gray-400">{formatDate(thread.createdAt)}</p>
                                         </div>
                                     </div>
@@ -391,7 +391,7 @@ export default function ThreadView() {
                                             <CardContent className="p-6">
                                                 {post.replyPost && (
                                                     <div className="mb-2 text-sm text-gray-400">
-                                                        Replied to {posts.find(p => p._id === post.replyPost)?.author.username}&apos;s post
+                                                        Replied to <span className={`${post.author.usernameEffect}`}>{posts.find(p => p._id === post.replyPost)?.author.username}</span>&apos;s post
                                                     </div>
                                                 )}
                                                 <div className="flex items-start text-white justify-between">
@@ -402,7 +402,7 @@ export default function ThreadView() {
                                                         </Avatar>
                                                         <div className="flex-1 text-white">
                                                             <div className="flex items-center">
-                                                                <span className="font-semibold">{post.author.username}</span>
+                                                                <span className={`font-semibold ${post.author.usernameEffect}`}>{post.author.username}</span>
                                                                 <span className="mx-2">•</span>
                                                                 <span className="text-sm text-gray-400">
                                                                     {formatDate(post.createdAt)}

@@ -92,3 +92,529 @@ body {
 .markdown-body a {
   @apply text-[#58a6ff] underline;
 }
+
+/* Emoji styling */
+.custom-emoji {
+  display: inline-block;
+  width: 24px; /* Control width */
+  height: 24px; /* Control height */
+  object-fit: contain; /* Adjust to fit the size */
+  border-radius: 50%; /* Round shape for transparent emojis */
+  background-color: transparent; /* Ensure background stays transparent */
+  vertical-align: middle; /* Align properly with text */
+}
+
+img[alt^=":"] {
+  width: 25px; /* Set the width */
+  height: 25px; /* Set the height */
+  display: inline-block; /* Ensure they are inline */
+  vertical-align: middle; /* Align with text */
+  background-color: transparent; /* Ensure background is transparent */
+  border: none; /* Remove any border */
+  padding: 0; /* Remove any padding */
+  margin: 0; /* Remove any margin */
+  border-radius: 50%; /* Make the image rounded */
+  object-fit: cover; /* Ensure the image covers the area */
+}
+
+.sparkle-effect {
+  position: relative;
+  color: #ff69b4;
+  background: url('https://i.gifer.com/XZ5V.gif') no-repeat left top;
+  background-size: contain;
+  overflow: hidden;
+}
+
+.regular-effect {
+  color: #ffffff;
+}
+
+
+/* .sparkle-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  opacity: 0.5; 
+  z-index: 1; 
+  animation: flicker 1s infinite;
+} */
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Neon Effect */
+.neon-effect {
+  position: relative;
+  color: #FF69B4;
+  text-shadow: 0 0 5px purple, 0 0 10px purple, 0 0 15px purple, 0 0 20px purple;
+  animation: neon 1.5s infinite alternate;
+}
+
+@keyframes neon {
+  0% {
+    text-shadow: 0 0 10px rgba(132, 0, 255, 0.8), 0 0 20px rgba(132, 0, 255, 0.6);
+  }
+  100% {
+    text-shadow: 0 0 30px rgba(132, 0, 255, 1), 0 0 50px rgba(132, 0, 255, 0.9);
+  }
+}
+
+/* Rainbow Effect */
+.rainbow-effect {
+  position: relative;
+  background: linear-gradient(45deg, red, 
+  orange, 
+  yellow, 
+  green, 
+  cyan, 
+  blue, 
+  violet, 
+  purple);
+  background-size: 400%;
+  color: transparent;
+  background-clip: text;
+  animation: rainbow 4s ease infinite;
+}
+
+@keyframes rainbow {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 100%;
+  }
+}
+
+/* Glitch Effect */
+.glitch-effect {
+  position: relative;
+  color: white;
+  text-shadow: 1px 0 red, -1px 0 blue;
+  animation: glitch 1s infinite;
+  background: url('https://i.gifer.com/D5XM.gif') no-repeat left top;
+  background-size: contain;
+  overflow: hidden;
+}
+
+/* .glitch-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  opacity: 0.5;
+  z-index: 1;
+  animation: flicker 1s infinite;
+} */
+
+@keyframes glitch {
+  0% {
+    transform: skew(0.5deg);
+  }
+  50% {
+    transform: skew(-0.5deg);
+  }
+  100% {
+    transform: skew(0.5deg);
+  }
+}
+
+.fire-effect {
+  position: relative;
+  color: #000000; /* Fire color for the text */
+  text-shadow: 0 0 5px rgba(255, 69, 0, 0.8), 0 0 10px rgba(255, 69, 0, 0.6); /* Optional glow effect */
+  overflow: hidden; 
+  background: url('https://i.gifer.com/YmoL.gif') no-repeat left top;
+  background-size: contain;
+}
+
+/* .fire-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://i.gifer.com/YmoL.gif') no-repeat center center;
+  background-size: cover;
+  opacity: 0.5; 
+  z-index: 1;
+  animation: flicker 1s infinite;
+} */
+
+@keyframes flicker {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* Snow Effect */
+.snow-effect {
+  position: relative;
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(187, 187, 187, 0.6);
+  overflow: hidden;
+  background: url('https://i.gifer.com/2yqT.gif') no-repeat left top;
+  background-size: contain;
+}
+
+/* .snow-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://i.gifer.com/2yqT.gif') no-repeat center center;
+  background-size: cover;
+  opacity: 1;
+  z-index: 1;
+  animation: flicker 1s infinite; 
+} */
+
+@keyframes snow {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0.8;
+    transform: translateY(100px);
+  }
+}
+
+/* Shadow Effect */
+.shadow-effect {
+  position: relative;
+  color: #000000;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6);
+  background: url('https://i.gifer.com/2yqT.gif') no-repeat left top;
+  background-size: contain;
+  overflow: hidden;
+}
+
+/* .shadow-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://i.gifer.com/2yqT.gif') no-repeat center center;
+  background-size: cover;
+  opacity: 0.5;
+  z-index: 1;
+} */
+
+/* Holo Effect */
+.holo-effect {
+  position: relative;
+  color: #00ffff;
+  text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff;
+}
+
+.holo-effect::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border: 1px solid rgba(0, 255, 255, 0.8);
+  animation: holo 2s infinite alternate;
+}
+
+@keyframes holo {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Retro Effect */
+.retro-effect {
+  position: relative;
+  color: #ff6347;
+  text-shadow: 0 0 10px rgba(255, 99, 71, 0.8), 0 0 20px rgba(255, 99, 71, 0.5);
+  font-family: 'Press Start 2P', cursive;
+  background: url('https://i.gifer.com/xx.gif') no-repeat left top;
+  background-size: contain;
+  overflow: hidden;
+  animation: flicker 1s infinite; 
+}
+
+/* .retro-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+  z-index: 1; 
+  animation: flicker 1s infinite; 
+} */
+
+@keyframes retro {
+  0% {
+    transform: skew(0.5deg);
+  }
+  50% {
+    transform: skew(-0.5deg);
+  }
+  100% {
+    transform: skew(0.5deg);
+  }
+}
+
+/* Cosmic Effect */
+.cosmic-effect {
+  position: relative;
+  color: #8a2be2;
+  text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2;
+  animation: cosmic 3s ease infinite;
+  background: url('https://i.gifer.com/2iiH.gif') no-repeat left top;
+  background-size: contain;
+  overflow: hidden;
+}
+
+.bubble-effect {
+  position: relative;
+  font-size: 2rem; /* Adjust the font size as needed */
+  color: #bad4f3; /* Fire color for the text */
+  text-shadow: 0 0 5px rgba(193, 192, 236, 0.8), 0 0 10px rgba(255, 69, 0, 0.6); /* Optional glow effect */
+  overflow: hidden; /* Ensure the pseudo-element doesn't overflow */
+}
+
+.bubble-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://i.gifer.com/bCv.gif') no-repeat center center;
+  background-size: cover; /* Cover the entire area */
+  opacity: 0.5; /* Adjust opacity for realism */
+  z-index: 1; /* Place the background behind the text */
+  animation: flicker 1s infinite; /* Optional flicker effect */
+}
+
+@keyframes flicker {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* .cosmic-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  opacity: 0.8;
+  z-index: 1;
+  animation: flicker 1s infinite;
+} */
+
+@keyframes cosmic {
+  0% {
+    text-shadow: 0 0 10px rgba(138, 43, 226, 0.5), 0 0 20px rgba(138, 43, 226, 0.4);
+  }
+  100% {
+    text-shadow: 0 0 30px rgba(138, 43, 226, 1), 0 0 40px rgba(138, 43, 226, 0.8);
+  }
+}
+
+/* Pixel Effect */
+.pixel-effect {
+  position: relative;
+  color: #32cd32;
+  font-family: 'PixelFont', monospace;
+  background: url('https://i.gifer.com/3sjl.gif') no-repeat left top;
+  background-size: contain;
+  overflow: hidden;
+}
+/* 
+.pixel-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  opacity: 0.8; 
+  z-index: 1;
+  animation: flicker 1s infinite;
+} */
+
+
+/* Liquid Effect */
+.liquid-effect {
+  position: relative;
+  font-size: 2rem;
+  color: #00bfff;
+}
+
+.liquid-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://s4.ezgif.com/tmp/ezgif-4-87926f4a24.gif') no-repeat center center;
+  background-size: cover; /* Cover the entire area */
+  opacity: 0.5; /* Adjust opacity for realism */
+  z-index: 1; /* Place the background behind the text */
+}
+
+@keyframes liquid {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* Neon Outline Effect */
+.neon-outline-effect {
+  position: relative;
+  font-size: 2rem;
+  color: transparent;
+  background-clip: text;
+  animation: neon-outline 1.5s infinite alternate;
+}
+
+.neon-outline-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://i.gifer.com/6SSp.gif') no-repeat center center;
+  background-size: cover; /* Cover the entire area */
+  opacity: 0.5; /* Adjust opacity for realism */
+  z-index: 1; /* Place the background behind the text */
+}
+
+@keyframes neon-outline {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* Glowing Effect */
+.glowing-effect {
+  position: relative;
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.5);
+  animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Metallic Effect */
+.metallic-effect {
+  position: relative;
+  font-size: 2rem;
+  color: silver;
+  text-shadow: 0 0 5px #c0c0c0, 0 0 10px #c0c0c0;
+  font-family: 'Metallic', sans-serif;
+}
+
+/* Cyberpunk Effect */
+.cyberpunk-effect {
+  position: relative;
+  color: neon-pink;
+  background: url('https://i.gifer.com/3dof.gif') no-repeat left top;
+  background-size: contain;
+  overflow: hidden;
+}
+
+/* .cyberpunk-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  opacity: 0.5;
+  z-index: 1;
+} */
+
+@keyframes cyberpunk {
+  0% {
+    text-shadow: 0 0 10px rgba(255, 20, 147, 0.5), 0 0 20px rgba(255, 20, 147, 0.7);
+  }
+  100% {
+    text-shadow: 0 0 30px rgba(255, 20, 147, 1), 0 0 50px rgba(255, 20, 147, 1);
+  }
+}
+
+/* Hologram Effect */
+.hologram-effect {
+  position: relative;
+  font-size: 2rem;
+  color: rgba(0, 255, 255, 0.5);
+  animation: hologram 1s infinite alternate;
+}
+
+@keyframes hologram {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+/* Ethereal Effect */
+.ethereal-effect {
+  position: relative;
+  font-size: 2rem;
+  color: #dcdcdc;
+  text-shadow: 0 0 10px rgba(220, 220, 220, 0.5), 0 0 20px rgba(220, 220, 220, 0.7);
+  animation: ethereal 3s ease-in-out infinite;
+}
+
+@keyframes ethereal {
+  0% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Lava Effect */
+.lava-effect {
+  position: relative;
+  font-size: 2rem;
+  color: #ff4500;
+  text-shadow: 0 0 10px rgba(255, 69, 0, 0.8), 0 0 20px rgba(255, 69, 0, 1);
+}

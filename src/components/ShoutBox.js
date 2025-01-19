@@ -636,6 +636,7 @@ export default function Shoutbox() {
 
     const messageData = {
       username: user.username,
+      usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
       content: newMessage,
       userId: user.userId,
       profilePic: user.profilePic,
@@ -687,7 +688,7 @@ export default function Shoutbox() {
                           : 'bg-zinc-200 text-black'
                         }`}>
                         {message.userId !== user?.userId && (
-                          <p className={`font-semibold text-xs ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'}`}>{message.username}</p>
+                          <p className={`font-semibold text-xs ${message.usernameEffect} ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'}`}>{message.username}</p>
                         )}
                         <p className="text-sm break-words">{renderTextWithEmojis(message.content, emojis)}</p>
                       </div>

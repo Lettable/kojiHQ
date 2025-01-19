@@ -777,12 +777,12 @@ export default function HomePage() {
                     <div key={staff.userId} className="flex text-white items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <div className={`w-2 h-2 rounded-full ${staff.status === 'online' ? 'bg-green-500' : 'bg-yellow-500'}`} />
-                        <span>{staff.username}</span>
+                        <span className={`${staff.usernameEffect}`}>{staff.username}</span>{renderTextWithEmojis(staff.statusEmoji, emojis)}
                       </div>
-                      <span className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
-                        {/* {staff.statusEmoji || ''} */}
-                        {renderTextWithEmojis(staff.statusEmoji, emojis)}
-                      </span>
+                      {/* <span className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
+                        
+                        
+                      </span> */}
                     </div>
                   ))}
                 </div>

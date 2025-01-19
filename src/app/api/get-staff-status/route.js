@@ -28,6 +28,7 @@ export async function GET() {
             return {
                 username: user.username,
                 userId: staff.userId,
+                usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
                 statusEmoji: user.statusEmoji,
                 status: staff.status
             };

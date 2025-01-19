@@ -23,7 +23,7 @@ export async function GET(req) {
         }
 
         const repliesCount = await PostModel.countDocuments({ threadId: thread._id });
-        const author = await User.findById(thread.userId, 'username profilePic').lean();
+        const author = await User.findById(thread.userId, 'username profilePic usernameEffect').lean();
 
         const threadResponse = {
             ...thread,
@@ -32,6 +32,7 @@ export async function GET(req) {
                 _id: author._id,
                 username: author.username,
                 profilePic: author.profilePic,
+                usernameEffect: author.usernameEffect ? author.usernameEffect : 'regular-effect'
             }
         };
 
