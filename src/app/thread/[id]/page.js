@@ -391,7 +391,7 @@ export default function ThreadView() {
                                             <CardContent className="p-6">
                                                 {post.replyPost && (
                                                     <div className="mb-2 text-sm text-gray-400">
-                                                        Replied to <span className={`${post.author.usernameEffect}`}>{posts.find(p => p._id === post.replyPost)?.author.username}</span>&apos;s post
+                                                        Replied to <span className={`${posts.find(p => p._id === post.replyPost)?.author.usernameEffect}`}>{posts.find(p => p._id === post.replyPost)?.author.username}</span>&apos;s post
                                                     </div>
                                                 )}
                                                 <div className="flex items-start text-white justify-between">

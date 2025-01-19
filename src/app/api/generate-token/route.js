@@ -52,6 +52,7 @@ export async function POST(req) {
         email: user.email,
         profilePic: user.profilePic,
         telegramUID: user.telegramUID,
+        usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
         isPremium: user.isPremium,
       },
       JWT_SECRET,

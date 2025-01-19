@@ -60,6 +60,7 @@ export async function POST(request) {
     const newUser = new User({
       username,
       email,
+      usernameEffect: "regular-effect",
       passwordHash,
       telegramUID,
       profilePic: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2-flKQOIE8ribInudJWpIsy94v1B7LMCemuBf8RcjpIY1Pt3hLHZR5r78rXBFW0cIhVg&usqp=CAU',
@@ -76,6 +77,7 @@ export async function POST(request) {
       {
         userId: newUser._id,
         username: newUser.username,
+        usernameEffect: newUser.usernameEffect,
         email: newUser.email,
         profilePic: newUser.profilePic,
         telegramUID: telegramUID,
@@ -93,6 +95,7 @@ export async function POST(request) {
         user: {
           userId: newUser._id,
           username: newUser.username,
+          usernameEffect: newUser.usernameEffect,
           email: newUser.email,
           profilePic: newUser.profilePic,
           bio: newUser.bio,

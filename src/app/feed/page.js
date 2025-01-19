@@ -491,7 +491,7 @@ export default function EnhancedDynamicSideProjector() {
                                 <img src={project.profilePic || '/placeholder-user.jpg'} alt={project.author} className="object-cover w-full h-full" />
                               </div>
                               <Link href={`/user/${project.authorId}`}>
-                                <span className={`text-sm ${isDarkTheme ? 'text-white/70' : 'text-black/70'}`}>{project.author}</span>
+                                <span className={`text-sm ${project.authorUsernameEffect} ${isDarkTheme ? 'text-white/70' : 'text-black/70'}`}>{project.author}</span>
                               </Link>
                               {project.authorStatusEmoji && (
                                 <span className="ml-2">{renderTextWithEmojis(project.authorStatusEmoji, emojis)}</span>
@@ -539,12 +539,9 @@ export default function EnhancedDynamicSideProjector() {
                               <img src={user.profilePic} alt={user.username} className="w-full h-full object-cover" />
                             </div>
                             <div>
-                              <span className="text-xl font-semibold">{user.username}</span>
-                              {/* {user.verified && (
-                                <Badge className="ml-2 bg-yellow-400/20 hover:bg-yellow-400/20 text-yellow-400">✓</Badge>
-                              )} */}
+                              <span className={`${user.usernameEffect} text-xl font-semibold`}>{user.username}</span>
                               {user.statusEmoji && (
-                                <span>{renderTextWithEmojis(user.statusEmoji, emojis)}</span>
+                                <span className='ml-2'>{renderTextWithEmojis(user.statusEmoji, emojis)}</span>
                               )}
                             </div>
                           </CardContent>

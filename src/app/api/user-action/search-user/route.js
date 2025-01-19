@@ -14,7 +14,7 @@ export async function POST(req) {
 
         const users = await User.find({
             username: { $regex: username, $options: "i" }
-        }).select("id username profilePic statusEmoji");
+        }).select("id username profilePic statusEmoji usernameEffect");
 
         if (users.length === 0) {
             return NextResponse.json({ success: false, message: "No users found" }, { status: 404 });
@@ -24,7 +24,8 @@ export async function POST(req) {
             id: user._id,
             username: user.username,
             profilePic: user.profilePic || "",
-            statusEmoji: user.statusEmoji || false
+            statusEmoji: user.statusEmoji || false,
+            usernameEffect: user.usernameEffect || "regular-effect"
         }));
 
         return NextResponse.json({ success: true, data: userData }, { status: 200 });

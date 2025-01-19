@@ -212,7 +212,6 @@ const UsernameEffectsMarketplace = () => {
                                 <Card className="bg-zinc-800 text-white border-zinc-700 overflow-hidden">
                                     <CardContent className="p-4 flex items-center justify-between">
                                         <div className="flex items-center space-x-4">
-                                            <effect.icon className="w-8 h-8 text-yellow-400" />
                                             <div>
                                                 <h3 className="text-lg font-semibold">{effect.name}</h3>
                                                 <div className={`text-xl font-bold ${effect.class}`}>

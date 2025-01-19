@@ -47,6 +47,7 @@ export async function POST(request) {
       {
         userId: user._id,
         username: user.username,
+        usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
         email: user.email,
         profilePic: user.profilePic,
         telegramUID: user.telegramUID,
@@ -70,6 +71,7 @@ export async function POST(request) {
         user: {
           userId: user._id,
           username: user.username,
+          usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
           email: user.email,
           profilePic: user.profilePic,
           bio: user.bio,

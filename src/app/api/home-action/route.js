@@ -133,32 +133,30 @@ export async function GET(req) {
   await connectDB();
 
   try {
-    // Fetch all projects and include the author's premium status
     const projects = await Project.aggregate([
       {
         $lookup: {
-          from: 'users', // Match User collection
-          localField: 'ownerId', // Link with the owner's ID
-          foreignField: '_id', // Match against User ID
-          as: 'authorDetails', // Alias for the joined user data
+          from: 'users',
+          localField: 'ownerId',
+          foreignField: '_id',
+          as: 'authorDetails',
         },
       },
-      { $unwind: '$authorDetails' }, // Flatten the author details array
+      { $unwind: '$authorDetails' },
       {
         $addFields: {
-          isPremium: '$authorDetails.isPremium', // Add premium status
+          isPremium: '$authorDetails.isPremium',
         },
       },
       {
         $sort: {
-          isPremium: -1, // Sort by premium status first (1 = premium, 0 = non-premium)
-          createdAt: -1, // Then sort by creation date (most recent first)
+          isPremium: -1,
+          createdAt: -1,
         },
       },
-      { $sample: { size: pageSize * page } }, // Random sampling, maintaining premium priority
+      { $sample: { size: pageSize * page } },
     ]);
 
-    // Format the project data to include necessary fields
     const projectData = projects.map((project) => ({
       id: project._id,
       title: project.title,
@@ -167,6 +165,7 @@ export async function GET(req) {
       price: project.price,
       type: project.category,
       author: project.authorDetails.username,
+      authorUsernameEffect: project.authorDetails.usernameEffect ? project.authorDetails.usernameEffect : "regular-effect",
       authorId: project.authorDetails._id,
       profilePic: project.authorDetails.profilePic,
       isPremium: project.isPremium,
@@ -180,7 +179,7 @@ export async function GET(req) {
     return NextResponse.json(
       {
         success: true,
-        data: projectData.slice((page - 1) * pageSize, page * pageSize), // Paginate the results
+        data: projectData.slice((page - 1) * pageSize, page * pageSize),
         page,
         pageSize,
       },

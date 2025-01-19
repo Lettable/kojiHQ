@@ -354,7 +354,6 @@ img[alt^=":"] {
   background: url('https://i.gifer.com/xx.gif') no-repeat left top;
   background-size: contain;
   overflow: hidden;
-  animation: flicker 1s infinite; 
 }
 
 /* .retro-effect::before {
