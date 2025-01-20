@@ -1568,7 +1568,7 @@ export default function ProjectDetails() {
             if (startChatData.success) {
                 setIsChatStarted(true)
 
-                wsRef.current = new WebSocket(`wss://sideprojector-ws.onrender.com/p2p?userId=${currentUser.userId}`)
+                wsRef.current = new WebSocket(`wss://kojihq-ws.onrender.com/p2p?userId=${currentUser.userId}`)
 
                 wsRef.current.onopen = () => {
                     const messageData = {

@@ -104,7 +104,7 @@ export async function POST(req) {
         replyPost: populatedPost.replyPostId || null
     };
 
-    const ws = new WebSocket('wss://koji-ws.onrender.com');
+    const ws = new WebSocket('wss://kojihq-ws.onrender.com');
     ws.onopen = () => {
         ws.send(JSON.stringify({
             type: 'post',

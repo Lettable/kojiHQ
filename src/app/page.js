@@ -357,6 +357,8 @@ import Header from '@/partials/Header'
 import Shoutbox from '@/components/ShoutBox'
 import { FaEthereum } from 'react-icons/fa'
 import { jwtDecode } from 'jwt-decode'
+import PreferredCurrencies from '@/components/PreferedCurrencies'
+import CryptoSelectionDialog from '@/components/CurrencyDialog'
 
 const renderTextWithEmojis = (text, emojis) => {
   if (!text || typeof text !== 'string') return text || '';
@@ -392,6 +394,7 @@ export default function HomePage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isDarkTheme, setIsDarkTheme] = useState(true)
   const [emojis, setEmojis] = useState([])
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [cryptoPrices, setCryptoPrices] = useState({
     BTC: "0",
     ETH: "0",
@@ -400,6 +403,7 @@ export default function HomePage() {
   const [forumCategories, setForumCategories] = useState({})
   const [announcements, setAnnouncements] = useState([])
   const [staffOnline, setStaffOnline] = useState([])
+  const [currencies, setCurrencies] = useState()
   const [userStats, setUserStats] = useState({ reputation: 0, totalPosts: 0, totalThreads: 0 })
 
   useEffect(() => {
@@ -425,11 +429,20 @@ export default function HomePage() {
       }
     };
 
-    fetchCryptoPrices();
-    const interval = setInterval(fetchCryptoPrices, 30000);
+    
+    const currencyObject = localStorage.getItem('preferredCurrencies');
+      // const preferredCurrencies = ["BTC", "ETH", "LTC", "DOGE"];
 
-    return () => clearInterval(interval);
+    setCurrencies(currencyObject)
+    
+
+    
+    // fetchCryptoPrices();
+    // const interval = setInterval(fetchCryptoPrices, 30000);
+
+    // return () => clearInterval(interval);
   }, []);
+  
 
   const fetchEmojis = async () => {
     try {
@@ -735,7 +748,7 @@ export default function HomePage() {
             </Card>
 
             {/* Crypto Prices */}
-            <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
+            {/* <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
               <CardHeader>
                 <CardTitle className="text-lg">Live Prices</CardTitle>
               </CardHeader>
@@ -764,7 +777,9 @@ export default function HomePage() {
                   </div>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
+
+            <PreferredCurrencies preferredCurrencies={currencies} />
 
             {/* Announcements */}
             <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
