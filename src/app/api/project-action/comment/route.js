@@ -126,12 +126,10 @@ export async function GET(req) {
             );
         }
 
-        // Fetch comments for the given project
         const comments = await Comment.find({ projectId })
             .sort({ timestamp: -1 })
             .lean();
 
-        // Collect all userIds from comments and replies
         const userIds = new Set();
         comments.forEach(comment => {
             userIds.add(comment.userId.toString());
@@ -140,35 +138,35 @@ export async function GET(req) {
             });
         });
 
-        // Fetch user data (username and profile picture) for all involved users
         const users = await User.find(
             { _id: { $in: Array.from(userIds) } },
-            { _id: 1, username: 1, profilePic: 1 } // Fetch only required fields
+            { _id: 1, username: 1, profilePic: 1, usernameEffect: 1 }
         ).lean();
 
-        // Map user data for easy lookup
         const userDataMap = users.reduce((acc, user) => {
             acc[user._id.toString()] = {
                 username: user.username,
                 avatar: user.profilePic,
+                usernameEffect: user.usernameEffect || "ragular-effect"
             };
             return acc;
         }, {});
 
-        // Format comments and replace author and avatar dynamically
         const formattedComments = comments.map(comment => ({
             id: comment._id,
-            author: userDataMap[comment.userId]?.username || comment.author, // Use current username or fallback
+            author: userDataMap[comment.userId]?.username || comment.author,
+            usernameEffect: userDataMap[comment.userId]?.usernameEffect || comment.usernameEffect,
             userId: comment.userId,
-            avatar: userDataMap[comment.userId]?.avatar || comment.avatar, // Use current avatar or fallback
+            avatar: userDataMap[comment.userId]?.avatar || comment.avatar,
             content: comment.content,
             timestamp: comment.timestamp,
             votes: comment.votes,
             replies: comment.replies.map(reply => ({
                 id: reply._id,
-                author: userDataMap[reply.userId]?.username || reply.author, // Use current username or fallback
+                author: userDataMap[reply.userId]?.username || reply.author,
+                usernameEffect: userDataMap[reply.userId]?.usernameEffect || reply.usernameEffect,
                 userId: reply.userId,
-                avatar: userDataMap[reply.userId]?.avatar || reply.avatar, // Use current avatar or fallback
+                avatar: userDataMap[reply.userId]?.avatar || reply.avatar,
                 content: reply.content,
                 timestamp: reply.timestamp,
                 votes: reply.votes,

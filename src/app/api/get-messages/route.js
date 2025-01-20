@@ -166,9 +166,9 @@ export async function POST(req) {
                     content: message.content,
                     read: message.read,
                     timestamp: message.timestamp,
-                    senderDetails: sender, // Add sender details
-                    parentId: message.parentId || null, // Include parentId if exists
-                    parentMessageContent, // Include parent message content if replying
+                    senderDetails: sender,
+                    parentId: message.parentId || null, 
+                    parentMessageContent, 
                 };
             })
         );

@@ -142,13 +142,14 @@ export async function POST(req) {
       ))
     ];
 
-    const users = await User.find({ _id: { $in: otherUserIds } }).select("username profilePic statusEmoji");
+    const users = await User.find({ _id: { $in: otherUserIds } }).select("username profilePic statusEmoji usernameEffect");
 
     const userMap = users.reduce((acc, user) => {
       acc[user._id.toString()] = {
         name: user.username,
         profilePic: user.profilePic,
         statusEmoji: user.statusEmoji,
+        usernameEffect: user.usernameEffect || "regular-effect",
       };
       return acc;
     }, {});
@@ -166,6 +167,7 @@ export async function POST(req) {
         chatData[otherUserId] = {
           userId: otherUserId,
           name: otherUser.name,
+          nameEffect: otherUser.usernameEffect,
           profilePic: otherUser.profilePic,
           statusEmoji: otherUser.statusEmoji,
           lastMessage: message.content,

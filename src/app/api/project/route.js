@@ -42,6 +42,7 @@ export async function GET(req) {
             author: {
                 id: author._id,
                 name: author.username,
+                nameEffect: author.usernameEffect || "regular-effect",
                 avatar: author.profilePic,
                 joinDate: author.createdAt.toLocaleDateString(),
                 verified: author.verified,

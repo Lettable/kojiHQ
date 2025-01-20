@@ -595,7 +595,7 @@ export default function ChatPage() {
                             </Avatar>
                             <div className="flex-1">
                               <div className="flex justify-between items-center">
-                                <span>
+                                <span className={`${chat.nameEffect}`}>
                                   {chat.name} {chat.statusEmoji && renderTextWithEmojis(chat.statusEmoji, emojis)}
                                 </span>
                                 <span className={`text-xs ${isDarkTheme ? 'text-white/50' : 'text-black/50'}`}>
@@ -655,7 +655,7 @@ export default function ChatPage() {
                           <AvatarImage src={filteredChats.find(c => c.userId === selectedChat)?.profilePic} />
                           <AvatarFallback>{filteredChats.find(c => c.userId === selectedChat)?.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                         </Avatar>
-                        <span>
+                        <span className={`${filteredChats.find(c => c.userId === selectedChat)?.nameEffect}`}>
                           {filteredChats.find(c => c.userId === selectedChat)?.name} {filteredChats.find(c => c.userId === selectedChat)?.statusEmoji && renderTextWithEmojis(filteredChats.find(c => c.userId === selectedChat)?.statusEmoji, emojis)}
                         </span>
                       </div>
@@ -817,8 +817,9 @@ export default function ChatPage() {
                     <AvatarImage src={user.profilePic} />
                     <AvatarFallback>{user.username[0]}</AvatarFallback>
                   </Avatar>
-                  <div>
-                    <div className="font-semibold">{user.username}</div>
+                  <div className='flex'>
+                    <div className={`font-semibold ${user.usernameEffect}`}>{user.username}</div>
+                    <span className='ml-2'>{renderTextWithEmojis(user?.statusEmoji, emojis)}</span>
                   </div>
                 </motion.div>
               ))}

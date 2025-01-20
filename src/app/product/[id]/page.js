@@ -1439,7 +1439,7 @@ const Comment = ({ comment, onReply, projectCreatorId, emojis, isDarkTheme }) =>
                     <div className={`${isDarkTheme ? 'text-white flex-1' : 'text-black flex-1'}`}>
                         <div className={`${isDarkTheme ? 'flex items-center text-white space-x-2' : 'flex items-center text-black space-x-2'}`}>
                             <Link href={`/user/${comment.userId}`}>
-                                <span className="font-semibold cursor-pointer hover:underline">{comment.author}</span>
+                                <span className={`font-semibold cursor-pointer hover:underline ${comment.usernameEffect}`}>{comment.author}</span>
                             </Link>
                             {isCreator && <Badge className="bg-blue-500 hover:bg-blue-500">Creator</Badge>}
                             <span className={`text-xs ${isDarkTheme ? 'text-white/50' : 'text-zinc-700'}`}>{new Date(comment.timestamp).toLocaleDateString()}</span>
@@ -1483,7 +1483,7 @@ const Comment = ({ comment, onReply, projectCreatorId, emojis, isDarkTheme }) =>
                                         <div className="flex-1">
                                             <div className="flex items-center space-x-2">
                                                 <Link href={`/user/${reply.userId}`}>
-                                                    <span className="font-semibold cursor-pointer hover:underline">{reply.author}</span>
+                                                    <span className={`font-semibold cursor-pointer hover:underline ${reply.usernameEffect} `}>{reply.author}</span>
                                                 </Link>
                                                 {reply.userId === projectCreatorId && <Badge className="bg-blue-500 hover:bg-blue-500">Creator</Badge>}
                                                 <span className={`${isDarkTheme ? 'text-sm text-white/50' : 'text-sm text-zinc-700'}`}>{new Date(reply.timestamp).toLocaleDateString()}</span>
@@ -2264,7 +2264,7 @@ export default function ProjectDetails() {
                                             <div>
                                                 <div className={`${isDarkTheme ? 'flex items-center text-white space-x-2' : 'flex items-center text-black space-x-2'}`}>
                                                     <Link href={`/user/${projectData.author.id}`}>
-                                                        <span className="font-semibold">{projectData.author.name}</span>
+                                                        <span className={`font-semibold ${projectData.author.nameEffect}`}>{projectData.author.name}</span>
                                                     </Link>
                                                     {renderTextWithEmojis(statusEmoji, emojis)}
                                                 </div>
