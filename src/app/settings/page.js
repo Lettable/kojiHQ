@@ -549,6 +549,7 @@ import ReactMarkdown from 'react-markdown'
 import ReactMarkdownEditorLite from 'react-markdown-editor-lite';
 import MarkdownWithEmojis from '@/partials/MarkdownWithEmojis'
 import EnhancedEmojiPicker from '@/components/EmojiPicker'
+import "react-markdown-editor-lite/lib/index.css";
 
 // In a real application, this would be fetched from an API
 const fetchUserData = async (userId) => {
@@ -766,7 +767,7 @@ export default function SettingsPage() {
                       </TabsContent>
 
                       <TabsContent value="signature" className="mt-0">
-                        <SignatureTab userData={userData} onSave={handleSaveProfile} />
+                        <SignatureTab handleEditorChange={handleEditorChange} handleEmojiSelect={handleEmojiSelect} isDarkTheme={true} content={content} userData={userData} onSave={handleSaveProfile} />
                       </TabsContent>
 
                       <TabsContent value="security" className="mt-0">
@@ -1022,32 +1023,23 @@ function PreferencesTab({ userData, onSave }) {
   )
 }
 
-function SignatureTab({ userData, onSave }) {
-  const [signature, setSignature] = useState(userData.signature)
+function SignatureTab({ isDarkTheme, handleEditorChange, handleEmojiSelect, content, userData, onSave }) {
+  const [signature, setSignature] = useState(userData.signature);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    onSave({ signature })
-  }
+    e.preventDefault();
+    onSave({ signature });
+  };
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl text-white font-bold">Forum Signature</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          {/* <Label htmlFor="signature">Signature (Markdown supported)</Label>
-          <Textarea
-            id="signature"
-            value={signature}
-            onChange={(e) => setSignature(e.target.value)}
-            className="bg-zinc-800 border-zinc-700 text-white"
-            rows={6}
-          /> */}
+    <div className={`space-y-8 p-6 rounded-lg ${isDarkTheme ? "bg-zinc-900" : "bg-white"}`}>
+      <h2 className={`text-3xl font-bold ${isDarkTheme ? "text-white" : "text-gray-800"}`}>Signature</h2>
+        <div className="flex items-start space-x-4">
           <div className="markdown-editor-container flex-1">
             <ReactMarkdownEditorLite
               value={content}
               onChange={handleEditorChange}
-              className="w-full h-64 bg-zinc-800 text-white border-0"
+              className="w-full h-64 bg-zinc-800 text-black border-0"
               style={{ backgroundColor: '#27272a' }}
               config={{
                 view: {
@@ -1059,27 +1051,40 @@ function SignatureTab({ userData, onSave }) {
               }}
             />
           </div>
+
           <EnhancedEmojiPicker
             className="w-1/3 mt-1 ml-1"
             onEmojiSelect={handleEmojiSelect}
             isDarkTheme={isDarkTheme}
           />
         </div>
-        <div>
-          <Label>Preview</Label>
-          <Card className="bg-zinc-800 text-white border-zinc-700 mt-2 p-4">
-            <ScrollArea className={`w-full h-64 p-0 rounded-md ${isDarkTheme ? 'bg-zinc-800' : 'bg-gray-100'}`}>
-              {/* <MarkdownPreview style={{ backgroundColor: '#27272a' }} className='m-6 bg-[#0d1117] ' source={content} /> */}
-              <MarkdownWithEmojis style={{ backgroundColor: '#27272a' }} className='m-6 bg-[#0d1117] ' content={content} />
+
+        {/* Preview Section */}
+        <div className="space-y-2">
+          <Label className="text-lg font-semibold">Preview</Label>
+          <Card className={`border-0 w-[860px] rounded-lg p-4 ${isDarkTheme ? "bg-zinc-800" : "bg-gray-100"}`}>
+            <ScrollArea className={`w-full h-64 rounded-md overflow-y-auto ${isDarkTheme ? "bg-zinc-800" : "bg-gray-50"}`}>
+              <MarkdownWithEmojis
+                style={{ backgroundColor: isDarkTheme ? "#1E1E24" : "#FFFFFF" }}
+                className="p-4"
+                content={content}
+              />
             </ScrollArea>
           </Card>
         </div>
-        <Button type="submit" className="bg-yellow-500 text-black hover:bg-yellow-600">
-          Save Signature
-        </Button>
-      </form>
+
+        {/* Save Button */}
+        <div className="flex justify-end">
+          <Button
+            type="submit"
+            className="bg-yellow-500 mr-16 text-black hover:bg-yellow-600"
+          >
+            Save Signature
+          </Button>
+        </div>
+      
     </div>
-  )
+  );
 }
 
 function SecurityTab({ onChangePassword }) {

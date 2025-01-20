@@ -58,7 +58,7 @@ export default function PreferredCurrencies() {
 
   return (
     <Card className={`bg-zinc-900/50 flex-1 text-white border-0 shadow-lg`}>
-      <CardHeader className="flex justify-between items-center">
+      <CardHeader className="flex justify-between items-start">
         <div className="flex items-center">
           <CardTitle className="text-lg">Live Prices</CardTitle>
           <button
