@@ -14,6 +14,10 @@ const UserSchema = new mongoose.Schema({
     unique: false,
     default: "regular-effect"
   },
+  storedUsernameEffects: {
+    type: Array,
+    default: ["regular-effect"]
+  },
   statusEmoji: {
     type: String,
     default: null
