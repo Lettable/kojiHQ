@@ -253,7 +253,7 @@ export default function ForumView() {
                             </div>
                             <div className="flex items-center mt-2 space-x-4 text-sm">
                               <span className={isDarkTheme ? 'text-gray-400' : 'text-gray-500'}>
-                                by {thread.creator} • {formatDate(thread.createdAt)}
+                                by <span className={`${thread.usernameEffect}`}>{thread.creator}</span> • {formatDate(thread.createdAt)}
                               </span>
                               <span><MessageSquare className="inline-block text-gray-400 mr-1 h-4 w-4" /> {thread.replies} replies</span>
                               <span><Users className="inline-block text-gray-400 mr-1 h-4 w-4" /> {thread.views} views</span>

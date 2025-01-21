@@ -9,11 +9,10 @@ export default function PreferredCurrencies() {
   const [cryptoPrices, setCryptoPrices] = useState({});
   const [previousPrices, setPreviousPrices] = useState({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  // Retrieve and parse preferred currencies from local storage
-  const storedCurrencies = localStorage.getItem('preferredCurrencies');
-  const preferredCurrencies = storedCurrencies ? JSON.parse(storedCurrencies) : []; // Parse the string into an array
-  console.log(preferredCurrencies);
+  const [preferredCurrencies, setPreferredCurrencies] = useState(() => {
+    const storedCurrencies = localStorage.getItem('preferredCurrencies');
+    return storedCurrencies ? JSON.parse(storedCurrencies) : ['BTC', 'ETH', 'LTC'];
+  });
 
   const handleOpenDialog = () => {
     setIsDialogOpen(true);

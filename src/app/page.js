@@ -693,7 +693,9 @@ export default function HomePage() {
                                 </p>
                               </div>
                               <div className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
-                                <p>Last post by {forum.lastPost.user}</p>
+                              <p>
+                                  Last post by <span className={`${forum.lastPost.usernameEffect}`}>{forum.lastPost.user}</span>
+                                </p>
                                 <p className="text-right">{forum.lastPost.time}</p>
                               </div>
                             </a>
@@ -716,7 +718,7 @@ export default function HomePage() {
             {/* Greeting Card */}
             <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
               <CardContent className="p-6">
-                <h2 className="text-2xl font-bold mb-2">{getGreeting()} {currentUser && currentUser.username}</h2>
+                <h2 className="text-2xl font-bold mb-2">{getGreeting()} <span className={`${currentUser && currentUser.usernameEffect}`}>{currentUser && currentUser.username}</span></h2>
                 <p className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
                   What&apos;s new today? Stay updated with the latest news and announcements.
                 </p>

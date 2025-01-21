@@ -102,7 +102,7 @@ export async function GET(req) {
         const allThreads = [...pinnedThreads, ...nonPinnedThreads];
 
         const userIds = allThreads.map(thread => thread.userId);
-        const users = await User.find({ _id: { $in: userIds } }).select('username profilePic');
+        const users = await User.find({ _id: { $in: userIds } }).select('username profilePic usernameEffect');
 
         const userMap = {};
         users.forEach(user => {
@@ -117,6 +117,7 @@ export async function GET(req) {
                 id: thread._id,
                 title: thread.title,
                 creator: user ? user.username : 'Unknown',
+                usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
                 profilePic: user ? user.profilePic : null,
                 createdAt: thread.createdAt,
                 replies: replyCount,
