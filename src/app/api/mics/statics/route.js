@@ -40,14 +40,13 @@ export async function GET(req) {
     }
 
     const defaultSpotify = 'spotify:track:default';
-    const defaultYoutube = 'https://youtube.com/watch?v=default';
+    const defaultYoutube = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
 
-    // Create the stored username effects array
     const storedUsernameEffects = (user.storedUsernameEffects || []).map(effect => {
-      const label = effect.split('-')[0]; // Get the label from the effect name
+      const label = effect.split('-')[0];
       return {
         value: effect,
-        label: label.charAt(0).toUpperCase() + label.slice(1) // Capitalize the first letter of the label
+        label: label.charAt(0).toUpperCase() + label.slice(1)
       };
     });
 
@@ -55,8 +54,8 @@ export async function GET(req) {
       userId: user._id,
       username: user.username,
       statusEmoji: user.statusEmoji,
-      profilePic: user.profilePic || '/placeholder.svg?height=200&width=200',
-      bio: user.bio || 'Passionate forum enthusiast and tech lover',
+      profilePic: user.profilePic,
+      bio: user.bio,
       createdAt: user.createdAt,
       lastUsernameChange: user.lastUsernameChange,
       lastPfpChange: user.lastPfpChange,
@@ -65,10 +64,10 @@ export async function GET(req) {
       threadCount: threads.length,
       postCount: posts.length,
       savedThreads: user.savedThreads?.length || 0,
-      usernameEffect: user.usernameEffect || 'none',
+      usernameEffect: user.usernameEffect || 'regular-effect',
       favSpotifySongOrPlaylist: user.favSpotifySongOrPlaylist || defaultSpotify,
       favYtVideo: user.favYtVideo || defaultYoutube,
-      signature: user.signature || '**Tech Enthusiast** | _Forum Veteran_',
+      signature: user.signature || '**No Sign was saved**',
       lastLogin: user.lastLogin,
       activityData,
       storedUsernameEffects, // Return the formatted stored username effects

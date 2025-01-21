@@ -275,7 +275,7 @@ export default function SettingsPage() {
                       </TabsContent>
 
                       <TabsContent value="profile" className="mt-0">
-                        <ProfileTab userData={userData} onSave={handleSaveProfile} />
+                        <ProfileTab userData={userData} setProfilePic={setProfilePic} profilePic={profilePic} onSave={handleSaveProfile} />
                       </TabsContent>
 
                       <TabsContent value="preferences" className="mt-0">
@@ -300,6 +300,7 @@ export default function SettingsPage() {
             </Card>
           </div>
         </Tabs>
+        <Toaster/>
       </div>
     </div>
   )
@@ -333,12 +334,12 @@ function OverviewTab({ userData, emojis, profilePic, setProfilePic }) {
               <AvatarFallback>{userData.username[0]}</AvatarFallback>
             </Avatar>
             <div className="space-y-1">
-              <h2 className="text-2xl font-bold flex items-center gap-2">
+              <h2 className={`text-2xl font-bold flex items-center gap-2 ${userData.usernameEffect}`}>
                 {userData.username}
                 {/* {userData.isPremium && (
                   <Star className="h-5 w-5 text-yellow-500 fill-yellow-500" />
                 )} */}
-                {renderTextWithEmojis(userData.statusEmoji, emojis)}
+                <span>{renderTextWithEmojis(userData.statusEmoji, emojis)}</span>
               </h2>
               <p className="text-gray-400 text-white">{userData.bio}</p>
               <p className="text-sm text-white text-gray-500">
@@ -417,12 +418,13 @@ function OverviewTab({ userData, emojis, profilePic, setProfilePic }) {
   )
 }
 
-function ProfileTab({ userData }) {
+function ProfileTab({ userData, profilePic, setProfilePic }) {
   const { toast } = useToast()
   const [newUsername, setNewUsername] = useState(userData.username)
   const [newBio, setNewBio] = useState(userData.bio)
   const [statusEmoji, setStatusEmoji] = useState(userData.statusEmoji)
   const [isHoveringAvatar, setIsHoveringAvatar] = useState(false)
+  const [newProfilePic, setNewProfilePic] = useState()
   const [uploadedImage, setUploadedImage] = useState('')
   const [isUploadingImage, setIsUploadingImage] = useState(false)
   const [isSelectingEmoji, setIsSelectingEmoji] = useState(false)
@@ -434,6 +436,17 @@ function ProfileTab({ userData }) {
     x: 0,
     y: 0,
   })
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken')
+    if (token) {
+      const decoded = jwtDecode(token)
+      const profilePic = decoded.profilePic
+      setProfilePic(profilePic)
+    } else {
+      throw new Error('No access token found')
+    }
+}, [])
   
   const fileInputRef = useRef(null)
   const imageRef = useRef(null)
@@ -459,6 +472,9 @@ function ProfileTab({ userData }) {
           body: JSON.stringify({ newBio }),
         })
         const result = await response.json()
+        if (result.success) {
+          localStorage.setItem('accessToken', result.accessToken)
+        }
         if (!result.success) throw new Error(result.message)
       }
 
@@ -517,6 +533,8 @@ function ProfileTab({ userData }) {
 
           const result = await response.json()
           if (result.success) {
+            localStorage.setItem('accessToken', result.accessToken)
+            setProfilePic(result.user.profilePic)
             toast({
               title: "Profile Picture Updated",
               description: "Your profile picture has been successfully updated.",
@@ -548,6 +566,7 @@ function ProfileTab({ userData }) {
 
       const result = await response.json()
       if (result.success) {
+        localStorage.setItem('accessToken', result.accessToken)
         setStatusEmoji(emoji)
         setIsSelectingEmoji(false)
         toast({
@@ -628,7 +647,7 @@ function ProfileTab({ userData }) {
             onMouseLeave={() => setIsHoveringAvatar(false)}
           >
             <Avatar className="w-full h-full">
-              <AvatarImage src={userData.profilePic} />
+              <AvatarImage src={profilePic} />
               <AvatarFallback>{userData.username[0]}</AvatarFallback>
             </Avatar>
             
@@ -800,6 +819,70 @@ function PreferencesTab({ userData, onSave }) {
   )
 }
 
+// function SignatureTab({ isDarkTheme, handleEditorChange, handleEmojiSelect, content, userData, onSave }) {
+//   const [signature, setSignature] = useState(userData.signature);
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     onSave({ signature });
+//   };
+
+//   return (
+//     <div className={`space-y-8 p-6 rounded-lg ${isDarkTheme ? "bg-zinc-900" : "bg-white"}`}>
+//       <h2 className={`text-3xl font-bold ${isDarkTheme ? "text-white" : "text-gray-800"}`}>Signature</h2>
+//         <div className="flex items-start space-x-4">
+//           <div className="markdown-editor-container flex-1">
+//             <ReactMarkdownEditorLite
+//               value={content}
+//               onChange={handleEditorChange}
+//               className="w-full h-64 bg-zinc-800 text-black border-0"
+//               style={{ backgroundColor: '#27272a' }}
+//               config={{
+//                 view: {
+//                   menu: true,
+//                   md: true,
+//                   html: false,
+//                 },
+//                 theme: 'dark',
+//               }}
+//             />
+//           </div>
+
+//           <EnhancedEmojiPicker
+//             className="w-1/3 mt-1 ml-1"
+//             onEmojiSelect={handleEmojiSelect}
+//             isDarkTheme={isDarkTheme}
+//           />
+//         </div>
+
+//         {/* Preview Section */}
+//         <div className="space-y-2">
+//           <Label className="text-lg font-semibold">Preview</Label>
+//           <Card className={`border-0 w-[860px] rounded-lg p-4 ${isDarkTheme ? "bg-zinc-800" : "bg-gray-100"}`}>
+//             <ScrollArea className={`w-full h-64 rounded-md overflow-y-auto ${isDarkTheme ? "bg-zinc-800" : "bg-gray-50"}`}>
+//               <MarkdownWithEmojis
+//                 style={{ backgroundColor: isDarkTheme ? "#1E1E24" : "#FFFFFF" }}
+//                 className="p-4"
+//                 content={content}
+//               />
+//             </ScrollArea>
+//           </Card>
+//         </div>
+
+//         {/* Save Button */}
+//         <div className="flex justify-end">
+//           <Button
+//             type="submit"
+//             className="bg-yellow-500 mr-16 text-black hover:bg-yellow-600"
+//           >
+//             Save Signature
+//           </Button>
+//         </div>
+      
+//     </div>
+//   );
+// }
+
 function SignatureTab({ isDarkTheme, handleEditorChange, handleEmojiSelect, content, userData, onSave }) {
   const [signature, setSignature] = useState(userData.signature);
 
@@ -809,60 +892,72 @@ function SignatureTab({ isDarkTheme, handleEditorChange, handleEmojiSelect, cont
   };
 
   return (
-    <div className={`space-y-8 p-6 rounded-lg ${isDarkTheme ? "bg-zinc-900" : "bg-white"}`}>
-      <h2 className={`text-3xl font-bold ${isDarkTheme ? "text-white" : "text-gray-800"}`}>Signature</h2>
-        <div className="flex items-start space-x-4">
-          <div className="markdown-editor-container flex-1">
-            <ReactMarkdownEditorLite
-              value={content}
-              onChange={handleEditorChange}
-              className="w-full h-64 bg-zinc-800 text-black border-0"
-              style={{ backgroundColor: '#27272a' }}
-              config={{
-                view: {
-                  menu: true,
-                  md: true,
-                  html: false,
-                },
-                theme: 'dark',
-              }}
-            />
-          </div>
+    <form
+      onSubmit={handleSubmit}
+      className={`space-y-6 p-6 rounded-xl shadow-lg transition-all duration-300 ${isDarkTheme ? "bg-zinc-900 text-white" : "bg-white text-gray-800"}`}
+    >
+      {/* Header */}
+      <h2 className="text-4xl font-extrabold tracking-tight border-b-2 pb-4 border-gray-300">
+        Signature
+      </h2>
 
+      {/* Markdown Editor and Emoji Picker */}
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex-1">
+          <ReactMarkdownEditorLite
+            value={content}
+            onChange={handleEditorChange}
+            className={`w-full h-64 rounded-lg border-2 ${isDarkTheme ? "border-zinc-800 bg-zinc-800 text-white" : "border-gray-300 bg-gray-50 text-gray-900"}`}
+            style={{ backgroundColor: isDarkTheme ? "#27272a" : "#f9fafb" }}
+            config={{
+              view: {
+                menu: true,
+                md: true,
+                html: false,
+              },
+              theme: isDarkTheme ? 'dark' : 'light',
+            }}
+          />
+        </div>
+
+        <div className="w-full md:w-1/3 flex-shrink-0">
           <EnhancedEmojiPicker
-            className="w-1/3 mt-1 ml-1"
+            className="rounded-lg border-2 p-4 transition-all duration-300 hover:shadow-md"
             onEmojiSelect={handleEmojiSelect}
             isDarkTheme={isDarkTheme}
           />
         </div>
+      </div>
 
-        {/* Preview Section */}
-        <div className="space-y-2">
-          <Label className="text-lg font-semibold">Preview</Label>
-          <Card className={`border-0 w-[860px] rounded-lg p-4 ${isDarkTheme ? "bg-zinc-800" : "bg-gray-100"}`}>
-            <ScrollArea className={`w-full h-64 rounded-md overflow-y-auto ${isDarkTheme ? "bg-zinc-800" : "bg-gray-50"}`}>
-              <MarkdownWithEmojis
-                style={{ backgroundColor: isDarkTheme ? "#1E1E24" : "#FFFFFF" }}
-                className="p-4"
-                content={content}
-              />
-            </ScrollArea>
-          </Card>
+      {/* Preview Section */}
+      <div className="space-y-4">
+        <label className="block text-lg font-medium">Preview</label>
+        <div
+          className={`rounded-lg shadow-md p-4 border-2 ${isDarkTheme ? "bg-zinc-800 border-zinc-700" : "bg-gray-50 border-gray-300"}`}
+        >
+          <ScrollArea className="w-full h-64 overflow-y-auto">
+            <MarkdownWithEmojis
+              className="p-4 whitespace-pre-wrap"
+              style={{ backgroundColor: isDarkTheme ? "#1E1E24" : "#FFFFFF" }}
+              content={content}
+            />
+          </ScrollArea>
         </div>
+      </div>
 
-        {/* Save Button */}
-        <div className="flex justify-end">
-          <Button
-            type="submit"
-            className="bg-yellow-500 mr-16 text-black hover:bg-yellow-600"
-          >
-            Save Signature
-          </Button>
-        </div>
-      
-    </div>
+      {/* Save Button */}
+      <div className="flex justify-end">
+        <Button
+          type="submit"
+          className={`px-6 py-3 font-semibold rounded-lg transition-all duration-300 shadow-md ${isDarkTheme ? "bg-yellow-500 text-zinc-900 hover:bg-yellow-600" : "bg-yellow-500 text-gray-900 hover:bg-yellow-600"}`}
+        >
+          Save Signature
+        </Button>
+      </div>
+    </form>
   );
 }
+
 
 function SecurityTab({ onChangePassword }) {
   const [currentPassword, setCurrentPassword] = useState('')
@@ -988,7 +1083,7 @@ function DangerZoneTab({ onDeleteAccount }) {
             </AlertDialogContent>
           </AlertDialog>
         </CardContent>
-        <Toaster/>
+        
       </Card>
     </div>
   )

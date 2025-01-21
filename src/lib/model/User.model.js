@@ -18,6 +18,11 @@ const UserSchema = new mongoose.Schema({
     type: Array,
     default: ["regular-effect"]
   },
+  favYtVideo: {
+    type: String,
+    default: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    required: false
+  },
   statusEmoji: {
     type: String,
     default: null
@@ -29,6 +34,11 @@ const UserSchema = new mongoose.Schema({
   lastPfpChange: {
     type: Date,
     default: null
+  },
+  signature: {
+    type: String,
+    defualt: "",
+    required: false
   },
   email: {
     type: String,
