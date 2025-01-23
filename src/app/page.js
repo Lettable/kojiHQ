@@ -406,6 +406,7 @@ export default function HomePage() {
   const [staffOnline, setStaffOnline] = useState([])
   const [currencies, setCurrencies] = useState()
   const [userStats, setUserStats] = useState({ reputation: 0, totalPosts: 0, totalThreads: 0 })
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCryptoPrices = async () => {
@@ -430,20 +431,20 @@ export default function HomePage() {
       }
     };
 
-    
+
     const currencyObject = localStorage.getItem('preferredCurrencies');
-      // const preferredCurrencies = ["BTC", "ETH", "LTC", "DOGE"];
+    // const preferredCurrencies = ["BTC", "ETH", "LTC", "DOGE"];
 
     setCurrencies(currencyObject)
-    
 
-    
+
+
     // fetchCryptoPrices();
     // const interval = setInterval(fetchCryptoPrices, 30000);
 
     // return () => clearInterval(interval);
   }, []);
-  
+
 
   const fetchEmojis = async () => {
     try {
@@ -521,6 +522,7 @@ export default function HomePage() {
       const data = await response.json();
       setForumCategories(data);
     } catch (error) {
+      setError(err.message)
       console.error('Error fetching forum data:', error);
     }
   };
@@ -656,6 +658,11 @@ export default function HomePage() {
 
             {/* Forums List */}
             <div className="text-white space-y-6">
+              {error && (
+                <div className="p-4 rounded-lg bg-red-500 text-white">
+                  <p>{error}</p>
+                </div>
+              )}
               {Object.entries(forumCategories).map(([category, forums]) => (
                 <Card key={category} className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
                   <CardHeader>
@@ -692,7 +699,7 @@ export default function HomePage() {
                                 </p>
                               </div>
                               <div className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
-                              <p>
+                                <p>
                                   Last post by <span className={`${forum.lastPost.usernameEffect}`}>{forum.lastPost.user}</span>
                                 </p>
                                 <p className="text-right">{forum.lastPost.time}</p>
