@@ -361,17 +361,55 @@ import PreferredCurrencies from '@/components/PreferedCurrencies'
 import CryptoSelectionDialog from '@/components/CurrencyDialog'
 
 
+// const renderTextWithEmojis = (text, emojis) => {
+//   if (!text || typeof text !== 'string') return text || '';
+//   if (!emojis || !Array.isArray(emojis)) return text;
+
+//   const emojiRegex = /:([\w-]+):/g;
+//   const parts = text.split(emojiRegex);
+
+//   return parts.map((part, index) => {
+//     if (index % 2 === 0) {
+//       return part;
+//     } else {
+//       const emoji = emojis.find(e => e.emojiTitle === `:${part}:`);
+//       if (emoji) {
+//         return (
+//           <img
+//             key={index}
+//             src={emoji.emojiUrl}
+//             alt={emoji.emojiTitle}
+//             title={emoji.emojiTitle}
+//             className="inline-block w-6 h-6"
+//           />
+//         );
+//       } else {
+//         return `:${part}:`;
+//       }
+//     }
+//   });
+// };
+
 const renderTextWithEmojis = (text, emojis) => {
+  // Check if text is valid
   if (!text || typeof text !== 'string') return text || '';
-  if (!emojis || !Array.isArray(emojis)) return text;
+
+  // Check if emojis is a valid array
+  if (!Array.isArray(emojis)) return text;
 
   const emojiRegex = /:([\w-]+):/g;
   const parts = text.split(emojiRegex);
 
+  // Check if parts array has elements
+  if (parts.length === 0) {
+    return text; // Return the original text if no parts are found
+  }
+
   return parts.map((part, index) => {
     if (index % 2 === 0) {
-      return part;
+      return part; // Return the text part as is
     } else {
+      // Find the emoji based on the part
       const emoji = emojis.find(e => e.emojiTitle === `:${part}:`);
       if (emoji) {
         return (
@@ -384,7 +422,7 @@ const renderTextWithEmojis = (text, emojis) => {
           />
         );
       } else {
-        return `:${part}:`;
+        return `:${part}:`; // Return the placeholder if emoji is not found
       }
     }
   });
