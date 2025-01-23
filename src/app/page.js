@@ -833,7 +833,7 @@ export default function HomePage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {stadffOnline.length > 0 ? (
+                  {staffOnline.length > 0 ? (
                     staffOnline.map(staff => (
                       <div key={staff.userId} className="flex text-white items-center justify-between">
                         <div className="flex items-center space-x-2">
