@@ -663,59 +663,64 @@ export default function HomePage() {
                   <p>{error}</p>
                 </div>
               )}
-              {Object.entries(forumCategories).map(([category, forums]) => (
-                <Card key={category} className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
-                  <CardHeader>
-                    <CardTitle className="text-xl">{category}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-white space-y-2">
-                      {/* {forums.map(forum => (
-                        <a href={`/forum/${forum.id}`} key={forum.id} className={`flex items-center text-white justify-between p-4 rounded-lg bg-zinc-800/10 ${isDarkTheme ? 'hover:bg-zinc-800/50' : 'hover:bg-gray-50'} transition-colors cursor-pointer`}>
-                          <div className="flex-1">
-                            <h3 className="font-semibold">{forum.title}</h3>
-                            <p className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
-                              {forum.threads} threads • {forum.posts} posts
-                            </p>
-                          </div>
-                          <div className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
-                            <p>Last post by {forum.lastPost.user}</p>
-                            <p className="text-right">{forum.lastPost.time}</p>
-                          </div>
-                        </a>
-                      ))} */}
+              {Object.keys(forumCategories).length > 0 ? (
+                Object.entries(forumCategories).map(([category, forums]) => (
+                  <Card key={category} className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
+                    <CardHeader>
+                      <CardTitle className="text-xl">{category}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
                       <div className="text-white space-y-2">
-                        {forums.length > 0 ? (
-                          forums.map(forum => (
-                            <a
-                              href={`/forum/${forum.id}`}
-                              key={forum.id}
-                              className={`flex items-center text-white justify-between p-4 rounded-lg bg-zinc-800/10 ${isDarkTheme ? 'hover:bg-zinc-800/50' : 'hover:bg-gray-50'} transition-colors cursor-pointer`}
-                            >
-                              <div className="flex-1">
-                                <h3 className="font-semibold">{forum.title}</h3>
-                                <p className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
-                                  {forum.threads} threads • {forum.posts} posts
-                                </p>
-                              </div>
-                              <div className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
-                                <p>
-                                  Last post by <span className={`${forum.lastPost.usernameEffect}`}>{forum.lastPost.user}</span>
-                                </p>
-                                <p className="text-right">{forum.lastPost.time}</p>
-                              </div>
-                            </a>
-                          ))
-                        ) : (
-                          <div className="p-4 rounded-lg bg-red-500 text-white">
-                            <p>No forums found or error fetching forums.</p>
-                          </div>
-                        )}
+                        {/* {forums.map(forum => (
+                          <a href={`/forum/${forum.id}`} key={forum.id} className={`flex items-center text-white justify-between p-4 rounded-lg bg-zinc-800/10 ${isDarkTheme ? 'hover:bg-zinc-800/50' : 'hover:bg-gray-50'} transition-colors cursor-pointer`}>
+                            <div className="flex-1">
+                              <h3 className="font-semibold">{forum.title}</h3>
+                              <p className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
+                                {forum.threads} threads • {forum.posts} posts
+                              </p>
+                            </div>
+                            <div className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
+                              <p>Last post by {forum.lastPost.user}</p>
+                              <p className="text-right">{forum.lastPost.time}</p>
+                            </div>
+                          </a>
+                        ))} */}
+                        <div className="text-white space-y-2">
+                          {forums.length > 0 ? (
+                            forums.map(forum => (
+                              <a
+                                href={`/forum/${forum.id}`}
+                                key={forum.id}
+                                className={`flex items-center text-white justify-between p-4 rounded-lg bg-zinc-800/10 ${isDarkTheme ? 'hover:bg-zinc-800/50' : 'hover:bg-gray-50'} transition-colors cursor-pointer`}
+                              >
+                                <div className="flex-1">
+                                  <h3 className="font-semibold">{forum.title}</h3>
+                                  <p className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    {forum.threads} threads • {forum.posts} posts
+                                  </p>
+                                </div>
+                                <div className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  <p>
+                                    Last post by <span className={`${forum.lastPost.usernameEffect}`}>{forum.lastPost.user}</span>
+                                  </p>
+                                  <p className="text-right">{forum.lastPost.time}</p>
+                                </div>
+                              </a>
+                            ))
+                          ) : (
+                            <div className="p-4 rounded-lg bg-red-500 text-white">
+                              <p>No forums found or error fetching forums.</p>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                ))) : (
+                  <div className="p-4 rounded-lg bg-red-500 text-white">
+                    <p>No categories found or error fetching categories.</p>
+                  </div>
+              )}
             </div>
           </div>
 
@@ -796,21 +801,27 @@ export default function HomePage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {announcements.map(announcement => (
-                    <div key={announcement._id} className="border-b last:border-0 pb-2 last:pb-0">
-                      <a
-                        href={announcement.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-yellow-500 hover:text-yellow-600 transition-colors"
-                      >
-                        {announcement.title}
-                      </a>
-                      <p className={`text-xs ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
-                        {new Date(announcement.createdAt).toLocaleDateString()}
-                      </p>
+                  {announcements.length > 0 ? (
+                    announcements.map(announcement => (
+                      <div key={announcement._id} className="border-b last:border-0 pb-2 last:pb-0">
+                        <a
+                          href={announcement.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-yellow-500 hover:text-yellow-600 transition-colors"
+                        >
+                          {announcement.title}
+                        </a>
+                        <p className={`text-xs ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
+                          {new Date(announcement.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-4 rounded-lg bg-red-500 text-white">
+                      <p>No announcements found or error fetching announcements.</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -822,14 +833,20 @@ export default function HomePage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {staffOnline.map(staff => (
-                    <div key={staff.userId} className="flex text-white items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className={`w-2 h-2 rounded-full ${staff.status === 'online' ? 'bg-green-500' : 'bg-yellow-500'}`} />
-                        <span className={`${staff.usernameEffect}`}>{staff.username}</span>{renderTextWithEmojis(staff.statusEmoji, emojis)}
+                  {stadffOnline.length > 0 ? (
+                    staffOnline.map(staff => (
+                      <div key={staff.userId} className="flex text-white items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <div className={`w-2 h-2 rounded-full ${staff.status === 'online' ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                          <span className={`${staff.usernameEffect}`}>{staff.username}</span>{renderTextWithEmojis(staff.statusEmoji, emojis)}
+                        </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="p-4 rounded-lg bg-red-500 text-white">
+                      <p>No staff found or error fetching staff.</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </CardContent>
             </Card>
