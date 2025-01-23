@@ -9,14 +9,17 @@ export default function PreferredCurrencies() {
   const [cryptoPrices, setCryptoPrices] = useState({});
   const [previousPrices, setPreviousPrices] = useState({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [preferredCurrencies, setPreferredCurrencies] = useState(() => {
-    const storedCurrencies = localStorage.getItem('preferredCurrencies');
-    return storedCurrencies ? JSON.parse(storedCurrencies) : ['BTC', 'ETH', 'LTC'];
-  });
+  const [preferredCurrencies, setPreferredCurrencies] = useState();
 
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
   };
+
+  useEffect(() => {
+    const storedCurrencies = localStorage.getItem('preferredCurrencies');
+    const initialCurrencies = storedCurrencies ? JSON.parse(storedCurrencies) : ['BTC', 'ETH', 'LTC'];
+    setPreferredCurrencies(initialCurrencies);
+  }, []);
 
   useEffect(() => {
     const fetchCryptoPrices = async () => {
@@ -59,17 +62,17 @@ export default function PreferredCurrencies() {
         <div className="flex items-center">
           <CardTitle className="text-lg">Live Prices</CardTitle>
           <button
-          onClick={handleOpenDialog}
-          className="bg-transparent ml-2 h-4 w-4 text-white"
-        >
-          <FiSettings className="mr-2" />
-        </button>
-        <CryptoSelectionDialog
-          open={isDialogOpen}
-          onOpenChange={setIsDialogOpen}
-        />
+            onClick={handleOpenDialog}
+            className="bg-transparent ml-2 h-4 w-4 text-white"
+          >
+            <FiSettings className="mr-2" />
+          </button>
+          <CryptoSelectionDialog
+            open={isDialogOpen}
+            onOpenChange={setIsDialogOpen}
+          />
         </div>
-        
+
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
