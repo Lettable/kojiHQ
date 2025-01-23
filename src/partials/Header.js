@@ -8,9 +8,13 @@ import { useRouter } from 'next/navigation';
 import NotificationTab from '@/partials/Notification';
 import ChatApp from '@/components/ChatApp';
 import { Switch } from "@/components/ui/switch"
+import { motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
+import ProfileDropdown from './ProfileDropDown';
+import { FaTelegram, FaFacebookMessenger, FaBell } from 'react-icons/fa';
 
 const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDarkTheme, isPremium, isLoggedIn }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const router = useRouter();
@@ -102,7 +106,7 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
 
     return (
       <>
-        <Button
+        {/* <Button
           variant="ghost"
           size="icon"
           className="relative hover:bg-white/10 hover:text-white"
@@ -112,12 +116,24 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
           {hasUnreadNotifications && (
             <span className="absolute top-0 right-0 h-2 w-2 bg-yellow-400 rounded-full" />
           )}
+        </Button> */}
+
+        <Button onClick={() => { router.push('/chat') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
+          <FaFacebookMessenger />
+        </Button>
+
+        <Button onClick={() => { router.push('/notifications') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
+          <FaBell />
+        </Button>
+
+        <Button onClick={() => { router.push('t.me/lettables') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
+          <FaTelegram /> Join Telegram
         </Button>
 
         {/* <ChatApp isOpen={isChatOpen} setIsOpen={setIsChatOpen} /> */}
         {/* <NotificationTab isOpen={isOpen} setIsOpen={setIsOpen} userId={userId} isDarkTheme={isDarkTheme} /> */}
 
-        {!isPremium && (
+        {!isPremium && isLoggedIn && (
           <Button
             onClick={() => router.push('/premium')}
             className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}
@@ -126,7 +142,7 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
           </Button>
         )}
 
-        {isLoggedIn && (
+        {/* {isLoggedIn && (
           <>
             <Button onClick={() => { router.push('/ad-bot') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
               Ad Bot
@@ -155,7 +171,42 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
           <Button onClick={handleGoLogin} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
             Login / Register
           </Button>
-        )}
+        )} */}
+        <div className="flex items-center space-x-4">
+          {isLoggedIn ? (
+            <div className="relative">
+              <motion.div
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                className={`flex items-center justify-center w-10 h-10 rounded-full overflow-hidden cursor-pointer ${isProfileDropdownOpen ? 'ring-2 ring-yellow-500' : ''}`}
+              >
+                <img
+                  src={avatar || "/placeholder.svg"}
+                  alt="User Avatar"
+                  className="object-cover w-full h-full"
+                />
+              </motion.div>
+              <AnimatePresence>
+                {isProfileDropdownOpen && (
+                  <ProfileDropdown
+                    isOpen={isProfileDropdownOpen}
+                    onClose={() => setIsProfileDropdownOpen(false)}
+                    avatar={avatar}
+                    userId={userId}
+                    // username={username}
+                    isPremium={isPremium}
+                    hasUnreadNotifications={hasUnreadNotifications}
+                    isDarkTheme={isDarkTheme}
+                  />
+                )}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <Button onClick={handleGoLogin} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
+              Login / Register
+            </Button>
+          )}
+        </div>
       </>
     );
   };
@@ -177,7 +228,6 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
             <nav className="hidden md:flex space-x-4 gap-0">
               <Link href="/feed" className={`${isDarkTheme ? 'text-white/70 hover:text-white' : 'text-black/70 hover:text-black'} transition-colors`}>Explore</Link>
               <Link href="/market" className={`${isDarkTheme ? 'text-white/70 hover:text-white' : 'text-black/70 hover:text-black'} transition-colors`}>Marketplace</Link>
-              <Link href="https://t.me/KojiHQ" className={`${isDarkTheme ? 'text-white/70 hover:text-white' : 'text-black/70 hover:text-black'} transition-colors`}>Telegram</Link>
               <Link href="/about-us" className={`${isDarkTheme ? 'text-white/70 hover:text-white' : 'text-black/70 hover:text-black'} transition-colors`}>About Us</Link>
             </nav>
           </div>

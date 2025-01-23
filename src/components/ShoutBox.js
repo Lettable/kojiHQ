@@ -676,7 +676,7 @@ export default function Shoutbox() {
                         <img
                           src={message.profilePic || '/placeholder.svg?height=32&width=32'}
                           alt={message.username}
-                          className="w-8 h-8 rounded-full cursor-pointer"
+                          className="w-10 h-10 rounded-full cursor-pointer"
                         />
                       </Link>
                     )}
@@ -688,9 +688,9 @@ export default function Shoutbox() {
                           : 'bg-zinc-200 text-black'
                         }`}>
                         {message.userId !== user?.userId && (
-                          <p className={`font-semibold text-xs ${message.usernameEffect} ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'}`}>{message.username}</p>
+                          <p className={`font-semibold text-sm ${message.usernameEffect} ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'}`}>{message.username}</p>
                         )}
-                        <p className="text-sm break-words">{renderTextWithEmojis(message.content, emojis)}</p>
+                        <p className="text-base break-words">{renderTextWithEmojis(message.content, emojis)}</p>
                       </div>
                       <span className={`text-xs ${isDarkTheme ? 'text-gray-400' : 'text-gray-500'} mt-1`}>
                         {formatTimestamp(message.createdAt)}

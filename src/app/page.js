@@ -360,6 +360,7 @@ import { jwtDecode } from 'jwt-decode'
 import PreferredCurrencies from '@/components/PreferedCurrencies'
 import CryptoSelectionDialog from '@/components/CurrencyDialog'
 
+
 const renderTextWithEmojis = (text, emojis) => {
   if (!text || typeof text !== 'string') return text || '';
   if (!emojis || !Array.isArray(emojis)) return text;
@@ -467,7 +468,7 @@ export default function HomePage() {
 
         if (!userId) throw new Error('User ID not found in token.');
 
-        fetchNewToken(userId)
+        fetchNewToken(userId, token)
           .then((newToken) => {
             const newDecoded = jwtDecode(newToken);
             setCurrentUser(newDecoded);
@@ -476,12 +477,10 @@ export default function HomePage() {
           })
           .catch((error) => {
             console.error('Error fetching new token:', error.message);
-            router.push('/auth');
           });
 
       } catch (error) {
         console.error('Error decoding token:', error);
-        router.push('/auth');
       }
 
       fetchUserStats(decodedToken.userId);
@@ -495,7 +494,7 @@ export default function HomePage() {
     fetchStaffStatus();
   }, []);
 
-  async function fetchNewToken(userId) {
+  async function fetchNewToken(userId, token) {
     try {
       const response = await fetch('/api/generate-token', {
         method: 'POST',

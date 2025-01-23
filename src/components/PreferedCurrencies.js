@@ -31,28 +31,26 @@ export default function PreferredCurrencies() {
       }
     };
 
-    // Fetch prices and set interval
     fetchCryptoPrices();
     const interval = setInterval(fetchCryptoPrices, 100000);
     return () => clearInterval(interval);
   }, [preferredCurrencies, cryptoPrices]);
 
-  // Determine price color and icon
   const getPriceIndicator = (currency) => {
     const currentPrice = parseFloat(cryptoPrices[currency]);
     const previousPrice = parseFloat(previousPrices[currency]);
 
     if (!previousPrice || !currentPrice) {
-      return { color: "text-yellow-500", icon: <FiMinus /> }; // Neutral for loading
+      return { color: "text-yellow-500", icon: <FiMinus /> };
     }
 
     if (currentPrice > previousPrice) {
-      return { color: "text-green-500", icon: <FiArrowUp /> }; // Price increased
+      return { color: "text-green-500", icon: <FiArrowUp /> };
     } else if (currentPrice < previousPrice) {
-      return { color: "text-red-500", icon: <FiArrowDown /> }; // Price decreased
+      return { color: "text-red-500", icon: <FiArrowDown /> };
     }
 
-    return { color: "text-yellow-500", icon: <FiMinus /> }; // No change
+    return { color: "text-yellow-500", icon: <FiMinus /> };
   };
 
   return (

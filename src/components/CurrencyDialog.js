@@ -322,18 +322,16 @@ export default function CryptoSelectionDialog({ open, onOpenChange }) {
   const [cryptocurrencies, setCryptocurrencies] = useState([]);
 
   useEffect(() => {
-    // Retrieve saved preferences from local storage
     const stored = localStorage.getItem('preferredCurrencies');
     if (stored) {
       setSelectedCurrencies(JSON.parse(stored));
     }
 
-    // Fetch cryptocurrencies from CoinCap API
     const fetchCryptocurrencies = async () => {
       try {
         const response = await fetch('https://api.coincap.io/v2/assets');
         const data = await response.json();
-        setCryptocurrencies(data.data); // Access the data array
+        setCryptocurrencies(data.data);
       } catch (error) {
         console.error('Error fetching cryptocurrencies:', error);
       }
@@ -376,7 +374,7 @@ export default function CryptoSelectionDialog({ open, onOpenChange }) {
               >
                 <Checkbox
                   id={crypto.symbol}
-                  checked={selectedCurrencies.includes(crypto.symbol)} // Check if the symbol is in the selected currencies
+                  checked={selectedCurrencies.includes(crypto.symbol)}
                   onCheckedChange={() => handleToggle(crypto.symbol)}
                   className="border-zinc-600"
                 />

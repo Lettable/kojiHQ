@@ -53,6 +53,8 @@ export async function GET(req) {
     const responseData = {
       userId: user._id,
       username: user.username,
+      telegramUID: user.telegramUID,
+      discordId: user.discordId,
       statusEmoji: user.statusEmoji,
       profilePic: user.profilePic,
       bio: user.bio,
@@ -67,10 +69,10 @@ export async function GET(req) {
       usernameEffect: user.usernameEffect || 'regular-effect',
       favSpotifySongOrPlaylist: user.favSpotifySongOrPlaylist || defaultSpotify,
       favYtVideo: user.favYtVideo || defaultYoutube,
-      signature: user.signature || '**No Sign was saved**',
+      signature: user.signature || '',
       lastLogin: user.lastLogin,
       activityData,
-      storedUsernameEffects, // Return the formatted stored username effects
+      storedUsernameEffects,
     };
 
     return NextResponse.json(responseData, { status: 200 });

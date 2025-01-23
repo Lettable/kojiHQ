@@ -281,7 +281,6 @@ const renderTextWithEmojis = (content, emojis) => {
   return content.replace(emojiRegex, (match, emojiName) => {
     const emoji = emojis.find((e) => e.emojiTitle === `:${emojiName}:`);
     if (emoji) {
-      // Replace with Markdown-compatible <img> tag
       return `![${emoji.emojiTitle}](${emoji.emojiUrl} "Emoji")`;
     }
     return match;
@@ -323,7 +322,7 @@ const MarkdownWithEmojis = ({ content }) => {
 
   return (
     <MarkdownPreview
-      className="m-0 bg-[#0d1117] text-[#c9d1d9] p-4 rounded-md markdown-body"
+      className="m-0 bg-[#0d1117] text-[#c9d1d9] rounded-md markdown-body"
       source={processedContent}
       style={{ backgroundColor: "rgba(24, 24, 27, 0.5)" }}
       data-color-mode="dark"
