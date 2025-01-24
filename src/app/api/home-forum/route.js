@@ -243,6 +243,7 @@ import SubCategoryModel from '@/lib/model/SubCategory.model';
 import ForumModel from '@/lib/model/Forum.model';
 import PostModel from '@/lib/model/Post.model';
 import UserModel from '@/lib/model/User.model';
+import ThreadModel from '@/lib/model/Thread.model';
 
 // export async function GET() {
 //   try {
@@ -353,8 +354,12 @@ export async function GET() {
 
             const forumsWithLatestPost = await Promise.all(
               forums.map(async (forum) => {
-                // Get the latest post for the forum
-                const latestPost = await PostModel.findOne({ forumId: forum._id })
+                // Get threads for the specific forum
+                const threads = await ThreadModel.find({ forumId: forum._id }).lean();
+
+                // Get the latest post for each thread
+                // Get the latest post for the specific forum by finding the latest post across all threads
+                const latestPost = await PostModel.findOne({ threadId: { $in: threads.map(thread => thread._id) } })
                   .sort({ createdAt: -1 })
                   .select('userId createdAt')
                   .lean();
@@ -372,11 +377,20 @@ export async function GET() {
                   };
                 }
 
+                // Return the latest post for the forum
                 return {
                   _id: forum._id,
                   name: forum.name,
                   description: forum.description,
-                  latestPost: latestPostData || { user: 'No posts', time: 'Never' },
+                  latestPost: latestPostData || { user: 'No posts', time: 'Never' }, // Return only the latest post
+                };
+
+                // Combine the latest posts for the forum
+                return {
+                  _id: forum._id,
+                  name: forum.name,
+                  description: forum.description,
+                  latestPosts: latestPosts,
                 };
               })
             );
