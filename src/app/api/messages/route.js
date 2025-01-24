@@ -87,7 +87,6 @@
 // }
 
 
-
 import { connectDB } from "@/lib/config/db";
 import Message from "@/lib/model/Message";
 import User from "@/lib/model/User.model";
@@ -102,15 +101,16 @@ export async function GET() {
       .limit(30)
       .lean();
 
-    const formatedMessages = messages.reverse();
+    const formattedMessages = messages.reverse();
     const updatedMessages = await Promise.all(
-      formatedMessages.map(async (message) => {
+      formattedMessages.map(async (message) => {
         const user = await User.findById(message.userId).lean();
+
         return {
           _id: message._id,
           content: message.content,
           userId: message.userId,
-          usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
+          usernameEffect: user?.usernameEffect ? user.usernameEffect : "regular-effect",
           username: user?.username || "Unknown User",
           profilePic: user?.profilePic || null,
           createdAt: message.createdAt,
