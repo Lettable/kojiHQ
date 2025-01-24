@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
     const { userId, groupName } = await req.json();
 
+    // Validate input
     if (!userId || !groupName) {
         return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
     }
@@ -14,9 +15,9 @@ export async function POST(req) {
 
         // Update the user document to add the group
         const result = await User.updateOne(
-            { userId },
+            { _id: userId }, // Ensure you're using the correct field to match the user
             {
-                $push: {
+                $addToSet: { // Use $addToSet to avoid duplicates
                     groups: {
                         groupName,
                         assignedAt: new Date()

@@ -700,9 +700,9 @@ export default function Shoutbox() {
                 ))}
               </AnimatePresence>
             )}
-            {posts && posts.map((post) => (
+            {/* {posts && posts.map((post) => (
               <p className='bg-zinc-600/50 text-gray-200 rounded-lg items-center justify-center text-center text-sm' key={post._id}>New Post: {post.content}</p>
-            ))}
+            ))} */}
           </div>
         </ScrollArea>
 
