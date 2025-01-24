@@ -43,6 +43,8 @@
 // export default connection.models.Forum || connection.model('Forum', ForumSchema);
 
 import mongoose from "mongoose";
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const ForumSchema = new mongoose.Schema({
   name: {
@@ -77,5 +79,5 @@ const ForumSchema = new mongoose.Schema({
   },
 });
 
-const Forum = mongoose.models.Forum || mongoose.model('Forum', ForumSchema);
+const Forum = connection.models.Forum || connection.model('Forum', ForumSchema);
 export default Forum;

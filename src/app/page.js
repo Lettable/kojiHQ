@@ -359,7 +359,7 @@ import { FaEthereum } from 'react-icons/fa'
 import { jwtDecode } from 'jwt-decode'
 import PreferredCurrencies from '@/components/PreferedCurrencies'
 import CryptoSelectionDialog from '@/components/CurrencyDialog'
-
+import { ForumSection } from '@/components/ForumSection'
 
 // const renderTextWithEmojis = (text, emojis) => {
 //   if (!text || typeof text !== 'string') return text || '';
@@ -391,25 +391,21 @@ import CryptoSelectionDialog from '@/components/CurrencyDialog'
 // };
 
 const renderTextWithEmojis = (text, emojis) => {
-  // Check if text is valid
   if (!text || typeof text !== 'string') return text || '';
 
-  // Check if emojis is a valid array
   if (!Array.isArray(emojis)) return text;
 
   const emojiRegex = /:([\w-]+):/g;
   const parts = text.split(emojiRegex);
 
-  // Check if parts array has elements
   if (parts.length === 0) {
-    return text; // Return the original text if no parts are found
+    return text;
   }
 
   return parts.map((part, index) => {
     if (index % 2 === 0) {
-      return part; // Return the text part as is
+      return part;
     } else {
-      // Find the emoji based on the part
       const emoji = emojis.find(e => e.emojiTitle === `:${part}:`);
       if (emoji) {
         return (
@@ -422,7 +418,7 @@ const renderTextWithEmojis = (text, emojis) => {
           />
         );
       } else {
-        return `:${part}:`; // Return the placeholder if emoji is not found
+        return `:${part}:`;
       }
     }
   });
@@ -439,7 +435,7 @@ export default function HomePage() {
     ETH: "0",
     LTC: "0"
   })
-  const [forumCategories, setForumCategories] = useState({})
+  const [forumCategories, setForumCategories] = useState([])
   const [announcements, setAnnouncements] = useState([])
   const [staffOnline, setStaffOnline] = useState([])
   const [currencies, setCurrencies] = useState()
@@ -447,40 +443,8 @@ export default function HomePage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCryptoPrices = async () => {
-      try {
-        const [btcResponse, ethResponse, ltcResponse] = await Promise.all([
-          fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT'),
-          fetch('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT'),
-          fetch('https://api.binance.com/api/v3/ticker/price?symbol=LTCUSDT')
-        ]);
-
-        const btcData = await btcResponse.json();
-        const ethData = await ethResponse.json();
-        const ltcData = await ltcResponse.json();
-
-        setCryptoPrices({
-          BTC: Number(btcData.price).toLocaleString(undefined, { maximumFractionDigits: 2 }),
-          ETH: Number(ethData.price).toLocaleString(undefined, { maximumFractionDigits: 2 }),
-          LTC: Number(ltcData.price).toLocaleString(undefined, { maximumFractionDigits: 2 })
-        });
-      } catch (error) {
-        console.error('Error fetching crypto prices:', error);
-      }
-    };
-
-
     const currencyObject = localStorage.getItem('preferredCurrencies');
-    // const preferredCurrencies = ["BTC", "ETH", "LTC", "DOGE"];
-
     setCurrencies(currencyObject)
-
-
-
-    // fetchCryptoPrices();
-    // const interval = setInterval(fetchCryptoPrices, 30000);
-
-    // return () => clearInterval(interval);
   }, []);
 
 
@@ -528,6 +492,17 @@ export default function HomePage() {
       setIsLoggedIn(false);
     }
 
+    const fetchForumData = async () => {
+      try {
+        const response = await fetch('/api/home-forum');
+        const data = await response.json();
+        setForumCategories(data);
+      } catch (error) {
+        setError(err.message)
+        console.error('Error fetching forum data:', error);
+      }
+    };
+    
     fetchForumData();
     fetchAnnouncements();
     fetchStaffStatus();
@@ -553,17 +528,6 @@ export default function HomePage() {
       throw error;
     }
   }
-
-  const fetchForumData = async () => {
-    try {
-      const response = await fetch('/api/home-forum');
-      const data = await response.json();
-      setForumCategories(data);
-    } catch (error) {
-      setError(err.message)
-      console.error('Error fetching forum data:', error);
-    }
-  };
 
   const fetchAnnouncements = async () => {
     try {
@@ -696,7 +660,7 @@ export default function HomePage() {
 
             {/* Forums List */}
             <div className="text-white space-y-6">
-              {error && (
+              {/* {error && (
                 <div className="p-4 rounded-lg bg-red-500 text-white">
                   <p>{error}</p>
                 </div>
@@ -709,20 +673,6 @@ export default function HomePage() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-white space-y-2">
-                        {/* {forums.map(forum => (
-                          <a href={`/forum/${forum.id}`} key={forum.id} className={`flex items-center text-white justify-between p-4 rounded-lg bg-zinc-800/10 ${isDarkTheme ? 'hover:bg-zinc-800/50' : 'hover:bg-gray-50'} transition-colors cursor-pointer`}>
-                            <div className="flex-1">
-                              <h3 className="font-semibold">{forum.title}</h3>
-                              <p className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
-                                {forum.threads} threads • {forum.posts} posts
-                              </p>
-                            </div>
-                            <div className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
-                              <p>Last post by {forum.lastPost.user}</p>
-                              <p className="text-right">{forum.lastPost.time}</p>
-                            </div>
-                          </a>
-                        ))} */}
                         <div className="text-white space-y-2">
                           {forums.length > 0 ? (
                             forums.map(forum => (
@@ -755,10 +705,23 @@ export default function HomePage() {
                     </CardContent>
                   </Card>
                 ))) : (
+                <div className="p-4 rounded-lg bg-red-500 text-white">
+                  <p>No categories found or error fetching categories.</p>
+                </div>
+              )} */}
+              <div className="text-white space-y-6">
+                {error ? (
                   <div className="p-4 rounded-lg bg-red-500 text-white">
-                    <p>No categories found or error fetching categories.</p>
+                    <p>{error}</p>
                   </div>
-              )}
+                ) : (
+                  <ForumSection
+                    forumData={forumCategories}
+                    isDarkTheme={isDarkTheme}
+                    setForumCategories={setForumCategories}
+                  />
+                )}
+              </div>
             </div>
           </div>
 

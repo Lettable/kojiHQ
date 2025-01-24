@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const CategorySchema = new mongoose.Schema({
     name: {
@@ -20,6 +22,6 @@ const CategorySchema = new mongoose.Schema({
     },
   });
   
-  const Category = mongoose.models.Category || mongoose.model('Category', CategorySchema);
+  const Category = connection.models.Category || connection.model('Category', CategorySchema);
   export default Category;
   

@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
+import { connectDB } from "../config/db";
+const connection = await connectDB();
 
 const SubcategorySchema = new mongoose.Schema({
     name: {
       type: String,
       required: true,
+      unique: false
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
@@ -20,6 +23,6 @@ const SubcategorySchema = new mongoose.Schema({
     },
   });
   
-  const Subcategory = mongoose.models.Subcategory || mongoose.model('Subcategory', SubcategorySchema);
+  const Subcategory = connection.models.Subcategory || connection.model('Subcategory', SubcategorySchema);
   export default Subcategory;
   
