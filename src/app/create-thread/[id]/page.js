@@ -785,6 +785,7 @@ export default function CreateThread() {
                                      <li>`Code` for inline code</li>
                                      <li>- Item for unordered lists</li>
                                      <li>[Link](URL) for hyperlinks</li>
+                                     <li>![Link](URL) for Images/Gifs</li>
                                  </ul>
                              </CardContent>
                          </Card>

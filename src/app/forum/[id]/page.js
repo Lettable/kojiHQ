@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
 import { jwtDecode } from 'jwt-decode'
 import { FaEthereum } from 'react-icons/fa'
+import PreferredCurrencies from '@/components/PreferedCurrencies'
 
 export default function ForumView() {
   const [currentUser, setCurrentUser] = useState(null)
@@ -35,35 +36,6 @@ export default function ForumView() {
   const router = useRouter()
   const pathname = usePathname()
   const forumId = pathname.split('/')[2]
-
-  useEffect(() => {
-    const fetchCryptoPrices = async () => {
-      try {
-        const [btcResponse, ethResponse, ltcResponse] = await Promise.all([
-          fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT'),
-          fetch('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT'),
-          fetch('https://api.binance.com/api/v3/ticker/price?symbol=LTCUSDT')
-        ]);
-
-        const btcData = await btcResponse.json();
-        const ethData = await ethResponse.json();
-        const ltcData = await ltcResponse.json();
-
-        setCryptoPrices({
-          BTC: Number(btcData.price).toLocaleString(undefined, { maximumFractionDigits: 2 }),
-          ETH: Number(ethData.price).toLocaleString(undefined, { maximumFractionDigits: 2 }),
-          LTC: Number(ltcData.price).toLocaleString(undefined, { maximumFractionDigits: 2 })
-        });
-      } catch (error) {
-        console.error('Error fetching crypto prices:', error);
-      }
-    };
-
-    fetchCryptoPrices();
-    const interval = setInterval(fetchCryptoPrices, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     const getCurrentUser = () => {
@@ -294,8 +266,7 @@ export default function ForumView() {
 
           {/* Right side - Sidebar */}
           <div className="lg:w-1/4 text-white space-y-6">
-            {/* Crypto Prices */}
-            <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
+            {/* <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
               <CardHeader>
                 <CardTitle className="text-lg">Live Prices</CardTitle>
               </CardHeader>
@@ -324,7 +295,9 @@ export default function ForumView() {
                   </div>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
+            <PreferredCurrencies preferredCurrencies={currencies} />
+
 
             {/* Forum Rules */}
             <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} border-0 text-white shadow-lg`}>

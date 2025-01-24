@@ -97,6 +97,20 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
+  groups: {
+    type: [
+      {
+        groupName: { type: String, required: true }, 
+        assignedAt: { type: Date, default: Date.now },
+      },
+    ],
+    default: [
+      { 
+        groupName: 'Member', 
+        assignedAt: Date.now 
+      },
+    ],
+  },
   reputationGiven: [
     {
       type: mongoose.Schema.Types.ObjectId,

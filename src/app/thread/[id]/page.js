@@ -19,6 +19,7 @@ import { jwtDecode } from 'jwt-decode'
 import remarkGfm from 'remark-gfm'
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import MarkdownWithEmojis from '@/partials/MarkdownWithEmojis'
+import PreferredCurrencies from '@/components/PreferedCurrencies'
 
 export default function ThreadView() {
     const [currentUser, setCurrentUser] = useState(null)
@@ -39,35 +40,6 @@ export default function ThreadView() {
     })
     const pathname = usePathname()
     const router = useRouter()
-
-    useEffect(() => {
-        const fetchCryptoPrices = async () => {
-            try {
-                const [btcResponse, ethResponse, ltcResponse] = await Promise.all([
-                    fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT'),
-                    fetch('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT'),
-                    fetch('https://api.binance.com/api/v3/ticker/price?symbol=LTCUSDT')
-                ]);
-
-                const btcData = await btcResponse.json();
-                const ethData = await ethResponse.json();
-                const ltcData = await ltcResponse.json();
-
-                setCryptoPrices({
-                    BTC: Number(btcData.price).toLocaleString(undefined, { maximumFractionDigits: 2 }),
-                    ETH: Number(ethData.price).toLocaleString(undefined, { maximumFractionDigits: 2 }),
-                    LTC: Number(ltcData.price).toLocaleString(undefined, { maximumFractionDigits: 2 })
-                });
-            } catch (error) {
-                console.error('Error fetching crypto prices:', error);
-            }
-        };
-
-        fetchCryptoPrices();
-        const interval = setInterval(fetchCryptoPrices, 50000);
-
-        return () => clearInterval(interval);
-    }, []);
 
     useEffect(() => {
         const getCurrentUser = () => {
@@ -448,7 +420,7 @@ export default function ThreadView() {
 
                     {/* Right Sidebar */}
                     <div className="lg:w-1/4 space-y-6">
-                        <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
+                        {/* <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
                             <CardHeader>
                                 <CardTitle className="text-lg">Live Prices</CardTitle>
                             </CardHeader>
@@ -477,7 +449,9 @@ export default function ThreadView() {
                                     </div>
                                 </div>
                             </CardContent>
-                        </Card>
+                        </Card> */}
+
+                        <PreferredCurrencies preferredCurrencies={currencies} />
 
                         <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} border-0 text-white shadow-lg`}>
                             <CardHeader>
