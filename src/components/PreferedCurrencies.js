@@ -9,7 +9,7 @@ export default function PreferredCurrencies() {
   const [cryptoPrices, setCryptoPrices] = useState({});
   const [previousPrices, setPreviousPrices] = useState({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [preferredCurrencies, setPreferredCurrencies] = useState();
+  const [preferredCurrencies, setPreferredCurrencies] = useState(['BTC', 'ETH', 'LTC']);
 
   const handleOpenDialog = () => {
     setIsDialogOpen(true);

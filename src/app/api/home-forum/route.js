@@ -244,12 +244,101 @@ import ForumModel from '@/lib/model/Forum.model';
 import PostModel from '@/lib/model/Post.model';
 import UserModel from '@/lib/model/User.model';
 
+// export async function GET() {
+//   try {
+//     await connectDB();
+
+//     // Fetch all categories
+//     const categories = await CategoryModel.find({}).lean();
+
+//     // Build structured data
+//     const structuredData = await Promise.all(
+//       categories.map(async (category) => {
+//         // Fetch subcategories for the current category
+//         const subcategories = await SubCategoryModel.find({ category: category._id }).lean();
+
+//         const subcategoriesWithForums = await Promise.all(
+//           subcategories.map(async (subcategory) => {
+//             // Fetch forums for the current subcategory
+//             const forums = await ForumModel.find({ subcategory: subcategory._id }).lean();
+
+//             const forumsWithLatestPost = await Promise.all(
+//               forums.map(async (forum) => {
+//                 // Get the latest post for the forum
+//                 const latestPost = await PostModel.findOne({ forumId: forum._id })
+//                   .sort({ createdAt: -1 })
+//                   .select('userId createdAt')
+//                   .lean();
+
+//                 let latestPostData = null;
+//                 if (latestPost) {
+//                   const user = await UserModel.findById(latestPost.userId)
+//                     .select('username usernameEffect')
+//                     .lean();
+
+//                   latestPostData = {
+//                     user: user?.username || 'Unknown',
+//                     usernameEffect: user?.usernameEffect || 'regular-effect',
+//                     time: getTimeDifference(latestPost.createdAt),
+//                   };
+//                 }
+
+//                 return {
+//                   _id: forum._id,
+//                   name: forum.name,
+//                   description: forum.description,
+//                   latestPost: latestPostData || { user: 'No posts', time: 'Never' },
+//                 };
+//               })
+//             );
+
+//             return {
+//               _id: subcategory._id,
+//               name: subcategory.name,
+//               description: subcategory.description,
+//               forums: forumsWithLatestPost,
+//             };
+//           })
+//         );
+
+//         return {
+//           _id: category._id,
+//           name: category.name,
+//           description: category.description,
+//           subcategories: subcategoriesWithForums,
+//         };
+//       })
+//     );
+
+//     return NextResponse.json(structuredData, { status: 200 });
+//   } catch (error) {
+//     console.error(error);
+//     return NextResponse.json(
+//       { message: 'Internal Server Error', error: error.message },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+// function getTimeDifference(date) {
+//   const now = new Date();
+//   const diff = now - new Date(date);
+//   const minutes = Math.floor(diff / 60000);
+//   const hours = Math.floor(minutes / 60);
+//   const days = Math.floor(hours / 24);
+
+//   if (minutes < 60) return `${minutes}m ago`;
+//   if (hours < 24) return `${hours}h ago`;
+//   return `${days}d ago`;
+// }
+
 export async function GET() {
   try {
     await connectDB();
 
-    // Fetch all categories
+    // Fetch all categories and sort them by index
     const categories = await CategoryModel.find({}).lean();
+    categories.sort((a, b) => a.index - b.index); // Sort categories by index
 
     // Build structured data
     const structuredData = await Promise.all(

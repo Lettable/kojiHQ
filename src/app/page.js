@@ -819,7 +819,7 @@ export default function HomePage() {
                       </div>
                     ))
                   ) : (
-                    <div className="p-4 rounded-lg bg-red-500 text-white">
+                    <div className="p-4 rounded-lg bg-transparent text-white">
                       <p>No announcements found or error fetching announcements.</p>
                     </div>
                   )}
@@ -844,7 +844,7 @@ export default function HomePage() {
                       </div>
                     ))
                   ) : (
-                    <div className="p-4 rounded-lg bg-red-500 text-white">
+                    <div className="p-4 rounded-lg bg-transparent text-white">
                       <p>No staff found or error fetching staff.</p>
                     </div>
                   )}
