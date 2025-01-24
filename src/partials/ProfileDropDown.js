@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { User, Settings, Bell, Crown, PlusCircle, LogOut, MessageSquare, Rocket } from 'lucide-react'
+import { jwtDecode } from 'jwt-decode'
 
 export function ProfileDropdown({
   isOpen,
@@ -15,7 +16,17 @@ export function ProfileDropdown({
   isDarkTheme
 }) {
   const router = useRouter()
+  const [username, setUsername] = useState()
 
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken')
+    if (token) {
+      const decodedToken = jwtDecode(token)
+      setUsername(decodedToken.username)
+    } else {
+      setUsername('Unknown')
+    }
+  }, []) 
   const dropdownVariants = {
     hidden: { opacity: 0, y: -20, scale: 0.95 },
     visible: { opacity: 1, y: 0, scale: 1 },
@@ -27,7 +38,7 @@ export function ProfileDropdown({
   };
 
   const handleCreateThread = () => {
-    router.push('/create-thread/6777b1e1da5ff8bd42fbbbd8')
+    router.push('/create-thread/')
     onClose()
   }
 
@@ -60,7 +71,7 @@ export function ProfileDropdown({
         <div className="flex items-center">
           <img className="h-10 w-10 rounded-full" src={avatar} alt="" />
           <div className="ml-3">
-            <p className="text-sm font-medium text-white">Mirza</p>
+            <p className="text-sm font-medium text-white">{username}</p>
             {/* <p className="text-xs font-medium text-gray-400 cursor-pointer hover:text-yellow-500" onClick={() => { router.push(`/user/${userId}`); onClose(); }}>View Profile</p> */}
             <p className="text-xs font-medium text-gray-400 cursor-pointer hover:text-yellow-500"><a className='text-gray-400' href={`/user/${userId}`}>View Profile</a></p>
           </div>
