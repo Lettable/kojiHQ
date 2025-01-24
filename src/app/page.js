@@ -443,8 +443,9 @@ export default function HomePage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const currencyObject = localStorage.getItem('preferredCurrencies');
-    setCurrencies(currencyObject)
+    const storedCurrencies = localStorage.getItem('preferredCurrencies');
+    const initialCurrencies = storedCurrencies ? JSON.parse(storedCurrencies) : ['BTC', 'ETH', 'LTC'];
+    setCurrencies(initialCurrencies);
   }, []);
 
 

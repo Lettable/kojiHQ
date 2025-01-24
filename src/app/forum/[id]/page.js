@@ -36,6 +36,13 @@ export default function ForumView() {
   const router = useRouter()
   const pathname = usePathname()
   const forumId = pathname.split('/')[2]
+  const [currencies, setCurrencies] = useState()
+
+  useEffect(() => {
+    const storedCurrencies = localStorage.getItem('preferredCurrencies');
+    const initialCurrencies = storedCurrencies ? JSON.parse(storedCurrencies) : ['BTC', 'ETH', 'LTC'];
+    setCurrencies(initialCurrencies);
+  }, []);
 
   useEffect(() => {
     const getCurrentUser = () => {

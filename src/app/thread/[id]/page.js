@@ -40,6 +40,13 @@ export default function ThreadView() {
     })
     const pathname = usePathname()
     const router = useRouter()
+    const [currencies, setCurrencies] = useState()
+
+  useEffect(() => {
+    const storedCurrencies = localStorage.getItem('preferredCurrencies');
+    const initialCurrencies = storedCurrencies ? JSON.parse(storedCurrencies) : ['BTC', 'ETH', 'LTC'];
+    setCurrencies(initialCurrencies);
+  }, []);
 
     useEffect(() => {
         const getCurrentUser = () => {
