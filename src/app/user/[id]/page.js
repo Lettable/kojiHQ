@@ -1108,7 +1108,7 @@ export default function ForumUserProfile() {
                                                 <h1 className={`text-2xl font-bold ${userData.usernameEffect}`}>
                                                     {userData.username} <span>{renderTextWithEmojis(userData.statusEmoji, emojis)}</span>
                                                 </h1>
-                                                <p className="text-gray-400">{userData.bio}</p>
+                                                <p className="text-gray-400">{userData.bio === "Edit your bio..." ? "Bio not set" : userData.bio}</p>
                                             </div>
                                         </div>
                                     </CardContent>
