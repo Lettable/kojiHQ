@@ -21,23 +21,23 @@ export default function PreferredCurrencies() {
     setPreferredCurrencies(initialCurrencies);
   }, []);
 
-  useEffect(() => {
-    const fetchCryptoPrices = async () => {
-      try {
-        const response = await fetch(`/api/getCryptoPrices?currencies=${preferredCurrencies.join(",")}`);
-        const { prices } = await response.json();
+  // useEffect(() => {
+  //   const fetchCryptoPrices = async () => {
+  //     try {
+  //       const response = await fetch(`/api/getCryptoPrices?currencies=${preferredCurrencies.join(",")}`);
+  //       const { prices } = await response.json();
 
-        setPreviousPrices(cryptoPrices);
-        setCryptoPrices(prices);
-      } catch (error) {
-        console.error("Error fetching crypto prices:", error);
-      }
-    };
+  //       setPreviousPrices(cryptoPrices);
+  //       setCryptoPrices(prices);
+  //     } catch (error) {
+  //       console.error("Error fetching crypto prices:", error);
+  //     }
+  //   };
 
-    fetchCryptoPrices();
-    const interval = setInterval(fetchCryptoPrices, 100000);
-    return () => clearInterval(interval);
-  }, [preferredCurrencies, cryptoPrices]);
+  //   fetchCryptoPrices();
+  //   const interval = setInterval(fetchCryptoPrices, 100000);
+  //   return () => clearInterval(interval);
+  // }, [preferredCurrencies, cryptoPrices]);
 
   const getPriceIndicator = (currency) => {
     const currentPrice = parseFloat(cryptoPrices[currency]);
