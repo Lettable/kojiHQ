@@ -100,14 +100,12 @@ const UserSchema = new mongoose.Schema({
   groups: {
     type: [
       {
-        groupName: { type: String, required: true }, 
-        assignedAt: { type: Date, default: Date.now },
+        groupName: { type: String, required: true },
       },
     ],
     default: [
       { 
-        groupName: 'Member', 
-        assignedAt: Date.now 
+        groupName: 'Member'
       },
     ],
   },
