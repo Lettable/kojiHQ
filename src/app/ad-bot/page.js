@@ -363,6 +363,7 @@ const adCategories = [
 
 export default function AdManagementPage() {
   const [currentUser, setCurrentUser] = useState(null)
+  const [currentNigga, setCurrentNigga] = useState(null)
   const [isDarkTheme, setIsDarkTheme] = useState(true)
   const [isAdRunning, setIsAdRunning] = useState(false)
   const [showFullToken, setShowFullToken] = useState(false)
@@ -387,6 +388,7 @@ export default function AdManagementPage() {
           const telegramUID = decodedToken.telegramUID
           setTgUid(telegramUID)
           setUsername(decodedToken.username)
+          setCurrentNigga(decodedToken)
           const response = await fetch(`/api/tg-user?id=${telegramUID}`)
           if (!response.ok) throw new Error('Failed to fetch user data')
           const userData = await response.json()
@@ -492,13 +494,13 @@ export default function AdManagementPage() {
     localStorage.setItem('theme', newTheme ? 'dark' : 'light')
   }
 
-  const isPremium = currentUser?.isPremium
+  const isPremium = currentNigga?.isPremium
 
   return (
     <div className={`min-h-screen ${isDarkTheme ? 'bg-black text-white' : 'bg-white text-black'}`}>
       <Header
-        avatar={currentUser && currentUser.profilePic}
-        userId={currentUser && currentUser.userId}
+        avatar={currentNigga && currentNigga.profilePic}
+        userId={currentNigga && currentNigga.userId}
         currentPage='/ad-management'
         isDarkTheme={isDarkTheme}
         toggleTheme={toggleTheme}
