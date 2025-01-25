@@ -390,39 +390,39 @@ import { ForumSection } from '@/components/ForumSection'
 //   });
 // };
 
-const renderTextWithEmojis = (text, emojis) => {
-  if (!text || typeof text !== 'string') return text || '';
+// const renderTextWithEmojis = (text, emojis) => {
+//   if (!text || typeof text !== 'string') return text || '';
 
-  if (!Array.isArray(emojis)) return text;
+//   if (!Array.isArray(emojis)) return text;
 
-  const emojiRegex = /:([\w-]+):/g;
-  const parts = text.split(emojiRegex);
+//   const emojiRegex = /:([\w-]+):/g;
+//   const parts = text.split(emojiRegex);
 
-  if (parts.length === 0) {
-    return text;
-  }
+//   if (parts.length === 0) {
+//     return text;
+//   }
 
-  return parts.map((part, index) => {
-    if (index % 2 === 0) {
-      return part;
-    } else {
-      const emoji = emojis.find(e => e.emojiTitle === `:${part}:`);
-      if (emoji) {
-        return (
-          <img
-            key={index}
-            src={emoji.emojiUrl}
-            alt={emoji.emojiTitle}
-            title={emoji.emojiTitle}
-            className="inline-block w-6 h-6"
-          />
-        );
-      } else {
-        return `:${part}:`;
-      }
-    }
-  });
-};
+//   return parts.map((part, index) => {
+//     if (index % 2 === 0) {
+//       return part;
+//     } else {
+//       const emoji = emojis.find(e => e.emojiTitle === `:${part}:`);
+//       if (emoji) {
+//         return (
+//           <img
+//             key={index}
+//             src={emoji.emojiUrl}
+//             alt={emoji.emojiTitle}
+//             title={emoji.emojiTitle}
+//             className="inline-block w-6 h-6"
+//           />
+//         );
+//       } else {
+//         return `:${part}:`;
+//       }
+//     }
+//   });
+// };
 
 export default function HomePage() {
   const [currentUser, setCurrentUser] = useState(null)
@@ -503,7 +503,7 @@ export default function HomePage() {
         console.error('Error fetching forum data:', error);
       }
     };
-    
+
     fetchForumData();
     fetchAnnouncements();
     fetchStaffStatus();
@@ -514,7 +514,7 @@ export default function HomePage() {
       const response = await fetch('/api/generate-token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: userId, token: token}),
+        body: JSON.stringify({ userId: userId, token: token }),
       });
 
       if (!response.ok) {
@@ -565,6 +565,35 @@ export default function HomePage() {
     if (hour < 12) return "Good morning"
     if (hour < 18) return "Good afternoon"
     return "Good evening"
+  }
+
+  const renderTextWithEmojis = (text, emojis) => {
+    if (!text || typeof text !== 'string') return text || ''
+    if (!emojis || !Array.isArray(emojis)) return text
+
+    const emojiRegex = /:([\w-]+):/g
+    const parts = text.split(emojiRegex)
+
+    return parts.map((part, index) => {
+      if (index % 2 === 0) {
+        return part
+      } else {
+        const emoji = emojis.find(e => e.emojiTitle === `:${part}:`)
+        if (emoji) {
+          return (
+            <img
+              key={index}
+              src={emoji.emojiUrl}
+              alt={emoji.emojiTitle}
+              title={emoji.emojiTitle}
+              className="inline-block w-6 h-6"
+            />
+          )
+        } else {
+          return `:${part}:`
+        }
+      }
+    })
   }
 
   return (
@@ -840,7 +869,7 @@ export default function HomePage() {
                       <div key={staff.userId} className="flex text-white items-center justify-between">
                         <div className="flex items-center space-x-2">
                           <div className={`w-2 h-2 rounded-full ${staff.status === 'online' ? 'bg-green-500' : 'bg-yellow-500'}`} />
-                          <span className={`${staff.usernameEffect}`}>{staff.username}</span>{renderTextWithEmojis(staff.statusEmoji, emojis)}
+                          <span className={`${staff.usernameEffect}`}>{staff.username} </span>{renderTextWithEmojis(staff.statusEmoji, emojis)}
                         </div>
                       </div>
                     ))
