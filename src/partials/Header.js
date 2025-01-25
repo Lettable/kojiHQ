@@ -126,7 +126,7 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
           <FaBell />
         </Button>
 
-        <Button onClick={() => { router.push('t.me/lettables') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
+        <Button onClick={() => { router.push('https://t.me/lettables') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
           <FaTelegram /> Join Telegram
         </Button>
 

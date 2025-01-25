@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { User, Settings, Bell, Crown, PlusCircle, LogOut, MessageSquare, Rocket } from 'lucide-react'
+import { User, Settings, Bell, Crown, PlusCircle, Crown, LogOut, MessageSquare, Rocket } from 'lucide-react'
 import { jwtDecode } from 'jwt-decode'
 
 export function ProfileDropdown({
@@ -36,6 +36,11 @@ export function ProfileDropdown({
     router.push(`/notifications`);
     onClose()
   };
+
+  const handleUsernameEffect = () => {
+    router.push('/mics/username-effect')
+    onClose()
+  }
 
   const handleCreateThread = () => {
     router.push('/create-thread/')
@@ -104,6 +109,9 @@ export function ProfileDropdown({
         <Button variant="ghost" className="w-full justify-start text-white hover:bg-zinc-800 hover:text-yellow-500" onClick={handleSubmitProduct}>
           <PlusCircle className="mr-2 h-4 w-4" /> Submit Product
         </Button>
+        <Button variant="ghost" className="w-full justify-start text-white hover:bg-zinc-800 hover:text-yellow-500" onClick={handleUsernameEffect}>
+          <Crown className="mr-2 h-4 w-4" /> Username Effects
+        </Button>
         <Button variant="ghost" className="w-full justify-start text-white hover:bg-zinc-800 hover:text-yellow-500" onClick={handleAdBot}>
           <Rocket className="mr-2 h-4 w-4" /> Ad Bot
         </Button>
@@ -111,7 +119,7 @@ export function ProfileDropdown({
 
       {!isPremium && (
         <>
-          <Separator className="my-2 bg-zinc-700" />
+          <Separator className="my-2 text-white bg-zinc-700" />
           <div className="px-2 py-2">
             <Button 
               variant="premium" 
