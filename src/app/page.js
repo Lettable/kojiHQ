@@ -390,8 +390,17 @@ import { ForumSection } from '@/components/ForumSection'
 //   });
 // };
 
-const renderTextWithEmojis = (text, emojis) => {
+const renderTextWithEmojis = async (text) => {
   if (!text || typeof text !== 'string') return text || '';
+
+  let emojis = [];
+
+  try {
+    const response = await fetch('/api/emojis');
+    emojis = await response.json();
+  } catch (error) {
+    console.error('Error fetching emojis:', error);
+  }
 
   if (!Array.isArray(emojis)) return text;
 
@@ -423,7 +432,6 @@ const renderTextWithEmojis = (text, emojis) => {
     }
   });
 };
-
 export default function HomePage() {
   const [currentUser, setCurrentUser] = useState(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -448,16 +456,6 @@ export default function HomePage() {
     setCurrencies(initialCurrencies);
   }, []);
 
-
-  const fetchEmojis = async () => {
-    try {
-      const response = await fetch('/api/emojis')
-      const data = await response.json()
-      setEmojis(data)
-    } catch (error) {
-      console.error('Error fetching emojis:', error)
-    }
-  }
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -840,7 +838,7 @@ export default function HomePage() {
                       <div key={staff.userId} className="flex text-white items-center justify-between">
                         <div className="flex items-center space-x-2">
                           <div className={`w-2 h-2 rounded-full ${staff.status === 'online' ? 'bg-green-500' : 'bg-yellow-500'}`} />
-                          <span className={`${staff.usernameEffect}`}>{staff.username}</span>{renderTextWithEmojis(staff.statusEmoji, emojis)}
+                          <span className={`${staff.usernameEffect}`}>{staff.username}</span>{renderTextWithEmojis(staff.statusEmoji)}
                         </div>
                       </div>
                     ))

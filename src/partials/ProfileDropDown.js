@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { User, Settings, Bell, Crown, PlusCircle, Crown, LogOut, MessageSquare, Rocket } from 'lucide-react'
+import { User, Settings, Bell, Crown, PlusCircle, LogOut, MessageSquare, Rocket } from 'lucide-react'
 import { jwtDecode } from 'jwt-decode'
 
 export function ProfileDropdown({
