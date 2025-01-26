@@ -604,7 +604,7 @@ export default function ChatPage() {
                               </div>
                               <p className={`text-sm ${isDarkTheme ? 'text-white/70' : 'text-black/70'} truncate`}>
                                 {/* {blockedUsers.includes(chat.userId) ? "You blocked this user" : renderTextWithEmojis(chat.lastMessage, emojis)} */}
-                              {blockedUsers.includes(chat.userId) ? "You blocked this user" : renderTextWithEmojis(chat.lastMessage.length > 20 ? `${chat.lastMessage.slice(0, 20)}...` : chat.lastMessage, emojis)}
+                                {blockedUsers.includes(chat.userId) ? "You blocked this user" : renderTextWithEmojis(chat.lastMessage.length > 20 ? `${chat.lastMessage.slice(0, 20)}...` : chat.lastMessage, emojis)}
                               </p>
                             </div>
                             {!blockedUsers.includes(chat.userId) && chat.unread > 0 && (
@@ -819,7 +819,10 @@ export default function ChatPage() {
                   </Avatar>
                   <div className='flex'>
                     <div className={`font-semibold ${user.usernameEffect}`}>{user.username}</div>
-                    <span className='ml-2'>{renderTextWithEmojis(user?.statusEmoji, emojis)}</span>
+                    {user?.statusEmoji && (
+                      <span className='ml-2'>{renderTextWithEmojis(user.statusEmoji, emojis)}</span>
+                    )}
+
                   </div>
                 </motion.div>
               ))}
