@@ -472,7 +472,7 @@ export default function HomePage() {
 
         if (!userId) throw new Error('User ID not found in token.');
 
-        fetchNewToken(userId, token)
+        fetchNewToken(userId)
           .then((newToken) => {
             const newDecoded = jwtDecode(newToken);
             setCurrentUser(newDecoded);
@@ -509,12 +509,12 @@ export default function HomePage() {
     fetchStaffStatus();
   }, []);
 
-  async function fetchNewToken(userId, token) {
+  async function fetchNewToken(userId) {
     try {
       const response = await fetch('/api/generate-token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: userId, token: token }),
+        body: JSON.stringify({ userId }),
       });
 
       if (!response.ok) {
