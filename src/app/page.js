@@ -462,32 +462,36 @@ export default function HomePage() {
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token) {
-      const decodedToken = jwtDecode(token);
-      setCurrentUser(decodedToken);
-      setIsLoggedIn(true);
-
       try {
-        const decoded = jwtDecode(token);
-        const userId = decoded.userId;
-
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.userId;
+  
         if (!userId) throw new Error('User ID not found in token.');
-
-        fetchNewToken(userId)
+  
+        setCurrentUser(decodedToken);
+        setIsLoggedIn(true);
+  
+        fetchNewToken(userId, token)
           .then((newToken) => {
             const newDecoded = jwtDecode(newToken);
+  
             setCurrentUser(newDecoded);
             localStorage.setItem('accessToken', newToken);
+  
             fetchEmojis();
           })
           .catch((error) => {
             console.error('Error fetching new token:', error.message);
+            setCurrentUser(null);
+            setIsLoggedIn(false);
           });
-
+  
+        fetchUserStats(userId);
       } catch (error) {
-        console.error('Error decoding token:', error);
+        console.error('Error decoding token:', error.message);
+        setCurrentUser(null);
+        setIsLoggedIn(false);
       }
-
-      fetchUserStats(decodedToken.userId);
     } else {
       setCurrentUser(null);
       setIsLoggedIn(false);
@@ -509,26 +513,49 @@ export default function HomePage() {
     fetchStaffStatus();
   }, []);
 
-  async function fetchNewToken(userId) {
+  // async function fetchNewToken(userId) {
+  //   try {
+  //     const response = await fetch('/api/generate-token', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ userId }),
+  //     });
+
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.error || 'Failed to fetch new token.');
+  //     }
+
+  //     const { token } = await response.json();
+  //     return token;
+  //   } catch (error) {
+  //     console.error('Error updating token:', error.message);
+  //     throw error;
+  //   }
+  // }
+  async function fetchNewToken(userId, token) {
     try {
       const response = await fetch('/api/generate-token', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, token }),
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to fetch new token.');
       }
-
-      const { token } = await response.json();
-      return token;
+  
+      const { token: newToken } = await response.json();
+      return newToken;
     } catch (error) {
       console.error('Error updating token:', error.message);
       throw error;
     }
   }
+  
 
   const fetchAnnouncements = async () => {
     try {
