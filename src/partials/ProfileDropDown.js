@@ -43,7 +43,7 @@ export function ProfileDropdown({
   }
 
   const handleCreateThread = () => {
-    router.push('/create-thread/')
+    router.push('/create-thread/6792a8101faf1d9895979003')
     onClose()
   }
 
