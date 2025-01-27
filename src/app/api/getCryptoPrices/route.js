@@ -1,7 +1,6 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
 
-const BINANCE_API = "https://api.binance.com/api/v3/ticker/price";
 
 export async function GET(req) {
   try {
@@ -16,7 +15,12 @@ export async function GET(req) {
 
     const currencyList = currencies.split(",");
     const pricePromises = currencyList.map((currency) =>
-      axios.get(`${BINANCE_API}?symbol=${currency}USDT`).catch(() => null)
+      axios
+        .get(`https://api.binance.com/api/v3/ticker/price?symbol=${currency}USDT`)
+        .catch((error) => {
+          console.error(`Error fetching ${currency}:`, error.response?.data || error.message);
+          return null;
+        })
     );
 
     const responses = await Promise.all(pricePromises);
