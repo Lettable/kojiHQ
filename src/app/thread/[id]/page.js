@@ -359,7 +359,7 @@ export default function ThreadView() {
                             </AnimatePresence>
 
                             <AnimatePresence>
-                                {posts.length > 0 && sortPosts(posts).map((post) => (
+                                {currentUser && posts.length > 0 && sortPosts(posts).map((post) => (
                                     <motion.div
                                         key={post._id}
                                         initial={{ opacity: 0, y: 20 }}
