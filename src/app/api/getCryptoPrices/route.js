@@ -16,7 +16,7 @@ export async function GET(req) {
     const currencyList = currencies.split(",");
     const pricePromises = currencyList.map((currency) =>
       axios
-        .get(`https://api.binance.com/api/v3/ticker/price?symbol=${currency}USDT`)
+        .get(`https://api.binance.us/api/v3/ticker/price?symbol=${currency}USDT`)
         .catch((error) => {
           console.error(`Error fetching ${currency}:`, error.response?.data || error.message);
           return null;
