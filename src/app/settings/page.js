@@ -217,6 +217,9 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-black text-white">
       <Header
         isDarkTheme={true}
+        avatar={profilePic}
+        userId={userData.userId}
+        isPremium={userData.isPremium}
         isLoggedIn={true}
       />
       <div className="container mx-auto px-4 py-8">
