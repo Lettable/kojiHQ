@@ -681,7 +681,7 @@ export default function HomePage() {
               <CardHeader className="pt-5 pl-10 pr-10 pb-5">
                 <CardTitle className="text-xl">Shoutbox</CardTitle>
               </CardHeader>
-              <CardContent className="h-[440px] p-1">
+              <CardContent className="h-[480px] p-1">
                 <Shoutbox />
               </CardContent>
             </Card>

@@ -268,6 +268,71 @@
 // export default MarkdownWithEmojis;
 
 
+// working one
+// import React, { useEffect, useState, useMemo } from "react";
+// import MarkdownPreview from "@uiw/react-markdown-preview";
+
+// const renderTextWithEmojis = (content, emojis) => {
+//   if (!emojis || !Array.isArray(emojis)) {
+//     return content;
+//   }
+
+//   const emojiRegex = /:([\w-]+):/g;
+
+//   return content.replace(emojiRegex, (match, emojiName) => {
+//     const emoji = emojis.find((e) => e.emojiTitle === `:${emojiName}:`);
+//     if (emoji) {
+//       return `![${emoji.emojiTitle}](${emoji.emojiUrl} "Emoji")`;
+//     }
+//     return match;
+//   });
+// };
+
+// const fetchEmojis = async () => {
+//   try {
+//     const response = await fetch("/api/emojis");
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("Error fetching emojis:", error);
+//     return [];
+//   }
+// };
+
+// const MarkdownWithEmojis = ({ content }) => {
+//   const [emojis, setEmojis] = useState([]);
+//   const emojisCache = useMemo(() => new Map(), []);
+
+//   useEffect(() => {
+//     const loadEmojis = async () => {
+//       if (emojisCache.size === 0) {
+//         const fetchedEmojis = await fetchEmojis();
+//         fetchedEmojis.forEach((emoji) => {
+//           emojisCache.set(emoji.emojiTitle, emoji);
+//         });
+//         setEmojis(fetchedEmojis);
+//       } else {
+//         setEmojis(Array.from(emojisCache.values()));
+//       }
+//     };
+
+//     loadEmojis();
+//   }, [emojisCache]);
+
+//   const processedContent = useMemo(() => renderTextWithEmojis(content, emojis), [content, emojis]);
+
+//   return (
+//     <MarkdownPreview
+//       className="m-0 bg-[#0d1117] p-2 text-[#c9d1d9] rounded-md markdown-body"
+//       source={processedContent}
+//       style={{ backgroundColor: "rgba(24, 24, 27, 0.5)" }}
+//       data-color-mode="dark"
+//     />
+//   );
+// };
+
+// export default MarkdownWithEmojis;
+
 import React, { useEffect, useState, useMemo } from "react";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 
@@ -298,7 +363,8 @@ const fetchEmojis = async () => {
   }
 };
 
-const MarkdownWithEmojis = ({ content }) => {
+
+const MarkdownWithEmojis = ({ content, style = {} }) => {
   const [emojis, setEmojis] = useState([]);
   const emojisCache = useMemo(() => new Map(), []);
 
@@ -320,11 +386,21 @@ const MarkdownWithEmojis = ({ content }) => {
 
   const processedContent = useMemo(() => renderTextWithEmojis(content, emojis), [content, emojis]);
 
+  const defaultStyle = {
+    margin: 0,
+    padding: '8px',
+    backgroundColor: "rgba(24, 24, 27, 0.5)",
+    color: "#c9d1d9",
+    borderRadius: '4px',
+  };
+
+  const mergedStyle = { ...defaultStyle, ...style };
+
   return (
     <MarkdownPreview
-      className="m-0 bg-[#0d1117] p-2 text-[#c9d1d9] rounded-md markdown-body"
+      className="markdown-body"
       source={processedContent}
-      style={{ backgroundColor: "rgba(24, 24, 27, 0.5)" }}
+      style={mergedStyle}
       data-color-mode="dark"
     />
   );
