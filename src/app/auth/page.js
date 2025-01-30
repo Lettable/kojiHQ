@@ -100,7 +100,7 @@ export default function AuthPage() {
   const handleMetaMaskAuth = async () => {
     try {
       if (!window.ethereum) {
-        toast({
+        return toast({
           title: 'MetaMask not detected',
           description: "Install MetaMask extension on your browser and create a wallet first.",
           variant: 'destructive'
@@ -510,8 +510,8 @@ export default function AuthPage() {
               Forgot password?
             </Link>
           </CardFooter>
+          <Toaster />
         </Card>
-        <Toaster />
       </motion.div>
     </div>
   )
