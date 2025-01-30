@@ -13,6 +13,7 @@ import Link from 'next/link'
 import { FaQuestionCircle, FaRegQuestionCircle } from 'react-icons/fa'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { FaDiscord } from "react-icons/fa"
+import { FaEthereum } from 'react-icons/fa'
 
 export default function AuthPage() {
   const [isLoginLoading, setIsLoginLoading] = useState(false)
@@ -47,6 +48,47 @@ export default function AuthPage() {
     const data = await res.json();
     return data.ip;
   }
+
+  const handleMetaMaskAuth = async () => {
+    try {
+      if (!window.ethereum) {
+        return alert('MetaMask not detected');
+      };
+
+      const username = `${Math.random().toString(36).substring(2, 8)}${Math.floor(Math.random() * 100)}`
+
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const userAddress = accounts[0];
+
+      const nonce = Math.floor(Math.random() * 1000000).toString();
+      const message = `Sign this message to log in: ${nonce}`;
+
+      const signature = await window.ethereum.request({
+        method: 'personal_sign',
+        params: [message, userAddress],
+      });
+
+      console.log(username, userAddress, nonce, signature)
+      const response = await fetch('/api/auth/metamask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username,
+          walletAddress: userAddress,
+          nonce,
+          signature,
+        })
+      });
+
+      router.push(`/welcome?token=${response.token}`);
+
+      console.log('Authentication success:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Error during MetaMask authentication:', error);
+      throw error;
+    }
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -268,6 +310,19 @@ export default function AuthPage() {
                     </Button>
                   </motion.div>
                 </form>
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="mt-3"
+                >
+                  <Button
+                    className="bg-[#F6851B] hover:bg-[#D76D1A] w-full text-white flex items-center justify-center"
+                    onClick={handleMetaMaskAuth} // Use onClick instead of asChild
+                  >
+                    <FaEthereum className="h-5 w-5" /> {/* Add margin to the right for spacing */}
+                    Go with MetaMask
+                  </Button>
+                </motion.div>
               </TabsContent>
 
               <TabsContent value="signup">

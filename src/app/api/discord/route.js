@@ -197,7 +197,7 @@ export async function GET(req) {
       { expiresIn: TOKEN_EXPIRATION }
     );
 
-    return NextResponse.redirect(`https://kojimarketplace.vercel.app/welcome?token=${token}`, { status: 302 });
+    return NextResponse.redirect(`https://koji.cbu.net/welcome?token=${token}`, { status: 302 });
 
   } catch (error) {
     console.error('Error during Discord OAuth2 callback:', error);

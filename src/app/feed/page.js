@@ -114,16 +114,19 @@ export default function EnhancedDynamicSideProjector() {
 
       if (!userId) throw new Error('User ID not found in token.');
 
-      fetchNewToken(userId)
+      fetchNewToken(userId, token)
         .then((newToken) => {
           const newDecoded = jwtDecode(newToken);
+
           setCurrentUser(newDecoded);
           localStorage.setItem('accessToken', newToken);
+
           fetchEmojis();
         })
         .catch((error) => {
           console.error('Error fetching new token:', error.message);
-          router.push('/auth');
+          setCurrentUser(null);
+          setIsLoggedIn(false);
         });
     } catch (error) {
       console.error('Error decoding token:', error);
@@ -131,12 +134,14 @@ export default function EnhancedDynamicSideProjector() {
     }
   }, [router]);
 
-  async function fetchNewToken(userId) {
+  async function fetchNewToken(userId, token) {
     try {
       const response = await fetch('/api/generate-token', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, token }),
       });
 
       if (!response.ok) {
@@ -144,8 +149,8 @@ export default function EnhancedDynamicSideProjector() {
         throw new Error(errorData.error || 'Failed to fetch new token.');
       }
 
-      const { token } = await response.json();
-      return token;
+      const { token: newToken } = await response.json();
+      return newToken;
     } catch (error) {
       console.error('Error updating token:', error.message);
       throw error;
@@ -566,11 +571,11 @@ export default function EnhancedDynamicSideProjector() {
             {searchType === 'projects' && hasMore && (
               <div className='justify-center items-center text-center'>
                 <Button
-                onClick={fetchProjects}
-                className={`w-full mt-4 ${isDarkTheme ? 'bg-yellow-400 hover:bg-yellow-500 w-30 justify-center items-center text-center text-black' : 'bg-yellow-500 hover:bg-yellow-600 text-black'}`}
-              >
-                Load More
-              </Button>
+                  onClick={fetchProjects}
+                  className={`w-full mt-4 ${isDarkTheme ? 'bg-yellow-400 hover:bg-yellow-500 w-30 justify-center items-center text-center text-black' : 'bg-yellow-500 hover:bg-yellow-600 text-black'}`}
+                >
+                  Load More
+                </Button>
               </div>
             )}
           </div>
