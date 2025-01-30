@@ -20,15 +20,14 @@ export const metadata = {
   "title": "Koji - Buy, Sell & Trade Digital Goods",
   "description": "Koji is your go-to platform for buying, selling, and trading digital goods, services, and exclusive content. Connect with a thriving community, find unique deals, and turn your skills into profit.",
   "keywords": "marketplace, forum, buy, sell, trade, digital goods, services, community, Koji",
-  "cryptomus": "4884514a",
   "author": "Mirzya",
   "openGraph": {
     "title": "Koji - Buy, Sell & Trade Digital Goods",
     "description": "Discover and trade digital goods and services on Koji Marketplace. Connect with buyers and sellers in a secure, thriving community.",
-    "type": "forum"
+    "type": "website"
   },
   "telegram": {
-    "site": "@--",
+    "site": "@",
     "title": "Koji Marketplace - Buy, Sell & Trade",
     "description": "Join Koji Marketplace to buy, sell, and trade digital goods and services securely."
   }
