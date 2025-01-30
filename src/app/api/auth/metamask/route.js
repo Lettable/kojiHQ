@@ -68,6 +68,8 @@ export async function POST(req) {
       { expiresIn: TOKEN_EXPIRATION }
     );
 
+    console.log('Token', token, 'User', user);
+
     return NextResponse.json({ token: token, user: user }, { status: 200 });
   } catch (error) {
     console.error('Error in MetaMask authentication route:', error);
