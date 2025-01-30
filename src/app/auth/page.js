@@ -14,6 +14,8 @@ import { FaQuestionCircle, FaRegQuestionCircle } from 'react-icons/fa'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { FaDiscord } from "react-icons/fa"
 import { FaEthereum } from 'react-icons/fa'
+import { useToast } from '@/hooks/use-toast'
+import { Toaster } from '@/components/ui/toaster'
 
 export default function AuthPage() {
   const [isLoginLoading, setIsLoginLoading] = useState(false)
@@ -27,6 +29,7 @@ export default function AuthPage() {
   const [signupTelegramUID, setSignupTelegramUID] = useState('')
   const [signupPassword, setSignupPassword] = useState('')
   const router = useRouter()
+  const toast = useToast()
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken')
@@ -49,26 +52,74 @@ export default function AuthPage() {
     return data.ip;
   }
 
+  // const handleMetaMaskAuth = async () => {
+  //   try {
+  //     if (!window.ethereum) {
+  //       return alert('MetaMask not detected');
+  //     };
+
+  //     const username = `${Math.random().toString(36).substring(2, 8)}${Math.floor(Math.random() * 100)}`
+
+  //     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+  //     const userAddress = accounts[0];
+
+  //     const nonce = Math.floor(Math.random() * 1000000).toString();
+  //     const message = `Sign this message to log in: ${nonce}`;
+
+  //     const signature = await window.ethereum.request({
+  //       method: 'personal_sign',
+  //       params: [message, userAddress],
+  //     });
+
+  //     console.log(username, userAddress, nonce, signature)
+  //     const response = await fetch('/api/auth/metamask', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({
+  //         username,
+  //         walletAddress: userAddress,
+  //         nonce,
+  //         signature,
+  //       })
+  //     });
+
+      
+  //     if (response.data) {
+  //       console.log('Authentication success:', response.data);
+  //       router.push(`/welcome?token=${response.data.token}`);
+  //       return response.data;
+  //     } else {
+  //       throw new Error('Token not found in response');
+  //     }
+
+  //   } catch (error) {
+  //     console.error('Error during MetaMask authentication:', error);
+  //     throw error;
+  //   }
+  // };
   const handleMetaMaskAuth = async () => {
     try {
       if (!window.ethereum) {
-        return alert('MetaMask not detected');
-      };
-
-      const username = `${Math.random().toString(36).substring(2, 8)}${Math.floor(Math.random() * 100)}`
-
+        toast({
+          title: 'MetaMask not detected',
+          description: "Install MetaMask extension on your browser and create a wallet first.",
+          variant: 'destructive'
+        })
+      }
+  
+      const username = `${Math.random().toString(36).substring(2, 8)}${Math.floor(Math.random() * 100)}`;
+  
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       const userAddress = accounts[0];
-
+  
       const nonce = Math.floor(Math.random() * 1000000).toString();
       const message = `Sign this message to log in: ${nonce}`;
-
+  
       const signature = await window.ethereum.request({
         method: 'personal_sign',
         params: [message, userAddress],
       });
-
-      console.log(username, userAddress, nonce, signature)
+  
       const response = await fetch('/api/auth/metamask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -77,18 +128,24 @@ export default function AuthPage() {
           walletAddress: userAddress,
           nonce,
           signature,
-        })
+        }),
       });
-
-      
-      if (response.data) {
-        console.log('Authentication success:', response.data);
-        router.push(`/welcome?token=${response.data.token}`);
-        return response.data;
+  
+      if (!response.ok) {
+        throw new Error('Failed to authenticate');
+      }
+  
+      const data = await response.json();
+  
+      console.log('Authentication success:', data);
+  
+      if (data.token) {
+        router.push(`/welcome?token=${data.token}`);
+        return data;
       } else {
         throw new Error('Token not found in response');
       }
-
+  
     } catch (error) {
       console.error('Error during MetaMask authentication:', error);
       throw error;
@@ -454,6 +511,7 @@ export default function AuthPage() {
             </Link>
           </CardFooter>
         </Card>
+        <Toaster />
       </motion.div>
     </div>
   )
