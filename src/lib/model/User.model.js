@@ -237,9 +237,7 @@ const UserSchema = new mongoose.Schema({
   },
   telegramUID: {
     type: String,
-    required: function () {
-      return !this.walletAddress && !this.discordId;
-    },
+    required: false,
     unique: true,
     trim: true
   },
@@ -337,9 +335,7 @@ const UserSchema = new mongoose.Schema({
   walletAddress: {
     type: String,
     unique: true,
-    required: function () {
-      return !this.discordId;
-    },
+    required: false,
   },
   nonce: {
     type: Number,
