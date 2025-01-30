@@ -465,19 +465,19 @@ export default function HomePage() {
       try {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.userId;
-  
+
         if (!userId) throw new Error('User ID not found in token.');
-  
+
         setCurrentUser(decodedToken);
         setIsLoggedIn(true);
-  
+
         fetchNewToken(userId, token)
           .then((newToken) => {
             const newDecoded = jwtDecode(newToken);
-  
+
             setCurrentUser(newDecoded);
             localStorage.setItem('accessToken', newToken);
-  
+
             fetchEmojis();
           })
           .catch((error) => {
@@ -485,7 +485,7 @@ export default function HomePage() {
             setCurrentUser(null);
             setIsLoggedIn(false);
           });
-  
+
         fetchUserStats(userId);
       } catch (error) {
         console.error('Error decoding token:', error.message);
@@ -542,12 +542,12 @@ export default function HomePage() {
         },
         body: JSON.stringify({ userId, token }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to fetch new token.');
       }
-  
+
       const { token: newToken } = await response.json();
       return newToken;
     } catch (error) {
@@ -555,7 +555,7 @@ export default function HomePage() {
       throw error;
     }
   }
-  
+
 
   const fetchAnnouncements = async () => {
     try {
@@ -637,29 +637,24 @@ export default function HomePage() {
       />
 
       {/* Hero Section */}
-      <section className={`relative py-16 overflow-hidden ${isDarkTheme ? 'bg-zinc-900/10 text-white border-zinc-300' : 'bg-gray-100'}`}>
+      {/* <section className={`relative py-16 overflow-hidden ${isDarkTheme ? 'bg-zinc-900/10 text-white border-zinc-300' : 'bg-gray-100'}`}>
         <div className="container mx-auto px-4 relative text-center">
 
-          {/* Title with a Slight Glow */}
           <h1 className="text-4xl md:text-6xl font-bold mb-6 text-center relative">
             🎉 Welcome to Koji HQ 🎆
           </h1>
 
-          {/* Festive Subtitle */}
           <p className="text-lg md:text-xl text-zinc-400">
             Your <b>hub for knowledge, cracking, and discussions.</b>
             🔥 Start the new year with exciting conversations!
           </p>
 
-          {/* Floating Confetti-like Decorations */}
           <div className="absolute -top-10 left-4 w-12 h-12 bg-yellow-500 rounded-full opacity-20 blur-lg"></div>
           <div className="absolute -top-12 right-10 w-8 h-8 bg-pink-500 rounded-full opacity-20 blur-md"></div>
           <div className="absolute bottom-8 left-8 w-10 h-10 bg-red-500 rounded-full opacity-20 blur-md"></div>
           <div className="absolute bottom-6 right-10 w-14 h-14 bg-orange-500 rounded-full opacity-10 blur-lg"></div>
 
-          {/* Vertical Glowing Side Borders */}
 
-          {/* Additional Spark Effects for Boundaries */}
           <div className="absolute left-2 top-10 w-6 h-6 bg-yellow-400 rounded-full opacity-20 blur-md"></div>
           <div className="absolute right-2 top-20 w-8 h-8 bg-pink-400 rounded-full opacity-15 blur-md"></div>
           <div className="absolute left-4 bottom-12 w-10 h-10 bg-red-400 rounded-full opacity-10 blur-md"></div>
@@ -671,6 +666,44 @@ export default function HomePage() {
       </section>
 
       <Separator className={`${isDarkTheme ? 'bg-white/10' : 'bg-zinc-300'}`} />
+       */}
+      <section className="relative py-12 overflow-hidden bg-black text-white">
+      <div className="container mx-auto text-center relative z-10">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className="font-mono mb-6"
+          >
+            <p className="text-sm mb-2">$ ./access_koji</p>
+            <h1 className="text-4xl md:text-6xl font-bold">KOJI HQ</h1>
+          </motion.div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="text-xl md:text-2xl text-white mb-8 font-mono"
+          >
+            &gt; Where Code Meets Liberation
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 1 }}
+            className="font-mono text-sm"
+          >
+            <p className="mb-1">&gt; initializing_kernel_exploit</p>
+            <p className="mb-1">&gt; bypassing_security_protocols</p>
+            <p>&gt; access_granted<span className="animate-pulse">_</span></p>
+          </motion.div>
+        </div>
+      </div>
+      
+    </section>
+
+      
+
 
 
 

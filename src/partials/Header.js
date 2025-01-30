@@ -217,7 +217,12 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-4">
             <Link href="/" className="flex items-center space-x-2">
-              <Zap className="h-6 w-6 text-yellow-400" />
+              
+              <img
+                src="/assets/logo.jpg"
+                alt="Logo"
+                className="rounded-full w-10 h-10 object-cover"
+              />
               <div className="relative inline-block">
                 <span className={`font-bold text-lg ${isDarkTheme ? 'text-white' : 'text-black'}`}>Koji Marketplace</span>
                 <span className="absolute -top-2 -right-2 text-yellow-500 bg-opacity-20 text-xs font-semibold rounded px-1">
