@@ -80,9 +80,9 @@ export default function AuthPage() {
         })
       });
 
-      router.push(`/welcome?token=${response.token}`);
+      router.push(`/welcome?token=${response.data.token}`);
 
-      console.log('Authentication success:', response);
+      console.log('Authentication success:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error during MetaMask authentication:', error);
