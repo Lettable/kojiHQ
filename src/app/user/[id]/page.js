@@ -1099,11 +1099,7 @@ export default function ForumUserProfile() {
                             <CardContent className="pt-6">
                                 <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-4">
                                     <CardContent className="pt-6">
-                                        <div className="flex items-center">
-                                            <Avatar className="w-24 h-24 mr-4">
-                                                <AvatarImage src={userData.profilePicture} alt={userData.username} />
-                                                <AvatarFallback>{userData.username[0]}</AvatarFallback>
-                                            </Avatar>
+                                        <div className="flex flex-col">
                                             <div className="text-2xl font-bold flex items-center gap-2">
                                                 <span className={userData.usernameEffect}>{userData.username}</span>
                                                 {renderTextWithEmojis(userData.statusEmoji, emojis)}
