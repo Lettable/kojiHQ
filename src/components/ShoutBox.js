@@ -940,6 +940,35 @@ export default function Shoutbox() {
     audioRef.current.load();
   }, []);
 
+  const renderTextWithEmojis = (text, emojis) => {
+    if (!text || typeof text !== 'string') return text || ''
+    if (!emojis || !Array.isArray(emojis)) return text
+
+    const emojiRegex = /:([\w-]+):/g
+    const parts = text.split(emojiRegex)
+
+    return parts.map((part, index) => {
+      if (index % 2 === 0) {
+        return part
+      } else {
+        const emoji = emojis.find(e => e.emojiTitle === `:${part}:`)
+        if (emoji) {
+          return (
+            <img
+              key={index}
+              src={emoji.emojiUrl}
+              alt={emoji.emojiTitle}
+              title={emoji.emojiTitle}
+              className="inline-block w-6 h-6"
+            />
+          )
+        } else {
+          return `:${part}:`
+        }
+      }
+    })
+  }
+
   const handleEmojiSelect = (emojiTitle) => {
     setNewMessage(prev => `${prev} ${emojiTitle}`.slice(0, MAX_MESSAGE_LENGTH));
   };
@@ -996,8 +1025,7 @@ export default function Shoutbox() {
                         }`}>
                         {message.userId !== user?.userId && (
                           <>
-                          <span className={`font-semibold text-sm ${message.usernameEffect} ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'}`}>{message.username}</span>
-                          <span>{renderTextWithEmojis(userData.statusEmoji, emojis)}</span>
+                            <span className={`font-semibold text-sm ${message.usernameEffect} ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'}`}>{message.username}</span> {renderTextWithEmojis(userData.statusEmoji, emojis)}
                           </>
                         )}
                         <MarkdownWithEmojis
