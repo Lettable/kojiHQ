@@ -959,7 +959,8 @@ export default function Shoutbox() {
               src={emoji.emojiUrl}
               alt={emoji.emojiTitle}
               title={emoji.emojiTitle}
-              className="inline-block w-4 h-4"
+              style={{ width: '18px', height: '18px' }}
+              className="inline-block"
             />
           )
         } else {
