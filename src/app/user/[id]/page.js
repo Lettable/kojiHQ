@@ -918,7 +918,7 @@ export default function ForumUserProfile() {
                 router.push('/auth')
             }
         }
-        
+
         const fetchEmojis = async () => {
             try {
                 const response = await fetch('/api/emojis')
@@ -1104,15 +1104,14 @@ export default function ForumUserProfile() {
                                                 <AvatarImage src={userData.profilePicture} alt={userData.username} />
                                                 <AvatarFallback>{userData.username[0]}</AvatarFallback>
                                             </Avatar>
-                                            <div>
-                                                <h1 className={`text-2xl font-bold ${userData.usernameEffect}`}>
-                                                    {userData.username} {renderTextWithEmojis(userData.statusEmoji, emojis)}
-                                                </h1>
-                                                
-                                                {/* if its appear on wrong place put this line next to {userData.username} */}
-                                                
-                                                <p className="text-gray-400">{userData.bio === "Edit your bio..." ? "Bio not set" : userData.bio}</p>
+                                            <div className="text-2xl font-bold flex items-center gap-2">
+                                                <span className={userData.usernameEffect}>{userData.username}</span>
+                                                {renderTextWithEmojis(userData.statusEmoji, emojis)}
                                             </div>
+
+                                            <p className="text-gray-400">
+                                                {userData.bio === "Edit your bio..." ? "Bio not set" : userData.bio}
+                                            </p>
                                         </div>
                                     </CardContent>
                                 </Card>

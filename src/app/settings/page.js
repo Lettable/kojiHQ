@@ -321,9 +321,10 @@ function OverviewTab({ userData, emojis, bio, username, statusEmoji, profilePic,
               <AvatarImage src={profilePic} />
               <AvatarFallback>{username[0]}</AvatarFallback>
             </Avatar>
+
             <div className="space-y-1">
-              <h2 className={`text-2xl font-bold flex items-center gap-2 ${usernameEffect}`}>
-                {username}
+              <h2 className="text-2xl font-bold flex items-center gap-2">
+                <span className={usernameEffect}>{username}</span>
                 <span>{renderTextWithEmojis(statusEmoji, emojis)}</span>
               </h2>
               <p className="text-gray-400">{bio}</p>
@@ -925,14 +926,14 @@ function PreferencesTab({ userData, onSave, setUsernameEffect }) {
         <div>
           <CardTitle className="text-sm">Live Prices</CardTitle>
           <div className="flex justify-start">
-          <Button
-            type="submit"
-            onClick={handleOpenDialog}
-            className="bg-yellow-500 mt-2 text-black hover:bg-yellow-600"
-          >
-            Customize Live Prices
-          </Button>
-        </div>
+            <Button
+              type="submit"
+              onClick={handleOpenDialog}
+              className="bg-yellow-500 mt-2 text-black hover:bg-yellow-600"
+            >
+              Customize Live Prices
+            </Button>
+          </div>
           {/* <button
           type='submit'
             onClick={handleOpenDialog}
