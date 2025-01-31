@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import User from "@/lib/model/User.model";
 import { connectDB } from "@/lib/config/db";
 
-export async function POST(req) {
+export async function GET(req) {
     const userId = req.nextUrl.searchParams.get('userId');
 
     try {
