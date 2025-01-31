@@ -802,6 +802,7 @@ export default function Shoutbox() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [user, setUser] = useState(null);
+  const [statusEmoji, setStatusEmoji] = useState(null);
   const [emojis, setEmojis] = useState([]);
   const scrollAreaRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -910,6 +911,13 @@ export default function Shoutbox() {
           }
           const authData = await authResponse.json();
           setUser(prev => ({ ...prev, isAuthorized: authData.isAuthorized }));
+
+          const statusResponse = await fetch(`/api/mics/status?userId=${decoded.userId}`);
+          if (!statusResponse.ok) {
+            throw new Error('Failed to fetch user status');
+          }
+          const data = await statusResponse.json();
+          setStatusEmoji(data.statusEmoji);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -982,6 +990,7 @@ export default function Shoutbox() {
       usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
       content: newMessage.slice(0, MAX_MESSAGE_LENGTH),
       userId: user.userId,
+      statusEmoji: statusEmoji,
       profilePic: user.profilePic,
       createdAt: new Date().toISOString(),
     };
