@@ -110,6 +110,7 @@ export async function GET() {
           _id: message._id,
           content: message.content,
           userId: message.userId,
+          statusEmoji: user?.statusEmoji || "",
           usernameEffect: user?.usernameEffect ? user.usernameEffect : "regular-effect",
           username: user?.username || "Deleted User",
           profilePic: user?.profilePic || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2-flKQOIE8ribInudJWpIsy94v1B7LMCemuBf8RcjpIY1Pt3hLHZR5r78rXBFW0cIhVg&usqp=CAU",
