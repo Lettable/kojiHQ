@@ -1106,9 +1106,9 @@ export default function ForumUserProfile() {
                                             </Avatar>
                                             <div>
                                                 <h1 className={`text-2xl font-bold ${userData.usernameEffect}`}>
-                                                    {userData.username} 
+                                                    {userData.username} {renderTextWithEmojis(userData.statusEmoji, emojis)}
                                                 </h1>
-                                                {renderTextWithEmojis(userData.statusEmoji, emojis)}
+                                                
                                                 {/* if its appear on wrong place put this line next to {userData.username} */}
                                                 
                                                 <p className="text-gray-400">{userData.bio === "Edit your bio..." ? "Bio not set" : userData.bio}</p>

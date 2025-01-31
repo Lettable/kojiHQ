@@ -1025,7 +1025,7 @@ export default function Shoutbox() {
                         }`}>
                         {message.userId !== user?.userId && (
                           <>
-                            <span className={`font-semibold text-sm ${message.usernameEffect} ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'}`}>{message.username}</span> {renderTextWithEmojis(userData.statusEmoji, emojis)}
+                            <span className={`font-semibold text-sm ${message.usernameEffect} ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'}`}>{message.username}</span> {renderTextWithEmojis(message.statusEmoji, emojis)}
                           </>
                         )}
                         <MarkdownWithEmojis
