@@ -77,6 +77,13 @@
     "isPremium": true
   },
   {
+    "id": "93748936478634263894563",
+    "emojiTitle": ":lighting-effect:",
+    "emojiUrl": "https://raw.githubusercontent.com/Lettable/resources/refs/heads/main/kojiHQ/gifs/lightning_item.webp",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
     "id": "11365824711",
     "emojiTitle": ":typescript:",
     "emojiUrl": "/emojis/typescript.png",

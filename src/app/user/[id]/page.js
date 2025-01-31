@@ -918,7 +918,7 @@ export default function ForumUserProfile() {
                 router.push('/auth')
             }
         }
-        ``
+        
         const fetchEmojis = async () => {
             try {
                 const response = await fetch('/api/emojis')

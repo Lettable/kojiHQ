@@ -138,6 +138,7 @@ import Header from '@/partials/Header'
 const usernameEffects = [
     { name: 'Sparkle', icon: Sparkles, class: 'sparkle-effect', price: 4.99 },
     { name: 'Neon', icon: Zap, class: 'neon-effect', price: 5.99 },
+    { name: 'Olympus', icon: Zap, class: 'olympus-effect', price: 9.99 },
     { name: 'Rainbow', icon: Sun, class: 'rainbow-effect', price: 6.99 },
     { name: 'Fire', icon: Fire, class: 'fire-effect', price: 4.99 },
     { name: 'Snow', icon: Snowflake, class: 'snow-effect', price: 4.99 },

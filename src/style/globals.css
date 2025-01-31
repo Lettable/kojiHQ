@@ -240,6 +240,19 @@ img[alt^=":"] {
   background-size: contain;
 }
 
+.olympus-effect {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  --bg-pos: .2em -.07em;
+  position: relative;
+  letter-spacing: .02em;
+  text-shadow: 0px 0px 5px #F9FF4A;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: border-box, border-box, text;
+  background-image: url(https://raw.githubusercontent.com/Lettable/resources/refs/heads/main/kojiHQ/gifs/bg1.webp), url(https://raw.githubusercontent.com/Lettable/resources/refs/heads/main/kojiHQ/gifs/thunder.gif), linear-gradient(125deg, rgba(170, 119, 28, 1) 0%, rgba(255, 242, 138, 1) 26%, rgba(246, 194, 35, 1) 37%, rgba(255, 215, 120, 1) 49%, rgba(238, 187, 29, 1) 61%, rgba(170, 119, 28, 1) 100%);
+  background-size: 3em, 3em, 15em;
+}
+
 /* .fire-effect::before {
   content: '';
   position: absolute;
