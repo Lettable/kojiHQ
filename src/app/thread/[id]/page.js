@@ -42,11 +42,11 @@ export default function ThreadView() {
     const router = useRouter()
     const [currencies, setCurrencies] = useState()
 
-  useEffect(() => {
-    const storedCurrencies = localStorage.getItem('preferredCurrencies');
-    const initialCurrencies = storedCurrencies ? JSON.parse(storedCurrencies) : ['BTC', 'ETH', 'LTC'];
-    setCurrencies(initialCurrencies);
-  }, []);
+    useEffect(() => {
+        const storedCurrencies = localStorage.getItem('preferredCurrencies');
+        const initialCurrencies = storedCurrencies ? JSON.parse(storedCurrencies) : ['BTC', 'ETH', 'LTC'];
+        setCurrencies(initialCurrencies);
+    }, []);
 
     useEffect(() => {
         const getCurrentUser = () => {
@@ -236,7 +236,7 @@ export default function ThreadView() {
                                             <AvatarFallback>{thread.author.username}</AvatarFallback>
                                         </Avatar>
                                         <div>
-                                            <h2 className={`text-lg font-semibold ${thread.author.usernameEffect}`}>{thread.author.username}</h2>
+                                            <span className={`text-lg font-semibold ${thread.author.usernameEffect}`}>{thread.author.username}</span>
                                             <p className="text-sm text-gray-400">{formatDate(thread.createdAt)}</p>
                                         </div>
                                     </div>
@@ -275,7 +275,7 @@ export default function ThreadView() {
                                     <div className="flex flex-col items-center justify-center p-6 bg-zinc-800/50 text-[#c9d1d9] rounded-md">
                                         <p className="text-lg font-semibold">🔒 Please sign in to view this thread</p>
                                         <p className="text-sm text-gray-400">It only takes 30 seconds to create an account!</p>
-                                        
+
                                         <Button onClick={() => { window.location.href = '/auth'; }} className={`${isDarkTheme ? 'bg-zinc-800/50 mt-4 px-4 py-2 hover:bg-zinc-800/20 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
                                             Login / Register
                                         </Button>
@@ -313,22 +313,28 @@ export default function ThreadView() {
 
                         {/* Posts Section */}
                         <div className="flex justify-between text-white items-center mb-6">
-                            <Button
-                                onClick={() => handleReply()}
-                                className="bg-yellow-500 hover:bg-yellow-600 text-black"
-                            >
-                                <Plus className="w-4 h-4 mr-2" />
-                                Create Post
-                            </Button>
-                            <Select value={sortBy} onValueChange={setSortBy}>
-                                <SelectTrigger className={`w-[180px] ${isDarkTheme ? 'bg-zinc-800 border-0' : 'bg-white'}`}>
-                                    <SelectValue placeholder="Sort by" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-zinc-800 border-0 hover:bg-zinc-800">
-                                    <SelectItem className="text-white border-0" value="latest">Latest</SelectItem>
-                                    <SelectItem className="text-white border-0" value="mostLikes">Top</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            {currentUser ? (
+                                <>
+                                    <Button
+                                        onClick={() => handleReply()}
+                                        className="bg-yellow-500 hover:bg-yellow-600 text-black"
+                                    >
+                                        <Plus className="w-4 h-4 mr-2" />
+                                        Create Post
+                                    </Button>
+                                    <Select value={sortBy} onValueChange={setSortBy}>
+                                        <SelectTrigger className={`w-[180px] ${isDarkTheme ? 'bg-zinc-800 border-0' : 'bg-white'}`}>
+                                            <SelectValue placeholder="Sort by" />
+                                        </SelectTrigger>
+                                        <SelectContent className="bg-zinc-800 border-0 hover:bg-zinc-800">
+                                            <SelectItem className="text-white border-0" value="latest">Latest</SelectItem>
+                                            <SelectItem className="text-white border-0" value="mostLikes">Top</SelectItem>
+                                        </SelectContent>
+                                    </Select></>
+                            ) : (
+                                <>
+                                </>
+                            )}
                         </div>
 
                         <div className="space-y-4 text-white">
