@@ -235,6 +235,16 @@ const UserSchema = new mongoose.Schema({
       return !this.walletAddress && !this.discordId;
     },
   },
+  latestVisitors: [
+    {
+      visitorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      visitedAt: { type: Date, default: Date.now }
+    }
+  ],
+  currentlyAt: {
+    type: String,
+    required: false
+  },
   telegramUID: {
     type: String,
     required: false,

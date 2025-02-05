@@ -638,7 +638,7 @@ export default function HomePage() {
       />
 
       {/* Hero Section */}
-      {/* <section className={`relative py-16 overflow-hidden ${isDarkTheme ? 'bg-zinc-900/10 text-white border-zinc-300' : 'bg-gray-100'}`}>
+      <section className={`relative py-16 overflow-hidden ${isDarkTheme ? 'bg-zinc-900/10 text-white border-zinc-300' : 'bg-gray-100'}`}>
         <div className="container mx-auto px-4 relative text-center">
 
           <h1 className="text-4xl md:text-6xl font-bold mb-6 text-center relative">
@@ -667,8 +667,8 @@ export default function HomePage() {
       </section>
 
       <Separator className={`${isDarkTheme ? 'bg-white/10' : 'bg-zinc-300'}`} />
-       */}
-      <section className="relative py-12 overflow-hidden bg-black text-white">
+      
+      {/* <section className="relative py-12 overflow-hidden bg-black text-white">
       <div className="container mx-auto text-center relative z-10">
         <div className="max-w-4xl mx-auto">
           <motion.div
@@ -701,7 +701,7 @@ export default function HomePage() {
         </div>
       </div>
       
-    </section>
+    </section> */}
 
       
 

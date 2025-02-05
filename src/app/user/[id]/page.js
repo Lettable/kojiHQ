@@ -901,7 +901,7 @@ export default function ForumUserProfile() {
                 try {
                     const identifier = pathname.split("/")[2]
                     const isId = /^[0-9a-fA-F]{24}$/.test(identifier)
-                    const apiEndpoint = isId ? `/api/user?id=${identifier}` : `/api/user?username=${identifier.toLowerCase()}`
+                    const apiEndpoint = isId ? `/api/user?id=${identifier}&token=${token}` : `/api/user?username=${identifier.toLowerCase()}&token=${token}`
                     const response = await fetch(apiEndpoint)
                     if (!response.ok) throw new Error('Failed to fetch user data')
                     const data = await response.json()
@@ -1171,29 +1171,53 @@ export default function ForumUserProfile() {
                                         ))}
                                     </div>
                                 </div>
-                                <div>
-                                    <p className="font-semibold mb-2">Signature</p>
-                                    <MarkdownWithEmojis content={userData.signature} />
-                                </div>
+                                {userData.signature &&
+                                    <div>
+                                        <p className="font-semibold mb-2">Signature</p>
+                                        <MarkdownWithEmojis content={userData.signature} />
+                                    </div>}
                             </CardContent>
                         </Card>
                     </div>
 
                     {/* Right Column - User Content */}
                     <div className="lg:w-1/4">
-                        <Card className={`mb-4 ${isDarkTheme ? 'bg-zinc-900/50 text-white' : 'bg-white text-black'} border-0 shadow-lg`}>
+                        import {useRouter} from 'next/router';
+
+                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6">
                             <CardHeader>
-                                <CardTitle className="flex items-center text-lg">
-                                    <AlertCircle className="w-5 h-5 mr-2" />
-                                    Looking suspecious!?
-                                </CardTitle>
+                                <CardTitle>Latest Visitors</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-sm">
-                                    If this user seems a scam to you or have done something unusual with you dont hasitate to report our moderators to get him ban!
-                                </p>
+                                <ScrollArea className="h-[300px]">
+                                    {userData.latestVisitors.length > 0 ? (
+                                        userData.latestVisitors.map((visitor) => (
+                                            <div key={visitor.userId} className="flex items-center gap-4 mb-4">
+                                                <div
+                                                    className={`w-10 h-10 rounded-full flex items-center justify-center`}
+                                                >
+                                                    <span
+                                                        className={`text-white text-sm ${visitor.usernameEffect}`}
+                                                        onClick={() => router.push(`/user/${visitor.userId}`)}
+                                                    >
+                                                        {visitor.username}
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm text-gray-400">
+                                                    {renderTextWithEmojis(visitor.statusEmoji, emojis)}
+                                                </p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-gray-400 text-center text-sm">
+                                            No recent visitors yet.
+                                        </p>
+                                    )}
+                                </ScrollArea>
                             </CardContent>
                         </Card>
+
+
                         <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6">
                             <CardHeader>
                                 <CardTitle>Recent Activity</CardTitle>
