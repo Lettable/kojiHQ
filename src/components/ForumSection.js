@@ -346,7 +346,7 @@ export function ForumSection({ isDarkTheme }) {
 
             <div className="p-4">
               <p className="text-sm text-gray-400 mb-4">
-                {activeUserCount} USERS ACTIVE TODAY OUT OF {activeUsers.length} MEMBERS. WE DON&apos;T STORE GUEST&apos;S USERS DATA.)
+                {activeUserCount} USERS ACTIVE TODAY OUT OF {activeUsers.length} MEMBERS. WE DON&apos;T STORE GUEST&apos;S USERS DATA.
               </p>
               {/* <div className="flex flex-wrap gap-2 mb-4">
                 {activeUsers.map((user, index) => (
