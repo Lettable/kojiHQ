@@ -367,7 +367,7 @@ export function ForumSection({ isDarkTheme }) {
                   <span key={user.username}>
                     <span
                       onClick={() => router.push(`/user/${user.username}`)}
-                      className={`text-zinc-200 ${user.usernameEffect} hover:underline cursor-pointer text-inherit`}
+                      className={`text-zinc-300 ${user.usernameEffect} hover:underline cursor-pointer text-inherit`}
                     >
                       {user.username}
                     </span>
@@ -376,7 +376,7 @@ export function ForumSection({ isDarkTheme }) {
                         {renderTextWithEmojis(user.statusEmoji, emojis)}
                       </span>
                     )}
-                    {index < activeUsers.length - 1 && <span className="text-zinc-200 ml-1">,</span>}
+                    {index < activeUsers.length - 1 && <span className="text-zinc-300 ml-1">,</span>}
                   </span>
                 ))}
               </div>
