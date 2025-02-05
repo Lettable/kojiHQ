@@ -361,6 +361,7 @@ import { jwtDecode } from 'jwt-decode'
 import PreferredCurrencies from '@/components/PreferedCurrencies'
 import CryptoSelectionDialog from '@/components/CurrencyDialog'
 import { ForumSection } from '@/components/ForumSection'
+import { useRouter } from 'next/navigation'
 
 // const renderTextWithEmojis = (text, emojis) => {
 //   if (!text || typeof text !== 'string') return text || '';
@@ -442,6 +443,7 @@ export default function HomePage() {
   const [currencies, setCurrencies] = useState()
   const [userStats, setUserStats] = useState({ reputation: 0, totalPosts: 0, totalThreads: 0 })
   const [error, setError] = useState(null);
+  const router = useRouter()
 
   useEffect(() => {
     const storedCurrencies = localStorage.getItem('preferredCurrencies');
@@ -544,13 +546,26 @@ export default function HomePage() {
         body: JSON.stringify({ userId, token }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to fetch new token.');
       }
 
-      const { token: newToken } = await response.json();
-      return newToken;
+      if (response.status === 403) {
+        if (data.message.includes('banned')) {
+          localStorage.removeItem('accessToken');
+          router.push('/auth')
+        } else if (data.message.includes('suspended')) {
+          localStorage.removeItem('accessToken');
+          router.push('/auth')
+        }
+      } else {
+        const { token: newToken } = await response.json();
+        return newToken;
+      }
+
     } catch (error) {
       console.error('Error updating token:', error.message);
       throw error;
@@ -667,7 +682,7 @@ export default function HomePage() {
       </section>
 
       <Separator className={`${isDarkTheme ? 'bg-white/10' : 'bg-zinc-300'}`} />
-      
+
       {/* <section className="relative py-12 overflow-hidden bg-black text-white">
       <div className="container mx-auto text-center relative z-10">
         <div className="max-w-4xl mx-auto">
@@ -703,7 +718,7 @@ export default function HomePage() {
       
     </section> */}
 
-      
+
 
 
 

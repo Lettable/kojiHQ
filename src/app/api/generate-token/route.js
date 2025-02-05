@@ -108,7 +108,7 @@ export async function POST(req) {
 
     if (decoded.userId !== userId) {
       return new Response(
-        JSON.stringify({ error: 'Unauthorized action. User ID does not match.' }),
+        JSON.stringify({ error: 'Unauthorized action.' }),
         { status: 403 }
       );
     }
@@ -123,7 +123,33 @@ export async function POST(req) {
       );
     }
 
-    console.log('Checking user premium status...');
+    if (user.isBanned) {
+      return NextResponse.json(
+        { message: 'Your account has been banned. Contact support for assistance.' },
+        { status: 403 }
+      );
+    }
+
+    if (user.isSuspended) {
+      const currentTime = new Date();
+      if (user.suspendedUntil && user.suspendedUntil > currentTime) {
+        return NextResponse.json(
+          {
+            message: `Your account is suspended until ${user.suspendedUntil.toLocaleString()}`,
+            suspendedUntil: user.suspendedUntil
+          },
+          { status: 403 }
+        );
+      } else {
+        await User.updateOne(
+          { _id: user._id },
+          { $set: { isSuspended: false, suspendedUntil: null } }
+        );
+        user.isSuspended = false;
+        user.suspendedUntil = null;
+      }
+    }
+
 
     if (user.isPremium && user.premiumEndDate) {
       const premiumEndDate = new Date(user.premiumEndDate);
