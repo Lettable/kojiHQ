@@ -915,7 +915,11 @@ export default function ForumUserProfile() {
                     })
                 }
             } else {
-                router.push('/auth')
+                toast({
+                    title: 'Warning',
+                    description: 'You are not signed In.',
+                    variant: 'destructive',
+                })
             }
         }
 

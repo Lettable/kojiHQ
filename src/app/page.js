@@ -353,6 +353,7 @@ import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { MessageSquare, Users, Clock, Bitcoin, DollarSign, MessageCircle, BookMarkedIcon, CoinsIcon } from 'lucide-react'
+import { FaTelegram } from 'react-icons/fa'
 import Header from '@/partials/Header'
 import Shoutbox from '@/components/ShoutBox'
 import { FaEthereum } from 'react-icons/fa'
@@ -944,6 +945,30 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+      <footer className="bg-zinc-900/50 border-t border-zinc-800/50 py-6">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col items-center space-y-4">
+            {/* Social Links */}
+            <div className="flex space-x-6">
+              <a
+                href="https://telegram.dog/sxymirza"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-zinc-400 hover:text-yellow-500 transition-colors"
+              >
+                <FaTelegram className="w-6 h-6" />
+              </a>
+            </div>
+
+            {/* Copyright */}
+            <div className="text-zinc-500 text-sm text-center">
+              © Koji - {new Date().getFullYear()} | All Rights Reserved.
+              <br />
+              <span className="text-zinc-600">Made with ❤️ for the community.</span>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

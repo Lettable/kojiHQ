@@ -23,7 +23,7 @@
 //         console.error('Error fetching forum data:', error);
 //       }
 //     };
-    
+
 //     fetchForumData();
 //   }, [setForumCategories]);
 
@@ -139,32 +139,100 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import LoadingIndicator from './LoadingIndicator'
+import { useRouter } from 'next/navigation'
+
+const renderTextWithEmojis = (text, emojis) => {
+  if (!text || typeof text !== 'string') return text || ''
+  if (!emojis || !Array.isArray(emojis)) return text
+
+  const emojiRegex = /:([\w-]+):/g
+  const parts = text.split(emojiRegex)
+
+  return parts.map((part, index) => {
+    if (index % 2 === 0) {
+      return part
+    } else {
+      const emoji = emojis.find(e => e.emojiTitle === `:${part}:`)
+      if (emoji) {
+        return (
+          <img
+            key={index}
+            src={emoji.emojiUrl}
+            alt={emoji.emojiTitle}
+            title={emoji.emojiTitle}
+            className="inline-block w-6 h-6"
+          />
+        )
+      } else {
+        return `:${part}:`
+      }
+    }
+  })
+}
 
 export function ForumSection({ isDarkTheme }) {
   const [forumData, setForumData] = useState([])
   const [activeCategory, setActiveCategory] = useState('')
   const [error, setError] = useState(null)
+  const [activeUsers, setActiveUsers] = useState([]);
+  const [emojis, setEmojis] = useState([])
+  const [activeUserCount, setActiveUserCount] = useState(0);
+  const router = useRouter()
+
+  const fetchActiveUsers = async () => {
+    try {
+      const response = await fetch("/api/mics/users");
+      if (!response.ok) throw new Error("Failed to fetch active users");
+      const users = await response.json();
+      setActiveUsers(users);
+    } catch (error) {
+      console.error("Error fetching active users:", error);
+    }
+  };
+
+  const fetchEmojis = async () => {
+    try {
+      const response = await fetch('/api/emojis')
+      const data = await response.json()
+      setEmojis(data)
+    } catch (error) {
+      console.error('Error fetching emojis:', error)
+    }
+  }
+
+  const fetchActiveUserCount = async () => {
+    try {
+      const response = await fetch("/api/mics/active");
+      if (!response.ok) throw new Error("Failed to fetch active user count");
+      const data = await response.json();
+      setActiveUserCount(data.activeUsersCount);
+    } catch (error) {
+      console.error("Error fetching active user count:", error);
+    }
+  };
+
+  const fetchForumData = async () => {
+    try {
+      const response = await fetch('/api/home-forum');
+      const data = await response.json();
+      console.log('Data direct from API', data)
+      setForumData(data);
+      if (data.length > 0) {
+        setActiveCategory(data[0]._id);
+      }
+    } catch (err) {
+      setError(err.message)
+      console.error('Error fetching forum data:', err);
+    }
+  };
 
   useEffect(() => {
-    const fetchForumData = async () => {
-      try {
-        const response = await fetch('/api/home-forum');
-        const data = await response.json();
-        console.log('Data direct from API', data)
-        setForumData(data);
-        if (data.length > 0) {
-          setActiveCategory(data[0]._id);
-        }
-      } catch (err) {
-        setError(err.message)
-        console.error('Error fetching forum data:', err);
-      }
-    };
-    
+    fetchEmojis();
     fetchForumData();
+    fetchActiveUsers();
+    fetchActiveUserCount();
   }, []);
 
-  console.log(forumData)
 
   if (error) {
     return <div className="text-white">Error: {error}</div>
@@ -172,14 +240,14 @@ export function ForumSection({ isDarkTheme }) {
 
   if (forumData.length === 0) {
     return <div className='text-center justify-center items-center flex h-96'>
-    <LoadingIndicator />
-  </div>
+      <LoadingIndicator />
+    </div>
   }
 
   return (
     <div className="space-y-6">
-      <Tabs 
-        value={activeCategory} 
+      <Tabs
+        value={activeCategory}
         onValueChange={setActiveCategory}
         className="w-full"
       >
@@ -213,8 +281,8 @@ export function ForumSection({ isDarkTheme }) {
         <AnimatePresence mode="wait">
           {forumData.length > 0 ? (
             forumData.map((category) => (
-              <TabsContent 
-                key={category._id} 
+              <TabsContent
+                key={category._id}
                 value={category._id}
                 className="mt-6 space-y-6"
               >
@@ -236,21 +304,18 @@ export function ForumSection({ isDarkTheme }) {
                             <a
                               href={`/forum/${forum._id}`}
                               key={forum._id}
-                              className={`flex items-center text-white justify-between p-4 rounded-lg bg-zinc-800/10 ${
-                                isDarkTheme ? 'hover:bg-zinc-800/50' : 'hover:bg-gray-50'
-                              } transition-colors cursor-pointer`}
+                              className={`flex items-center text-white justify-between p-4 rounded-lg bg-zinc-800/10 ${isDarkTheme ? 'hover:bg-zinc-800/50' : 'hover:bg-gray-50'
+                                } transition-colors cursor-pointer`}
                             >
                               <div className="flex-1">
                                 <h3 className="font-semibold">{forum.name}</h3>
-                                <p className={`text-sm ${
-                                  isDarkTheme ? 'text-gray-400' : 'text-gray-600'
-                                }`}>
+                                <p className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'
+                                  }`}>
                                   {forum.description}
                                 </p>
                               </div>
-                              <div className={`text-sm ${
-                                isDarkTheme ? 'text-gray-400' : 'text-gray-600'
-                              }`}>
+                              <div className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'
+                                }`}>
                                 <p>
                                   Last post by{' '}
                                   <span className={`${forum.latestPost?.usernameEffect || ''}`}>
@@ -273,6 +338,51 @@ export function ForumSection({ isDarkTheme }) {
               <LoadingIndicator />
             </div>
           )}
+          {/* Member Activity Section */}
+          <div className="bg-zinc-900/50 rounded-lg overflow-hidden">
+            <div className="bg-yellow-500 px-4 py-2">
+              <h2 className="text-black font-medium">Member Activity</h2>
+            </div>
+
+            <div className="p-4">
+              <p className="text-sm text-gray-400 mb-4">
+                {activeUserCount} USERS ACTIVE TODAY OUT OF {activeUsers.length} MEMBERS. WE DON&apos;T STORE GUEST&apos;S USERS DATA.)
+              </p>
+              {/* <div className="flex flex-wrap gap-2 mb-4">
+                {activeUsers.map((user, index) => (
+                  <span
+                    key={user.username}
+                    className={`
+                      ${user.usernameEffect}
+                      hover:underline cursor-pointer
+                    `}
+                  >
+                    {user.username}
+                    {index < activeUsers.length - 1 && <span className="text-gray-600 ml-1">,</span>}
+                  </span>
+                ))}
+              </div> */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {activeUsers.map((user, index) => (
+                  <span key={user.username}>
+                    <span
+                      onClick={() => router.push(`/user/${user.username}`)}
+                      className={`${user.usernameEffect} hover:underline cursor-pointer text-inherit`}
+                    >
+                      {user.username}
+                    </span>
+                    {user.statusEmoji && (
+                      <span className="ml-1">
+                        {renderTextWithEmojis(user.statusEmoji, emojis)}
+                      </span>
+                    )}
+                    {index < activeUsers.length - 1 && <span className="text-gray-600 ml-1">,</span>}
+                  </span>
+                ))}
+              </div>
+
+            </div>
+          </div>
         </AnimatePresence>
       </Tabs>
     </div>

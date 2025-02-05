@@ -982,7 +982,7 @@ export default function Shoutbox() {
     setNewMessage(prev => `${prev} ${emojiTitle}`.slice(0, MAX_MESSAGE_LENGTH));
   };
 
-  const sendMessage = () => {
+  const sendMessage = (e) => {
     if (!user || !newMessage.trim() || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
 
     const messageData = {
