@@ -1101,7 +1101,7 @@ export default function ForumUserProfile() {
                     <div className="lg:w-1/2">
                         <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6">
                             <CardContent className="pt-6">
-                                <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-4">
+                                {/* <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-4">
                                     <CardContent className="pt-6">
                                         <div className="flex items-center">
                                             <Avatar className="w-24 h-24 mr-4">
@@ -1119,6 +1119,59 @@ export default function ForumUserProfile() {
                                                     {userData.bio === "Edit your bio..." ? "Bio not set" : userData.bio}
                                                 </p>
                                             </div>
+                                        </div>
+                                    </CardContent>
+                                </Card> */}
+                                <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-4">
+                                    <CardContent className="pt-6">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center">
+                                                <Avatar className="w-24 h-24 mr-4">
+                                                    <AvatarImage src={userData.profilePicture} alt={userData.username} />
+                                                    <AvatarFallback>{userData.username[0]}</AvatarFallback>
+                                                </Avatar>
+
+                                                <div className="flex flex-col">
+                                                    <div className="text-2xl font-bold flex items-center gap-2">
+                                                        <span className={userData.usernameEffect}>{userData.username}</span>
+                                                        {renderTextWithEmojis(userData.statusEmoji, emojis)}
+                                                    </div>
+
+                                                    <p className="text-gray-400">
+                                                        {userData.bio === "Edit your bio..." ? "Bio not set" : userData.bio}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            {/* Reputation Button */}
+                                            {currentUser && currentUser.userId !== userData.userId && (
+                                                <div className="flex-shrink-0">
+                                                    <TooltipProvider>
+                                                        <Tooltip>
+                                                            <TooltipTrigger asChild>
+                                                                <Button
+                                                                    onClick={handleRepToggle}
+                                                                    variant={userData.reputation.includes(currentUser.userId) ? "destructive" : "default"}
+                                                                    className={`
+                                                                        ${userData.reputation.includes(currentUser.userId)
+                                                                            ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20'
+                                                                            : 'bg-yellow-500 text-black hover:bg-yellow-600'}
+                                                                            transition-colors duration-200
+                                                                        `}>
+                                                                    {userData.reputation.includes(currentUser.userId) ? "Remove Rep" : "Give Rep"}
+                                                                </Button>
+                                                            </TooltipTrigger>
+                                                            <TooltipContent className="bg-zinc-800 border-zinc-700">
+                                                                <p className="text-white">
+                                                                    {userData.reputation.includes(currentUser.userId)
+                                                                        ? "Remove your reputation point"
+                                                                        : "Give a reputation point"}
+                                                                </p>
+                                                            </TooltipContent>
+                                                        </Tooltip>
+                                                    </TooltipProvider>
+                                                </div>
+                                            )}
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -1197,7 +1250,7 @@ export default function ForumUserProfile() {
                                                 </Avatar>
                                                 <div className="flex flex-col">
                                                     <a href={`/user/${visitor.userId}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
-                                                        <span className={`font-medium ${visitor.usernameEffect}`}>{visitor.username}</span>{renderTextWithEmojis(visitor.statusEmoji, emojis)}
+                                                        <span className={`font-medium ${visitor.usernameEffect}`}>{visitor.username}</span> {renderTextWithEmojis(visitor.statusEmoji, emojis)}
                                                     </a>
                                                 </div>
                                                 <hr className='my-2 border-zinc-700' />
@@ -1213,7 +1266,7 @@ export default function ForumUserProfile() {
                         </Card>
 
 
-                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6">
+                        {/* <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6">
                             <CardHeader>
                                 <CardTitle>Recent Activity</CardTitle>
                             </CardHeader>
@@ -1232,10 +1285,59 @@ export default function ForumUserProfile() {
                                     ))}
                                 </ScrollArea>
                             </CardContent>
+                        </Card> */}
+                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6">
+                            <CardHeader>
+                                <CardTitle>Recent Activity</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ScrollArea className="h-[300px] overflow-y-auto">
+                                    {userData.activity.threads.length > 0 || userData.activity.posts.length > 0 ? (
+                                        <>
+                                            {userData.activity.threads.length > 0 && (
+                                                <div>
+                                                    <h4 className="font-semibold text-lg mb-2">Threads</h4>
+                                                    {userData.activity.threads.map((thread) => (
+                                                        <div key={thread._id} className="mb-4">
+                                                            <a href={`/thread/${thread._id}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
+                                                                <h3 className="font-semibold">{thread.title}</h3>
+                                                            </a>
+                                                            <p className="text-sm text-gray-400">
+                                                                {new Date(thread.createdAt).toLocaleDateString()}
+                                                            </p>
+                                                            <p className="text-sm mt-1">{renderTextWithEmojis(thread.content.substring(0, 100), emojis)}...</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {userData.activity.posts.length > 0 && (
+                                                <div className="mt-6">
+                                                    <h4 className="font-semibold text-lg mb-2">Posts</h4>
+                                                    {userData.activity.posts.map((post) => (
+                                                        <div key={post._id} className="mb-4">
+                                                            <a href={`/thread/${post.threadId}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
+                                                                <h3 className="font-semibold">{post.threadTitle || "Untitled Thread"}</h3>
+                                                            </a>
+                                                            <p className="text-sm text-gray-400">
+                                                                {new Date(post.createdAt).toLocaleDateString()}
+                                                            </p>
+                                                            <p className="text-sm mt-1">{renderTextWithEmojis(post.content.substring(0, 100), emojis)}...</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <p className="text-gray-400 text-center text-sm">
+                                            No recent activity yet.
+                                        </p>
+                                    )}
+                                </ScrollArea>
+                            </CardContent>
                         </Card>
                     </div>
                 </div>
-                {currentUser && currentUser.userId !== userData.userId && (
+                {/* {currentUser && currentUser.userId !== userData.userId && (
                     <div className="mt-6 flex justify-center">
                         <TooltipProvider>
                             <Tooltip>
@@ -1253,7 +1355,7 @@ export default function ForumUserProfile() {
                             </Tooltip>
                         </TooltipProvider>
                     </div>
-                )}
+                )} */}
             </main>
         </div>
     )
