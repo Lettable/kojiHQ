@@ -372,7 +372,6 @@ export async function GET(req) {
             usernameEffect: user.usernameEffect || "regular-effect",
             signature: user.signature || "",
             groups: user.groups || [],
-            email: user.email,
             statusEmoji: user.statusEmoji,
             bio: user.bio,
             favYtVideo: user.favYtVideo,

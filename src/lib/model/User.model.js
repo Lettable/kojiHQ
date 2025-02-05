@@ -260,6 +260,10 @@ const UserSchema = new mongoose.Schema({
     trim: true,
     default: 'Edit your bio...',
   },
+  credits: {
+    type: Number,
+    default: 50
+  },
   isVerified: {
     type: Boolean,
     default: false,
