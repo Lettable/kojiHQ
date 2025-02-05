@@ -293,11 +293,16 @@ export async function GET(req) {
         }
 
         if (!user) {
-            return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
+            return NextResponse.json({ success: false, message: "User  not found" }, { status: 404 });
         }
 
         if (visitorUserId !== user._id.toString()) {
-            const updatedVisitors = [...new Set([visitorUserId, ...user.latestVisitors.slice(0, 9)])];
+            const newVisitor = {
+                visitorId: visitorUserId,
+                visitedAt: new Date()
+            };
+
+            const updatedVisitors = [newVisitor, ...user.latestVisitors].slice(0, 10);
             user.latestVisitors = updatedVisitors;
             await user.save();
         }
@@ -357,7 +362,7 @@ export async function GET(req) {
             posts.reduce((acc, post) => acc + post.likes, 0);
 
         const latestVisitorDetails = await User.find(
-            { _id: { $in: user.latestVisitors } },
+            { _id: { $in: user.latestVisitors.map(visitor => visitor.visitorId) } },
             { _id: 1, username: 1, usernameEffect: 1, statusEmoji: 1 }
         );
 
