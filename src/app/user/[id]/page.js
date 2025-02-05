@@ -1197,11 +1197,8 @@ export default function ForumUserProfile() {
                                                 </Avatar>
                                                 <div className="flex flex-col">
                                                     <a href={`/user/${visitor.userId}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
-                                                        <span className={`font-medium ${visitor.usernameEffect}`}>{visitor.username}</span>
+                                                        <span className={`font-medium ${visitor.usernameEffect}`}>{visitor.username}</span>{renderTextWithEmojis(visitor.statusEmoji, emojis)}
                                                     </a>
-                                                    <p className="text-sm text-gray-400">
-                                                        {renderTextWithEmojis(visitor.statusEmoji, emojis)}
-                                                    </p>
                                                 </div>
                                                 <hr className='my-2 border-zinc-700' />
                                             </div>
