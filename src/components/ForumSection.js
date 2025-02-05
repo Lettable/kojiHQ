@@ -339,7 +339,7 @@ export function ForumSection({ isDarkTheme }) {
             </div>
           )}
           {/* Member Activity Section */}
-          <div className="bg-zinc-900/50 rounded-lg overflow-hidden">
+          <div className="bg-zinc-900/50 rounded-lg mt-4 overflow-hidden">
             <div className="bg-yellow-500 px-4 py-2">
               <h2 className="text-black font-medium">Member Activity</h2>
             </div>
