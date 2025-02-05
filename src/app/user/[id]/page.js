@@ -936,6 +936,12 @@ export default function ForumUserProfile() {
         fetchUserData()
     }, [router, toast])
 
+    const getYouTubeVideoId = (url) => {
+        const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^&\n]{11})/;
+        const match = url.match(regex);
+        return match ? match[1] : null;
+    };
+
     const handleRepToggle = async () => {
         if (!userData || !currentUser) return
 
@@ -1015,6 +1021,7 @@ export default function ForumUserProfile() {
     }
 
     const userScore = userData.stats.posts * 2 + userData.stats.threads * 5 + userData.stats.reputation * 10
+    const videoId = getYouTubeVideoId(userData.favYtVideo);
 
     return (
         <div className="min-h-screen bg-black text-white">
@@ -1229,6 +1236,26 @@ export default function ForumUserProfile() {
                                         <p className="font-semibold mb-2">Signature</p>
                                         <MarkdownWithEmojis content={userData.signature} />
                                     </div>}
+                                {userData.favYtVideo && (
+                                    <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-4">
+                                        <CardContent className="pt-6">
+                                            <p className="font-semibold mb-4">Favorite Video</p>
+                                            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                                                {videoId ? (
+                                                    <iframe
+                                                        className="absolute top-0 left-0 w-full h-full rounded-lg"
+                                                        src={`https://www.youtube.com/embed/${videoId}`}
+                                                        title="YouTube video"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowFullScreen
+                                                    />
+                                                ) : (
+                                                    <p className="text-gray-400 text-center">Nigga set Invalid YouTube video link.</p>
+                                                )}
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                )}
                             </CardContent>
                         </Card>
                     </div>

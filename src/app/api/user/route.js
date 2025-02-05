@@ -375,6 +375,7 @@ export async function GET(req) {
             email: user.email,
             statusEmoji: user.statusEmoji,
             bio: user.bio,
+            favYtVideo: user.favYtVideo,
             lastPfpChange: user.lastPfpChange,
             lastUsernameChange: user.lastUsernameChange,
             profilePicture: user.profilePic || "",
