@@ -264,6 +264,11 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 50
   },
+  btcAddress: {
+    type: String,
+    default: "",
+    required: false
+  },
   isVerified: {
     type: Boolean,
     default: false,

@@ -848,6 +848,10 @@ export default function HomePage() {
                     <span>Threads</span>
                     <span>{userStats.totalThreads}</span>
                   </div>
+                  <div className="flex justify-between">
+                    <span>Credits</span>
+                    <span>{userStats.credits}</span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
