@@ -1,0 +1,132 @@
+{
+    "Abstract": "",
+    "AbstractSource": "",
+    "AbstractText": "",
+    "AbstractURL": "",
+    "Answer": "",
+    "AnswerType": "",
+    "Definition": "",
+    "DefinitionSource": "",
+    "DefinitionURL": "",
+    "Entity": "",
+    "Heading": "",
+    "Image": "",
+    "ImageHeight": "",
+    "ImageIsLogo": "",
+    "ImageWidth": "",
+    "Infobox": "",
+    "Redirect": "",
+    "RelatedTopics": [],
+    "Results": [],
+    "Type": "",
+    "meta": {
+        "attribution": null,
+        "blockgroup": null,
+        "created_date": "2021-03-24",
+        "description": "testing",
+        "designer": null,
+        "dev_date": "2021-03-24",
+        "dev_milestone": "development",
+        "developer": [
+            {
+                "name": "zt",
+                "type": "duck.co",
+                "url": "https://duck.co/user/zt"
+            }
+        ],
+        "example_query": "",
+        "id": "just_another_test",
+        "is_stackexchange": 0,
+        "js_callback_name": "another_test",
+        "live_date": null,
+        "maintainer": {
+            "github": ""
+        },
+        "name": "Just Another Test",
+        "perl_module": "DDG::Lontail::AnotherTest",
+        "producer": null,
+        "production_state": "offline",
+        "repo": "fathead",
+        "signal_from": "just_another_test",
+        "src_domain": "how about there",
+        "src_id": null,
+        "src_name": "hi there",
+        "src_options": {
+            "directory": "",
+            "is_fanon": 0,
+            "is_mediawiki": 0,
+            "is_wikipedia": 0,
+            "language": "",
+            "min_abstract_length": null,
+            "skip_abstract": 0,
+            "skip_abstract_paren": 0,
+            "skip_icon": 0,
+            "skip_image_name": 0,
+            "skip_qr": "",
+            "src_info": "",
+            "src_skip": ""
+        },
+        "src_url": "Hello there",
+        "status": null,
+        "tab": "is this source",
+        "topic": [],
+        "unsafe": null
+    },
+    {
+        "id": "8723123423124312222314343423213545312255",
+        "emojiTitle": ":de_init:",
+        "emojiUrl": "https://cdn3.emoji.gg/emojis/93677-de.png",
+        "isAnimated": false,
+        "isPremium": true
+      },
+      {
+        "id": "8723123423124312222314343423213545312244",
+        "emojiTitle": ":lay_mid:",
+        "emojiUrl": "https://cdn3.emoji.gg/emojis/87635-lay.png",
+        "isAnimated": false,
+        "isPremium": true
+      },
+      {
+        "id": "8723123423124312222314343423213545312222",
+        "emojiTitle": ":ed_end:",
+        "emojiUrl": "https://cdn3.emoji.gg/emojis/46463-ed.png",
+        "isAnimated": false,
+        "isPremium": true
+      },
+      {
+        "id": "87231234231243122299464434232135453122222245",
+        "emojiTitle": ":reseller1:",
+        "emojiUrl": "https://cdn3.emoji.gg/emojis/52008-reseller1.png",
+        "isAnimated": false,
+        "isPremium": true
+      },
+      {
+        "id": "872312342312431222994644342321354531222222231",
+        "emojiTitle": ":reseller2:",
+        "emojiUrl": "https://cdn3.emoji.gg/emojis/21202-reseller2.png",
+        "isAnimated": false,
+        "isPremium": true
+      },
+      {
+        "id": "872312342312431222994644342321354531222277",
+        "emojiTitle": ":cl_inits:",
+        "emojiUrl": "https://cdn3.emoji.gg/emojis/47485-cl.png",
+        "isAnimated": false,
+        "isPremium": true
+      },
+      {
+        "id": "872312342312431222994644342321354531222244",
+        "emojiTitle": ":ose_mid:",
+        "emojiUrl": "https://cdn3.emoji.gg/emojis/34644-ose.png",
+        "isAnimated": false,
+        "isPremium": true
+      },
+      {
+        "id": "872312342312431222994644342321354531222222",
+        "emojiTitle": ":eds_end:",
+        "emojiUrl": "https://cdn3.emoji.gg/emojis/29516-ed.png",
+        "isAnimated": false,
+        "isPremium": true
+      }
+}
+

@@ -184,10 +184,21 @@ export function ForumSection({ isDarkTheme }) {
       const response = await fetch("/api/mics/users");
       if (!response.ok) throw new Error("Failed to fetch active users");
       const users = await response.json();
-      setActiveUsers(users);
+  
+      const shuffledUsers = shuffleArray(users);
+  
+      setActiveUsers(shuffledUsers);
     } catch (error) {
       console.error("Error fetching active users:", error);
     }
+  };
+  
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
   };
 
   const fetchEmojis = async () => {
