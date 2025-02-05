@@ -962,6 +962,7 @@ export default function CreateThread() {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
+        event.stopPropagation();
         setIsSubmitting(true)
 
         try {
@@ -1033,7 +1034,7 @@ export default function CreateThread() {
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="lg:w-3/4">
                         <h1 className="text-3xl font-bold mb-6">Create New Thread</h1>
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={(event) => handleSubmit(event)}>
                             <div className="mb-4">
                                 <label htmlFor="category" className="block text-sm font-medium mb-1">Select Category*</label>
                                 <Select value={selectedCategory} onValueChange={handleCategoryChange}>
