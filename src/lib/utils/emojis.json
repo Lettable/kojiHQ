@@ -308,13 +308,6 @@
     "isPremium": true
   },
   {
-    "id": "87231234231243122223143434232135453122",
-    "emojiTitle": ":prettyarrowr:",
-    "emojiUrl": "https://cdn3.emoji.gg/emojis/95849-prettyarrowr.gif",
-    "isAnimated": false,
-    "isPremium": true
-  },
-  {
     "id": "8723123423124312222314343423213545312255",
     "emojiTitle": ":de_init:",
     "emojiUrl": "https://cdn3.emoji.gg/emojis/93677-de.png",
@@ -336,6 +329,13 @@
     "isPremium": true
   },
   {
+    "id": "87231234231243122223143434232135453122",
+    "emojiTitle": ":prettyarrowr:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/95849-prettyarrowr.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
     "id": "87231234231243122223546443423213545312222",
     "emojiTitle": ":verify_insta:",
     "emojiUrl": "https://cdn3.emoji.gg/emojis/13215-verify.png",
@@ -346,6 +346,20 @@
     "id": "8723123423124312229946443423213545312222",
     "emojiTitle": ":thumbs-up-glasses:",
     "emojiUrl": "https://cdn3.emoji.gg/emojis/31522-thumbs-up-glasses.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "87231234231243122299464434232135453122222245",
+    "emojiTitle": ":reseller1:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/52008-reseller1.png",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "872312342312431222994644342321354531222222231",
+    "emojiTitle": ":reseller2:",
+    "emojiUrl": "https://cdn3.emoji.gg/emojis/21202-reseller2.png",
     "isAnimated": false,
     "isPremium": true
   },
@@ -367,20 +381,6 @@
     "id": "872312342312431222994644342321354531222222",
     "emojiTitle": ":eds_end:",
     "emojiUrl": "https://cdn3.emoji.gg/emojis/29516-ed.png",
-    "isAnimated": false,
-    "isPremium": true
-  },
-  {
-    "id": "87231234231243122299464434232135453122222245",
-    "emojiTitle": ":reseller1:",
-    "emojiUrl": "https://cdn3.emoji.gg/emojis/52008-reseller1.png",
-    "isAnimated": false,
-    "isPremium": true
-  },
-  {
-    "id": "872312342312431222994644342321354531222222231",
-    "emojiTitle": ":reseller2:",
-    "emojiUrl": "https://cdn3.emoji.gg/emojis/21202-reseller2.png",
     "isAnimated": false,
     "isPremium": true
   },
