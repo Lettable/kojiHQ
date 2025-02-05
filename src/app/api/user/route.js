@@ -410,7 +410,7 @@ export async function GET(req) {
                 username: visitor.username,
                 usernameEffect: visitor.usernameEffect,
                 statusEmoji: visitor.statusEmoji,
-                profilePhoto: visitor.profilePic
+                profilePic: visitor.profilePic
             }))
         };
 
