@@ -363,7 +363,7 @@ export async function GET(req) {
 
         const latestVisitorDetails = await User.find(
             { _id: { $in: user.latestVisitors.map(visitor => visitor.visitorId) } },
-            { _id: 1, username: 1, usernameEffect: 1, statusEmoji: 1 }
+            { _id: 1, username: 1, usernameEffect: 1, statusEmoji: 1, profilePic: 1 }
         );
 
         const userData = {
@@ -409,7 +409,8 @@ export async function GET(req) {
                 userId: visitor._id,
                 username: visitor.username,
                 usernameEffect: visitor.usernameEffect,
-                statusEmoji: visitor.statusEmoji
+                statusEmoji: visitor.statusEmoji,
+                profilePhoto: visitor.profilePic
             }))
         };
 

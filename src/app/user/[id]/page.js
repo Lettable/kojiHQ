@@ -1182,28 +1182,28 @@ export default function ForumUserProfile() {
 
                     {/* Right Column - User Content */}
                     <div className="lg:w-1/4">
-                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6">
+                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg rounded-lg mb-6">
                             <CardHeader>
-                                <CardTitle>Latest Visitors</CardTitle>
+                                <CardTitle className="text-lg font-semibold">Latest Visitors</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <ScrollArea className="h-[300px]">
+                                <ScrollArea className="h-[300px] overflow-y-auto">
                                     {userData.latestVisitors.length > 0 ? (
                                         userData.latestVisitors.map((visitor) => (
-                                            <div key={visitor.userId} className="flex items-center gap-4 mb-4">
-                                                <div
-                                                    className={`w-10 h-10 rounded-full flex items-center justify-center`}
-                                                >
-                                                    <span
-                                                        className={`text-white text-sm ${visitor.usernameEffect}`}
-                                                        onClick={() => router.push(`/user/${visitor.userId}`)}
-                                                    >
-                                                        {visitor.username}
-                                                    </span>
+                                            <div key={visitor.userId} className="flex items-center mb-4">
+                                                <Avatar className="w-10 h-10 mr-3">
+                                                    <AvatarImage src={visitor.profilePic} alt={visitor.username} />
+                                                    <AvatarFallback>{visitor.username[0]}</AvatarFallback>
+                                                </Avatar>
+                                                <div className="flex flex-col">
+                                                    <a href={`/user/${visitor.userId}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
+                                                        <span className={`font-medium ${visitor.usernameEffect}`}>{visitor.username}</span>
+                                                    </a>
+                                                    <p className="text-sm text-gray-400">
+                                                        {renderTextWithEmojis(visitor.statusEmoji, emojis)}
+                                                    </p>
                                                 </div>
-                                                <p className="text-sm text-gray-400">
-                                                    {renderTextWithEmojis(visitor.statusEmoji, emojis)}
-                                                </p>
+                                                <hr className='my-2 border-zinc-700' />
                                             </div>
                                         ))
                                     ) : (
