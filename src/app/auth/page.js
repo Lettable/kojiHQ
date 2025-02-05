@@ -152,39 +152,85 @@ export default function AuthPage() {
     }
   };
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    setIsLoginLoading(true)
-    setMessage(null)
+  // const handleLogin = async (event) => {
+  //   event.preventDefault()
+  //   setIsLoginLoading(true)
+  //   setMessage(null)
 
+  //   const deviceDetails = getDeviceDetails();
+  //   const userIP = await getUserIP();
+
+  //   const email = event.target.loginEmail.value
+  //   const password = event.target.loginPassword.value
+
+  //   try {
+  //     const response = await fetch('/api/auth/signin', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ email, password, deviceDetails, userIP })
+  //     })
+  //     const data = await response.json()
+
+  //     if (response.ok) {
+  //       localStorage.setItem('accessToken', data.accessToken)
+  //       localStorage.setItem('theme', 'dark')
+  //       setMessage({ type: 'success', text: 'Logged in successfully!' })
+  //       router.push('/')
+  //     } else {
+  //       setMessage({ type: 'error', text: data.message || 'Login failed!' })
+  //     }
+  //   } catch (error) {
+  //     setMessage({ type: 'error', text: 'An error occurred during login.' })
+  //   } finally {
+  //     setIsLoginLoading(false)
+  //   }
+  // }
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    setIsLoginLoading(true);
+    setMessage(null);
+  
     const deviceDetails = getDeviceDetails();
     const userIP = await getUserIP();
-
-    const email = event.target.loginEmail.value
-    const password = event.target.loginPassword.value
-
+  
+    const email = event.target.loginEmail.value;
+    const password = event.target.loginPassword.value;
+  
     try {
       const response = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, deviceDetails, userIP })
-      })
-      const data = await response.json()
-
+        body: JSON.stringify({ email, password, deviceDetails, userIP }),
+      });
+      const data = await response.json();
+  
       if (response.ok) {
-        localStorage.setItem('accessToken', data.accessToken)
-        localStorage.setItem('theme', 'dark')
-        setMessage({ type: 'success', text: 'Logged in successfully!' })
-        router.push('/')
+        localStorage.setItem('accessToken', data.accessToken);
+        localStorage.setItem('theme', 'dark');
+        setMessage({ type: 'success', text: 'Logged in successfully!' });
+        router.push('/');
       } else {
-        setMessage({ type: 'error', text: data.message || 'Login failed!' })
+        if (response.status === 403) {
+          if (data.message.includes('banned')) {
+            setMessage({ type: 'error', text: 'Your account has been banned. Contact support for assistance.' });
+          } else if (data.message.includes('suspended')) {
+            setMessage({
+              type: 'error',
+              text: data.suspendedUntil
+                ? `Your account is suspended until ${new Date(data.suspendedUntil).toLocaleString()}`
+                : 'Your account is temporarily suspended.',
+            });
+          }
+        } else {
+          setMessage({ type: 'error', text: data.message || 'Login failed!' });
+        }
       }
     } catch (error) {
-      setMessage({ type: 'error', text: 'An error occurred during login.' })
+      setMessage({ type: 'error', text: 'An error occurred during login. Please try again.' });
     } finally {
-      setIsLoginLoading(false)
+      setIsLoginLoading(false);
     }
-  }
+  };
 
   const handleSendOtp = async (event) => {
     event.preventDefault()
