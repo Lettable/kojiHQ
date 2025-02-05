@@ -1182,8 +1182,6 @@ export default function ForumUserProfile() {
 
                     {/* Right Column - User Content */}
                     <div className="lg:w-1/4">
-                        import {useRouter} from 'next/router';
-
                         <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6">
                             <CardHeader>
                                 <CardTitle>Latest Visitors</CardTitle>
