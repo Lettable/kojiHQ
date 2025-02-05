@@ -1237,7 +1237,7 @@ export default function ForumUserProfile() {
                                         <MarkdownWithEmojis content={userData.signature} />
                                     </div>}
                                 {userData.favYtVideo && (
-                                    <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-4">
+                                    <Card className="bg-zinc-900/50 text-white border-0 mt-4 shadow-lg mb-4">
                                         <CardContent className="pt-6">
                                             <p className="font-semibold mb-4">Favorite Video</p>
                                             <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
