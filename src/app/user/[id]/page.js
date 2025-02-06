@@ -1116,23 +1116,25 @@ export default function ForumUserProfile() {
                                     </div>
 
                                     {/* BTC Address with Copy Function */}
-                                    <div className="flex items-center">
-                                        <FileText className="mr-2 h-4 w-4" />
-                                        <span className="mr-2 truncate">{`${userData.btcAddress.slice(0, 6)}...${userData.btcAddress.slice(-4)}`}</span>
-                                        <button
-                                            className="bg-transparent hover:bg-zinc-700 p-2 rounded-full"
-                                            onClick={() => {
-                                                navigator.clipboard.writeText(userData.btcAddress);
-                                                toast({
-                                                    title: "Copied!",
-                                                    description: "BTC Address has been copied to clipboard!",
-                                                    variant: "destructive",
-                                                });
-                                            }}
-                                        >
-                                            <Clipboard className="h-4 w-4 text-zinc-300 hover:text-white" />
-                                        </button>
-                                    </div>
+                                    {userData.btcAddress && userData.btcAddress.length > 0 && (
+                                        <div className="flex items-center">
+                                            <FileText className="mr-2 h-4 w-4 text-zinc-300" />
+                                            <span className="mr-2 truncate text-zinc-300">{`${userData.btcAddress.slice(0, 6)}...${userData.btcAddress.slice(-4)}`}</span>
+                                            <button
+                                                className="bg-transparent hover:bg-zinc-700 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(userData.btcAddress);
+                                                    toast({
+                                                        title: "Copied!",
+                                                        description: "BTC Address has been copied to clipboard!",
+                                                        variant: "destructive",
+                                                    });
+                                                }}
+                                            >
+                                                <Clipboard className="h-4 w-4 text-zinc-300 hover:text-white" />
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </CardContent>
                         </Card>
