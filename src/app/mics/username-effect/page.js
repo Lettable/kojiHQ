@@ -274,7 +274,7 @@ const usernameEffects = [
 
 const UsernameEffectsMarketplace = () => {
     const [username, setUsername] = useState('')
-    const [currentUser, setCurrentUser] = useState<any>(null)
+    const [currentUser, setCurrentUser] = useState(null)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [dialogContent, setDialogContent] = useState({ title: '', message: '' })
     const [isLoading, setIsLoading] = useState(false)
