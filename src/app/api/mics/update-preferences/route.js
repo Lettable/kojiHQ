@@ -54,6 +54,13 @@ import { NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET;
+const ALLOWED_PARAMS = [
+  "favYtVideo",
+  "telegramId",
+  "discordId",
+  "usernameEffect",
+  "btcAddress"
+];
 
 export async function POST(req) {
   const token = req.nextUrl.searchParams.get('token');
@@ -81,24 +88,25 @@ export async function POST(req) {
 
     const userId = decoded.userId;
 
-    const allowedFields = ["usernameEffect", "btcAddress", "favYtVideo", "discordId", "telegramUID"];
-    const sanitizedData = Object.keys(updatedData)
-      .filter(key => allowedFields.includes(key))
-      .reduce((obj, key) => {
-        obj[key] = updatedData[key];
-        return obj;
-      }, {});
+    // Validate allowed parameters
+    const invalidParams = Object.keys(updatedData).filter(
+      key => !ALLOWED_PARAMS.includes(key)
+    );
 
-    if (Object.keys(sanitizedData).length === 0) {
+    if (invalidParams.length > 0) {
       return NextResponse.json(
-        { error: "No valid fields to update" },
+        {
+          error: "Invalid parameters",
+          invalidFields: invalidParams,
+          allowedFields: ALLOWED_PARAMS
+        },
         { status: 400 }
       );
     }
 
     const user = await User.findByIdAndUpdate(
       userId,
-      { $set: sanitizedData },
+      { $set: updatedData },
       { new: true }
     );
 
