@@ -69,35 +69,27 @@ export async function POST(req) {
         await connectDB();
         const updatedData = await req.json();
 
-        // Validate allowed parameters
-        const invalidParams = Object.keys(updatedData).filter(
-            key => !ALLOWED_PARAMS.includes(key)
-        );
+        const filteredData = {};
+        ALLOWED_PARAMS.forEach(param => {
+            if (updatedData[param] !== undefined) {
+                filteredData[param] = updatedData[param];
+            }
+        });
 
-        if (invalidParams.length > 0) {
+        if (Object.keys(filteredData).length === 0) {
             return NextResponse.json(
-                { 
-                    error: "Invalid parameters",
-                    invalidFields: invalidParams,
-                    allowedFields: ALLOWED_PARAMS 
-                },
+                { error: "No valid fields to update" },
                 { status: 400 }
             );
         }
 
         const decoded = jwt.verify(token, JWT_SECRET);
-        if (!decoded) {
-            return NextResponse.json(
-                { message: 'Invalid or expired token' },
-                { status: 401 }
-            );
-        }
         const userId = decoded.userId;
 
         const user = await User.findByIdAndUpdate(
             userId,
-            { $set: updatedData },
-            { new: true, runValidators: true }
+            { $set: filteredData },
+            { new: true }
         );
 
         if (!user) {
