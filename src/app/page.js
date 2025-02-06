@@ -441,7 +441,7 @@ export default function HomePage() {
   const [announcements, setAnnouncements] = useState([])
   const [staffOnline, setStaffOnline] = useState([])
   const [currencies, setCurrencies] = useState()
-  const [userStats, setUserStats] = useState({ reputation: 0, totalPosts: 0, totalThreads: 0 })
+  const [userStats, setUserStats] = useState({ reputation: 0, totalPosts: 0, totalThreads: 0, credits: 0 })
   const [error, setError] = useState(null);
   const router = useRouter()
 
@@ -545,32 +545,27 @@ export default function HomePage() {
         },
         body: JSON.stringify({ userId, token }),
       });
-
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch new token.');
-      }
-
-      if (response.status === 403) {
-        if (data.message.includes('banned')) {
-          localStorage.removeItem('accessToken');
-          router.push('/auth')
-        } else if (data.message.includes('suspended')) {
-          localStorage.removeItem('accessToken');
-          router.push('/auth')
+        if (response.status === 403) {
+          if (data.message?.includes('banned') || data.message?.includes('suspended')) {
+            localStorage.removeItem('accessToken');
+            router.push('/auth');
+          }
         }
-      } else {
-        const { token: newToken } = await response.json();
-        return newToken;
+        throw new Error(data.error || 'Failed to fetch new token.');
       }
-
+  
+      const { token: newToken } = data;
+      return newToken;
     } catch (error) {
       console.error('Error updating token:', error.message);
       throw error;
     }
   }
+  
 
 
   const fetchAnnouncements = async () => {

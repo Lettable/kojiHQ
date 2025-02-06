@@ -165,32 +165,27 @@ export default function EnhancedDynamicSideProjector() {
         },
         body: JSON.stringify({ userId, token }),
       });
-
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch new token.');
-      }
-
-      if (response.status === 403) {
-        if (data.message.includes('banned')) {
-          localStorage.removeItem('accessToken');
-          router.push('/auth')
-        } else if (data.message.includes('suspended')) {
-          localStorage.removeItem('accessToken');
-          router.push('/auth')
+        if (response.status === 403) {
+          if (data.message?.includes('banned') || data.message?.includes('suspended')) {
+            localStorage.removeItem('accessToken');
+            router.push('/auth');
+          }
         }
-      } else {
-        const { token: newToken } = await response.json();
-        return newToken;
+        throw new Error(data.error || 'Failed to fetch new token.');
       }
-
+  
+      const { token: newToken } = data;
+      return newToken;
     } catch (error) {
       console.error('Error updating token:', error.message);
       throw error;
     }
   }
+  
 
   const fetchProjects = useCallback(async () => {
     if (!hasMore || isLoading) return
