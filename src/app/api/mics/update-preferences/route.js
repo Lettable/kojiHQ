@@ -12,12 +12,6 @@ export async function POST(req) {
     await connectDB();
     const updatedData = await req.json();
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { $set: updatedData },
-      { new: true }
-    );
-
     const decoded = jwt.verify(token, JWT_SECRET);
     if (!decoded) {
       return NextResponse.json(
@@ -26,6 +20,12 @@ export async function POST(req) {
       );
     }
     const userId = decoded.userId
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $set: updatedData },
+      { new: true }
+    );
 
     if (!user) {
       return NextResponse.json(
