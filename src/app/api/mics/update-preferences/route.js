@@ -77,6 +77,7 @@ export async function POST(req) {
         });
 
         if (Object.keys(filteredData).length === 0) {
+            console.log('filtered Data', filteredData)
             return NextResponse.json(
                 { error: "No valid fields to update" },
                 { status: 400 }
