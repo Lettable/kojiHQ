@@ -881,6 +881,7 @@ import { Clipboard, CoinsIcon } from 'lucide-react'
 import { FaCoins } from 'react-icons/fa'
 import { usePathname } from 'next/navigation'
 import { AlertCircle } from 'lucide-react'
+import { Toaster } from '@/components/ui/toaster'
 
 export default function ForumUserProfile() {
     const [userData, setUserData] = useState(null)
@@ -1438,6 +1439,7 @@ export default function ForumUserProfile() {
                         </TooltipProvider>
                     </div>
                 )} */}
+                <Toaster />
             </main>
         </div>
     )
