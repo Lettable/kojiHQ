@@ -3,11 +3,10 @@ import User from "@/lib/model/User.model";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-  const userId = req.nextUrl.searchParams.get('userId');
+  const token = req.nextUrl.searchParams.get('token');
 
   try {
     await connectDB();
-
     const updatedData = await req.json();
 
     const user = await User.findByIdAndUpdate(
@@ -15,6 +14,15 @@ export async function POST(req) {
       { $set: updatedData },
       { new: true }
     );
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (!decoded) {
+      return NextResponse.json(
+        { message: 'Invalid or expired token' },
+        { status: 401 }
+      );
+    }
+    const userId = decoded.userId
 
     if (!user) {
       return NextResponse.json(

@@ -3,12 +3,22 @@ import User from "@/lib/model/User.model";
 import Post from "@/lib/model/Post.model";
 import Thread from "@/lib/model/Thread.model";
 import { NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
 
 export async function GET(req) {
   await connectDB();
 
   try {
-    const userId = req.nextUrl.searchParams.get('userId');
+    const token = req.nextUrl.searchParams.get('token');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (!decoded) {
+      return NextResponse.json(
+        { message: 'Invalid or expired token' },
+        { status: 401 }
+      );
+    }
+    const userId = decoded.userId
+
     if (!userId) {
       return NextResponse.json({ error: 'User  ID is required.' }, { status: 400 });
     }
@@ -57,6 +67,7 @@ export async function GET(req) {
       discordId: user.discordId,
       statusEmoji: user.statusEmoji,
       profilePic: user.profilePic,
+      btcAddress: user.btcAddress,
       bio: user.bio,
       createdAt: user.createdAt,
       lastUsernameChange: user.lastUsernameChange,

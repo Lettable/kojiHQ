@@ -22,7 +22,7 @@ export async function DELETE(req) {
     const tokenUserId = decoded.userId;
 
     if (tokenUserId !== userId) {
-      return NextResponse.json({ error: 'Unauthorized action. UserID does not match.' }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized action. fuck off nigga' }, { status: 403 });
     }
 
     const user = await User.findByIdAndDelete(userId);

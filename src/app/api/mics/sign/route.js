@@ -1,14 +1,24 @@
 import { connectDB } from "@/lib/config/db";
 import User from "@/lib/model/User.model";
 import { NextResponse } from "next/server";
+import jwt from 'jsonwebtoken';
 
 export async function POST(req) {
-    const userId = req.nextUrl.searchParams.get('userId');
+  const token = req.nextUrl.searchParams.get('token');
 
   try {
     await connectDB();
 
     const { signature } = await req.json();
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (!decoded) {
+      return NextResponse.json(
+        { message: 'Invalid or expired token' },
+        { status: 401 }
+      );
+    }
+    const userId = decoded.userId
 
     if (!signature) {
       return NextResponse.json(

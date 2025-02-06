@@ -31,10 +31,10 @@ import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
 import CryptoSelectionDialog from '@/components/CurrencyDialog';
 
-const fetchUserData = async (userId) => {
-  if (!userId) throw new Error('User ID is required.');
+const fetchUserData = async (token) => {
+  if (!token) throw new Error('User ID is required.');
 
-  const apiUrl = `/api/mics/statics?userId=${userId}`;
+  const apiUrl = `/api/mics/statics?token=${token}`;
 
   try {
     const response = await fetch(apiUrl);
@@ -127,7 +127,7 @@ export default function SettingsPage() {
           const userId = decoded.userId
           const profilePic = decoded.profilePic
           setProfilePic(profilePic)
-          const data = await fetchUserData(userId)
+          const data = await fetchUserData(token)
           setUserData(data)
           setUsernameEffect(data.usernameEffect)
           setStatusEmoji(data.statusEmoji)
@@ -259,23 +259,23 @@ export default function SettingsPage() {
                       transition={{ duration: 0.2 }}
                     >
                       <TabsContent value="overview" className="border-0 mt-0">
-                        <OverviewTab userData={userData} emojis={emojis} bio={bio} username={username} statusEmoji={statusEmoji} profilePic={profilePic} setProfilePic={setProfilePic} usernameEffect={usernameEffect} />
+                        <OverviewTab token={token} userData={userData} emojis={emojis} bio={bio} username={username} statusEmoji={statusEmoji} profilePic={profilePic} setProfilePic={setProfilePic} usernameEffect={usernameEffect} />
                       </TabsContent>
 
                       <TabsContent value="profile" className="mt-0">
-                        <ProfileTab userData={userData} setProfilePic={setProfilePic} setUsername={setUsername} setBio={setBio} setStatusEmoji={setStatusEmoji} profilePic={profilePic} onSave={handleSaveProfile} />
+                        <ProfileTab token={token} userData={userData} setProfilePic={setProfilePic} setUsername={setUsername} setBio={setBio} setStatusEmoji={setStatusEmoji} profilePic={profilePic} onSave={handleSaveProfile} />
                       </TabsContent>
 
                       <TabsContent value="preferences" className="mt-0">
-                        <PreferencesTab userData={userData} onSave={handleSavePreferences} setUsernameEffect={setUsernameEffect} />
+                        <PreferencesTab token={token} userData={userData} onSave={handleSavePreferences} setUsernameEffect={setUsernameEffect} />
                       </TabsContent>
 
                       <TabsContent value="signature" className="mt-0">
-                        <SignatureTab isDarkTheme={true} userData={userData} onSave={handleSaveProfile} />
+                        <SignatureTab token={token} isDarkTheme={true} userData={userData} onSave={handleSaveProfile} />
                       </TabsContent>
 
                       <TabsContent value="security" className="mt-0">
-                        <SecurityTab onChangePassword={handleChangePassword} userData={userData} />
+                        <SecurityTab token={token} onChangePassword={handleChangePassword} userData={userData} />
                       </TabsContent>
 
                       <TabsContent value="danger" className="mt-0">
@@ -294,7 +294,7 @@ export default function SettingsPage() {
   )
 }
 
-function OverviewTab({ userData, emojis, bio, username, statusEmoji, profilePic, setProfilePic, usernameEffect }) {
+function OverviewTab({ token, userData, emojis, bio, username, statusEmoji, profilePic, setProfilePic, usernameEffect }) {
   const stats = [
     { title: "Reputation", value: userData.reputation, icon: Trophy, color: "text-yellow-500" },
     { title: "Threads", value: userData.threadCount, icon: MessageSquare, color: "text-blue-500" },
@@ -404,7 +404,7 @@ function OverviewTab({ userData, emojis, bio, username, statusEmoji, profilePic,
   )
 }
 
-function ProfileTab({ userData, profilePic, setProfilePic, setUsername, setBio, setStatusEmoji }) {
+function ProfileTab({ token,  userData, profilePic, setProfilePic, setUsername, setBio, setStatusEmoji }) {
   const { toast } = useToast()
   const [newUsername, setNewUsername] = useState(userData.username)
   const [newBio, setNewBio] = useState(userData.bio)
@@ -441,7 +441,7 @@ function ProfileTab({ userData, profilePic, setProfilePic, setUsername, setBio, 
 
     try {
       if (newUsername !== userData.username) {
-        const response = await fetch(`/api/edit-user?action=username&id=${userData.userId}`, {
+        const response = await fetch(`/api/edit-user?action=username&token=${token}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ newUsername }),
@@ -455,7 +455,7 @@ function ProfileTab({ userData, profilePic, setProfilePic, setUsername, setBio, 
       }
 
       if (newBio !== userData.bio) {
-        const response = await fetch(`/api/edit-user?action=bio&id=${userData.userId}`, {
+        const response = await fetch(`/api/edit-user?action=bio&token=${token}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ newBio }),
@@ -515,7 +515,7 @@ function ProfileTab({ userData, profilePic, setProfilePic, setUsername, setBio, 
         })
 
         try {
-          const response = await fetch(`/api/edit-user?action=profilePic&id=${userData.userId}`, {
+          const response = await fetch(`/api/edit-user?action=profilePic&token=${token}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ profilePic: base64Image }),
@@ -548,7 +548,7 @@ function ProfileTab({ userData, profilePic, setProfilePic, setUsername, setBio, 
 
   const handleEmojiSelect = async (emoji) => {
     try {
-      const response = await fetch(`/api/edit-user?action=statusEmoji&id=${userData.userId}`, {
+      const response = await fetch(`/api/edit-user?action=statusEmoji&token=${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ statusEmoji: emoji }),
@@ -828,11 +828,12 @@ function ProfileTab({ userData, profilePic, setProfilePic, setUsername, setBio, 
 //   )
 // }
 
-function PreferencesTab({ userData, onSave, setUsernameEffect }) {
+function PreferencesTab({ token,  userData, onSave, setUsernameEffect }) {
   const [youtubeVideo, setYoutubeVideo] = useState(userData.favYtVideo);
   const [telegramId, setTelegramId] = useState(userData.telegramUID || "");
   const [discordId, setDiscordId] = useState(userData.discordId || "");
   const [newUsernameEffect, setNewUsernameEffect] = useState(userData.usernameEffect);
+  const [btcAddress, setBtcAddress] = useState(userData.btcAddress)
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast()
 
@@ -846,10 +847,11 @@ function PreferencesTab({ userData, onSave, setUsernameEffect }) {
       telegramId,
       discordId,
       usernameEffect: newUsernameEffect,
+      btcAddress: btcAddress
     };
 
     try {
-      const response = await fetch(`/api/mics/update-preferences?userId=${userData.userId}`, {
+      const response = await fetch(`/api/mics/update-preferences?token=${token}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -868,6 +870,7 @@ function PreferencesTab({ userData, onSave, setUsernameEffect }) {
         setYoutubeVideo(result.user.favYtVideo)
         setNewUsernameEffect(result.user.usernameEffect)
         setUsernameEffect(result.user.usernameEffect)
+        setBtcAddress(result.user.btcAddress)
         toast({
           title: "Preferences Updated",
           description: "Your preferences have been successfully updated.",
@@ -896,6 +899,17 @@ function PreferencesTab({ userData, onSave, setUsernameEffect }) {
             onChange={(e) => setYoutubeVideo(e.target.value)}
             className="bg-zinc-800 border-zinc-700 text-white"
             placeholder="YouTube URL"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="btcaddress">BTC Address</Label>
+          <Input
+            id="btcaddress"
+            value={btcaddress}
+            onChange={(e) => setBtcAddress(e.target.value)}
+            className="bg-zinc-800 border-zinc-700 text-white"
+            placeholder="Your BTC Address"
           />
         </div>
 
@@ -1050,7 +1064,7 @@ function PreferencesTab({ userData, onSave, setUsernameEffect }) {
 //   );
 // }
 
-function SignatureTab({ isDarkTheme, userData, onSave }) {
+function SignatureTab({ token,  isDarkTheme, userData, onSave }) {
   const [signature, setSignature] = useState(userData.signature);
   const { toast } = useToast()
 
@@ -1073,7 +1087,7 @@ function SignatureTab({ isDarkTheme, userData, onSave }) {
     e.preventDefault();
 
     try {
-      const response = await fetch(`/api/mics/sign?userId=${userData.userId}`, {
+      const response = await fetch(`/api/mics/sign?token=${token}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -1250,7 +1264,7 @@ function SignatureTab({ isDarkTheme, userData, onSave }) {
 //   )
 // }
 
-function SecurityTab({ userData }) {
+function SecurityTab({ token,  userData }) {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -1263,7 +1277,7 @@ function SecurityTab({ userData }) {
 
     if (newPassword === confirmPassword) {
       try {
-        const response = await fetch(`/api/mics/password?userId=${userData.userId}`, {
+        const response = await fetch(`/api/mics/password?token=${token}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -102,7 +102,17 @@ export async function POST(req) {
 
     try {
         const action = req.nextUrl.searchParams.get('action');
-        const id = req.nextUrl.searchParams.get('id');
+        const token = req.nextUrl.searchParams.get('token');
+
+        const decoded = jwt.verify(token, JWT_SECRET);
+        if (!decoded) {
+            return NextResponse.json(
+                { message: 'Invalid or expired token' },
+                { status: 401 }
+            );
+        }
+        const id = decoded.userId
+
         const { newUsername, newBio, profilePic, statusEmoji } = await req.json();
 
         let updatedUser;
