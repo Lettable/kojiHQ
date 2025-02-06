@@ -41,6 +41,7 @@
     "coinbase-commerce-node": "^1.0.4",
     "cookies-next": "^4.3.0",
     "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
     "ether": "^0.0.9",
     "ethers": "^6.13.5",
     "framer-motion": "^11.11.11",
