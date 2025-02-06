@@ -860,7 +860,7 @@ export default function HomePage() {
                   </div>
                   <div className="flex justify-between">
                     <span>Credits</span>
-                    <span>{userStats.credits}</span>
+                    <span>{userStats.credits.toFixed(2)}</span>
                   </div>
                 </div>
               </CardContent>

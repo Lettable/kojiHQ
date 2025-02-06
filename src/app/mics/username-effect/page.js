@@ -313,7 +313,7 @@ const UsernameEffectsMarketplace = () => {
             if (response.ok) {
                 setDialogContent({
                     title: 'Purchase Successful',
-                    message: `${data.message} You have ${data.remainingCredits} credits left.`
+                    message: `${data.message} You have ${data.remainingCredits.toFixed(2)} credits left.`
                 });
                 setIsDialogOpen(true);
             } else {
@@ -390,11 +390,11 @@ const UsernameEffectsMarketplace = () => {
                                         </h3>
                                         <code className="text-sm text-gray-400">{effect.class}</code>
                                     </div>
-                                    <div className={`text-2xl font-bold ${effect.class} mb-4`}>
+                                    <span className={`text-2xl font-bold ${effect.class} mb-4`}>
                                         {username || 'Your Username'}
-                                    </div>
+                                    </span>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-lg font-semibold text-yellow-400">${effect.price}</span>
+                                        <span className="text-lg font-semibold text-yellow-400">{effect.price} Credits</span>
                                         <Button
                                             variant="default"
                                             className="bg-yellow-500 hover:bg-yellow-600 text-black"

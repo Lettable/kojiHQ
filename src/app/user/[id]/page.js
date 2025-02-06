@@ -877,6 +877,8 @@ import { useToast } from "@/hooks/use-toast"
 import Header from '@/partials/Header'
 import MarkdownWithEmojis from '@/partials/MarkdownWithEmojis'
 import { Calendar, MessageCircle, FileText, Award, ThumbsUp } from 'lucide-react'
+import { Clipboard, CoinsIcon } from 'lucide-react'
+import { FaCoins } from 'react-icons/fa'
 import { usePathname } from 'next/navigation'
 import { AlertCircle } from 'lucide-react'
 
@@ -1053,7 +1055,7 @@ export default function ForumUserProfile() {
                                 </div>
                             </CardContent>
                         </Card> */}
-                        <Card className='bg-zinc-900/50 border-0 mb-4 text-zinc-200'>
+                        {/* <Card className='bg-zinc-900/50 border-0 mb-4 text-zinc-200'>
                             <CardHeader>
                                 <CardTitle>About {userData.username}</CardTitle>
                             </CardHeader>
@@ -1080,7 +1082,60 @@ export default function ForumUserProfile() {
                                     </div>
                                 </div>
                             </CardContent>
+                        </Card> */}
+                        <Card className='bg-zinc-900/50 border-0 mb-4 text-zinc-200'>
+                            <CardHeader>
+                                <CardTitle>About {userData.username}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="space-y-4">
+                                    <div className="flex items-center">
+                                        <Calendar className="mr-2 h-4 w-4" />
+                                        <span>Joined on {new Date(userData.createdAt).toLocaleDateString()}</span>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <MessageCircle className="mr-2 h-4 w-4" />
+                                        <span>{userData.stats.posts} post(s)</span>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <FileText className="mr-2 h-4 w-4" />
+                                        <span>{userData.stats.threads} thread(s)</span>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <Award className="mr-2 h-4 w-4" />
+                                        <span>Level {Math.floor(userData.stats.posts / 10) + 1}</span>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <Award className="mr-2 h-4 w-4" />
+                                        <span>Overall Score {userScore}</span>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <FaCoins className="mr-2 h-4 w-4" />
+                                        <span>Credits: {userData.credits.toFixed(2)}</span>
+                                    </div>
+
+                                    {/* BTC Address with Copy Function */}
+                                    <div className="flex items-center">
+                                        <FileText className="mr-2 h-4 w-4" />
+                                        <span className="mr-2 truncate">{`${userData.btcAddress.slice(0, 6)}...${userData.btcAddress.slice(-4)}`}</span>
+                                        <button
+                                            className="bg-transparent hover:bg-zinc-700 p-2 rounded-full"
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(userData.btcAddress);
+                                                toast({
+                                                    title: "Copied!",
+                                                    description: "BTC Address has been copied to clipboard!",
+                                                    variant: "destructive",
+                                                });
+                                            }}
+                                        >
+                                            <Clipboard className="h-4 w-4 text-zinc-300 hover:text-white" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </CardContent>
                         </Card>
+
                         <Card className="bg-zinc-900/50 text-white border-0 shadow-lg rounded-lg">
                             <CardHeader>
                                 <CardTitle className="text-lg font-semibold">Recent Reputation</CardTitle>

@@ -215,6 +215,7 @@ const PremiumSubscription = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [dialogContent, setDialogContent] = useState({ title: '', message: '' })
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [token, setToken] = useState()
     const router = useRouter()
     const { toast } = useToast()
 
@@ -225,6 +226,7 @@ const PremiumSubscription = () => {
                 router.push("/auth");
                 return;
             }
+            setToken(token)
             const decoded = jwtDecode(token);
             setCurrentUser(decoded);
         } catch (error) {
@@ -254,7 +256,8 @@ const PremiumSubscription = () => {
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    planName: plan.name
+                    planName: plan.name,
+                    token: token
                 }),
             });
 
@@ -357,34 +360,56 @@ const PremiumSubscription = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
-                            <Card className={`bg-gradient-to-br from-gray-800 to-gray-900 border-2 rounded-3xl overflow-hidden ${selectedPlan === plan.name.toLowerCase() ? 'border-purple-500 shadow-lg shadow-purple-500/20' : 'border-gray-700'} hover:border-purple-500 transition-all duration-300`}>
+                            <Card
+                                className={`bg-gradient-to-br from-gray-800 to-gray-900 border-2 rounded-3xl overflow-hidden ${selectedPlan === plan.name.toLowerCase()
+                                        ? 'border-purple-500 shadow-lg shadow-purple-500/20'
+                                        : 'border-gray-700'
+                                    } hover:border-purple-500 transition-all duration-300`}
+                            >
                                 <CardHeader className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 p-6">
                                     <CardTitle className="text-3xl font-bold text-center text-white">
                                         {plan.name}
                                     </CardTitle>
                                     <div className="text-center mt-2">
-                                        <span className="text-4xl font-bold text-white">${plan.price}</span>
+                                        <span className="text-4xl font-bold text-white">
+                                            {plan.price} Credits
+                                        </span>
                                         <span className="text-gray-300">/{plan.period}</span>
                                     </div>
                                 </CardHeader>
-                                <CardContent className="p-6">
-                                    <ul className="space-y-3">
-                                        {[
-                                            ...plan.groups.map((group) => ({
-                                                content: group,
-                                                type: 'group',
-                                            })),
-                                            ...plan.features.map((feature) => ({
-                                                content: feature,
-                                                type: 'feature',
-                                            }))
-                                        ].map((item, index) => (
-                                            <li key={index} className="flex items-center">
-                                                <Check className={`w-5 h-5 mr-2 flex-shrink-0 ${item.type === 'group' ? 'text-blue-400' : 'text-green-400'}`} />
-                                                <span className="text-gray-300">{item.content}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
+
+                                <CardContent className="p-6 space-y-6">
+                                    {plan.groups.length > 0 && (
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-blue-400 mb-2 uppercase">
+                                                Included Groups
+                                            </h3>
+                                            <ul className="space-y-2">
+                                                {plan.groups.map((group, index) => (
+                                                    <li key={index} className="flex items-center">
+                                                        <Check className="w-5 h-5 text-blue-400 mr-2 flex-shrink-0" />
+                                                        <span className="text-gray-300">{group}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    {plan.features.length > 0 && (
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-green-400 mb-2 uppercase">
+                                                Additional Features
+                                            </h3>
+                                            <ul className="space-y-2">
+                                                {plan.features.map((feature, index) => (
+                                                    <li key={index} className="flex items-center">
+                                                        <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0" />
+                                                        <span className="text-gray-300">{feature}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
 
                                     <Button
                                         className="w-full mt-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 rounded-full text-lg transition-all duration-300 transform hover:scale-105"
@@ -394,11 +419,11 @@ const PremiumSubscription = () => {
                                         {isLoading ? 'Processing...' : `Choose ${plan.name}`}
                                     </Button>
                                 </CardContent>
-
                             </Card>
                         </motion.div>
                     ))}
                 </div>
+
 
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

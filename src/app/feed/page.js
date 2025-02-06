@@ -132,7 +132,7 @@ export default function EnhancedDynamicSideProjector() {
       console.error('Error decoding token:', error);
       router.push('/auth');
     }
-  }, [router]);
+  }, [fetchNewToken, router]);
 
   // async function fetchNewToken(userId, token) {
   //   try {

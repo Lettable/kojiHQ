@@ -374,6 +374,8 @@ export async function GET(req) {
             groups: user.groups || [],
             statusEmoji: user.statusEmoji,
             bio: user.bio,
+            btcAddress: user.btcAddress || "",
+            credits: user.credits || 0,
             favYtVideo: user.favYtVideo,
             lastPfpChange: user.lastPfpChange,
             lastUsernameChange: user.lastUsernameChange,
