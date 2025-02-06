@@ -55,78 +55,68 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const ALLOWED_PARAMS = [
-  "favYtVideo",
-  "telegramId",
-  "discordId",
-  "usernameEffect",
-  "btcAddress"
+    "favYtVideo",
+    "telegramId",
+    "discordId",
+    "usernameEffect",
+    "btcAddress"
 ];
 
 export async function POST(req) {
-  const token = req.nextUrl.searchParams.get('token');
+    const token = req.nextUrl.searchParams.get('token');
 
-  try {
-    await connectDB();
+    try {
+        await connectDB();
+        const updatedData = await req.json();
 
-    // Validate JSON request body
-    const updatedData = await req.json();
+        // Validate allowed parameters
+        const invalidParams = Object.keys(updatedData).filter(
+            key => !ALLOWED_PARAMS.includes(key)
+        );
 
-    if (typeof updatedData !== 'object' || Array.isArray(updatedData)) {
-      return NextResponse.json(
-        { error: "Invalid request data" },
-        { status: 400 }
-      );
+        if (invalidParams.length > 0) {
+            return NextResponse.json(
+                { 
+                    error: "Invalid parameters",
+                    invalidFields: invalidParams,
+                    allowedFields: ALLOWED_PARAMS 
+                },
+                { status: 400 }
+            );
+        }
+
+        const decoded = jwt.verify(token, JWT_SECRET);
+        if (!decoded) {
+            return NextResponse.json(
+                { message: 'Invalid or expired token' },
+                { status: 401 }
+            );
+        }
+        const userId = decoded.userId;
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $set: updatedData },
+            { new: true, runValidators: true }
+        );
+
+        if (!user) {
+            return NextResponse.json(
+                { error: "User not found" },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json({
+            success: true,
+            message: "Preferences updated successfully",
+            user,
+        });
+    } catch (error) {
+        console.error("Error updating preferences:", error);
+        return NextResponse.json(
+            { error: "Failed to update preferences" },
+            { status: 500 }
+        );
     }
-
-    const decoded = jwt.verify(token, JWT_SECRET);
-    if (!decoded) {
-      return NextResponse.json(
-        { message: 'Invalid or expired token' },
-        { status: 401 }
-      );
-    }
-
-    const userId = decoded.userId;
-
-    // Validate allowed parameters
-    const invalidParams = Object.keys(updatedData).filter(
-      key => !ALLOWED_PARAMS.includes(key)
-    );
-
-    if (invalidParams.length > 0) {
-      return NextResponse.json(
-        {
-          error: "Invalid parameters",
-          invalidFields: invalidParams,
-          allowedFields: ALLOWED_PARAMS
-        },
-        { status: 400 }
-      );
-    }
-
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { $set: updatedData },
-      { new: true }
-    );
-
-    if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: "Preferences updated successfully",
-      user,
-    });
-  } catch (error) {
-    console.error("Error updating preferences:", error);
-    return NextResponse.json(
-      { error: "Failed to update preferences" },
-      { status: 500 }
-    );
-  }
 }
