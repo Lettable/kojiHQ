@@ -414,9 +414,9 @@ const PremiumSubscription = () => {
                                     <Button
                                         className="w-full mt-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 rounded-full text-lg transition-all duration-300 transform hover:scale-105"
                                         onClick={() => handleSubscription(plan)}
-                                        disabled={isLoading}
+                                        
                                     >
-                                        {isLoading ? 'Processing...' : `Choose ${plan.name}`}
+                                        {`Choose ${plan.name}`}
                                     </Button>
                                 </CardContent>
                             </Card>

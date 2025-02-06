@@ -370,7 +370,7 @@ const UserSchema = new mongoose.Schema({
   planName: {
     type: String,
     default: null,
-    enum: ["weekly", "monthly", "yearly"]
+    enum: ["Weekly", "Monthly", "Yearly"]
   },
   premiumEndDate: {
     type: Date,
