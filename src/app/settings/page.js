@@ -906,7 +906,7 @@ function PreferencesTab({ token,  userData, onSave, setUsernameEffect }) {
           <Label htmlFor="btcaddress">BTC Address</Label>
           <Input
             id="btcaddress"
-            value={btcaddress}
+            value={btcAddress}
             onChange={(e) => setBtcAddress(e.target.value)}
             className="bg-zinc-800 border-zinc-700 text-white"
             placeholder="Your BTC Address"
