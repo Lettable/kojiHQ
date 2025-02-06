@@ -399,9 +399,8 @@ const UsernameEffectsMarketplace = () => {
                                             variant="default"
                                             className="bg-yellow-500 hover:bg-yellow-600 text-black"
                                             onClick={() => handleBuyEffect(effect.class)}
-                                            disabled={isLoading}
                                         >
-                                            {isLoading ? 'Processing...' : 'Buy Now'}
+                                            {'Buy Now'}
                                         </Button>
                                     </div>
                                 </CardContent>

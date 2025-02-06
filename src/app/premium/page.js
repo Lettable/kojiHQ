@@ -266,7 +266,7 @@ const PremiumSubscription = () => {
             if (response.ok) {
                 setDialogContent({
                     title: 'Premium Plan Purchased',
-                    message: `Congratulations! You've successfully purchased the ${data.planName} plan. Your premium status will end on ${new Date(data.premiumEndDate).toLocaleDateString()}. You have ${data.daysRemaining} days remaining. Your new group is: ${data.groupName}. Remaining credits: ${data.remainingCredits}`
+                    message: `Congratulations! You've successfully purchased the ${data.planName} plan. Your premium status will end on ${new Date(data.premiumEndDate).toLocaleDateString()}. You have ${data.daysRemaining} days remaining. Your new group is: ${data.assignedGroups}. Remaining credits: ${data.remainingCredits}`
                 });
                 setIsDialogOpen(true);
             } else if (response.status === 403) {
