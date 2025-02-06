@@ -76,6 +76,7 @@
 import jwt from 'jsonwebtoken';
 import User from '@/lib/model/User.model';
 import { connectDB } from '@/lib/config/db';
+import { NextResponse } from 'next/server';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const TOKEN_EXPIRATION = '7d';
