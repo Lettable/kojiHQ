@@ -256,7 +256,7 @@ import { jwtDecode } from 'jwt-decode'
 import Header from '@/partials/Header'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from '@/hooks/use-toast'
 
 const usernameEffects = [
     { name: 'Sparkle', icon: Sparkles, class: 'sparkle-effect', price: 4.99 },
