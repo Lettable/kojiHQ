@@ -3,6 +3,8 @@ import User from "@/lib/model/User.model";
 import { NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
 
+const JWT_SECRET = process.env.JWT_SECRET;
+
 export async function POST(req) {
   const token = req.nextUrl.searchParams.get('token');
 

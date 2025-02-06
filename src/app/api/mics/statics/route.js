@@ -5,6 +5,8 @@ import Thread from "@/lib/model/Thread.model";
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 
+const JWT_SECRET = process.env.JWT_SECRET;
+
 export async function GET(req) {
   await connectDB();
 
