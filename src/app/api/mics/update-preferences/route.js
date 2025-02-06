@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/config/db";
 import User from "@/lib/model/User.model";
 import { NextResponse } from "next/server";
+import jwt from 'jsonwebtoken';
 
 export async function POST(req) {
   const token = req.nextUrl.searchParams.get('token');
