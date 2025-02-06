@@ -833,7 +833,7 @@ function PreferencesTab({ token,  userData, onSave, setUsernameEffect }) {
   const [telegramId, setTelegramId] = useState(userData.telegramUID || "");
   const [discordId, setDiscordId] = useState(userData.discordId || "");
   const [newUsernameEffect, setNewUsernameEffect] = useState(userData.usernameEffect);
-  const [btcAddress, setBtcAddress] = useState(userData.btcAddress)
+  const [btcAddress, setBtcAddress] = useState(userData.btcAddress || "")
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast()
 

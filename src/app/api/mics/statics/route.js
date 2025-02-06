@@ -20,12 +20,12 @@ export async function GET(req) {
     const userId = decoded.userId
 
     if (!userId) {
-      return NextResponse.json({ error: 'User  ID is required.' }, { status: 400 });
+      return NextResponse.json({ error: 'User ID is required.' }, { status: 400 });
     }
 
     const user = await User.findById(userId);
     if (!user) {
-      return NextResponse.json({ error: 'User  not found.' }, { status: 404 });
+      return NextResponse.json({ error: 'User not found.' }, { status: 404 });
     }
 
     const now = new Date();
@@ -67,7 +67,7 @@ export async function GET(req) {
       discordId: user.discordId,
       statusEmoji: user.statusEmoji,
       profilePic: user.profilePic,
-      btcAddress: user.btcAddress,
+      btcAddress: user.btcAddress || "",
       bio: user.bio,
       createdAt: user.createdAt,
       lastUsernameChange: user.lastUsernameChange,
