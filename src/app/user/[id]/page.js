@@ -882,6 +882,7 @@ import { FaCoins } from 'react-icons/fa'
 import { usePathname } from 'next/navigation'
 import { AlertCircle } from 'lucide-react'
 import { Toaster } from '@/components/ui/toaster'
+import { FaBan } from 'react-icons/fa'
 
 export default function ForumUserProfile() {
     const [userData, setUserData] = useState(null)
@@ -1192,21 +1193,52 @@ export default function ForumUserProfile() {
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center">
                                                 <Avatar className="w-24 h-24 mr-4">
-                                                    <AvatarImage src={userData.profilePicture} alt={userData.username} />
+                                                    <AvatarImage
+                                                        src={
+                                                            userData.isBanned
+                                                                ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2-flKQOIE8ribInudJWpIsy94v1B7LMCemuBf8RcjpIY1Pt3hLHZR5r78rXBFW0cIhVg&usqp=CAU"
+                                                                : userData.profilePicture
+                                                        }
+                                                        alt={userData.username}
+                                                    />
                                                     <AvatarFallback>{userData.username[0]}</AvatarFallback>
                                                 </Avatar>
 
                                                 <div className="flex flex-col">
-                                                    <div className="text-2xl font-bold flex items-center gap-2">
-                                                        <span className={userData.usernameEffect}>{userData.username}</span>
-                                                        {renderTextWithEmojis(userData.statusEmoji, emojis)}
-                                                    </div>
+                                                    {userData.isBanned ? (
+                                                        <div className="text-2xl font-bold line-through text-gray-500 flex items-center gap-2">
+                                                            {userData.username}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="text-2xl font-bold flex items-center gap-2">
+                                                            <span className={userData.isSuspended ? "" : userData.usernameEffect}>
+                                                                {userData.username}
+                                                            </span>
+                                                            {renderTextWithEmojis(userData.statusEmoji, emojis)}
+                                                        </div>
+                                                    )}
 
-                                                    <p className="text-gray-400">
-                                                        {userData.bio === "Edit your bio..." ? "Bio not set" : userData.bio}
-                                                    </p>
+                                                    {!userData.isBanned && (
+                                                        <>
+                                                            <p className="text-gray-400">
+                                                                {userData.bio === "Edit your bio..." ? "Bio not set" : userData.bio}
+                                                            </p>
+                                                            {userData.isSuspended && (
+                                                                <>
+                                                                    <Badge variant="destructive" className="mr-2">
+                                                                        <FaBan className="w-3 h-3 mr-1" />
+                                                                        Suspended
+                                                                    </Badge>
+                                                                    <span className="ml-2 px-2 py-1 bg-yellow-500 text-white text-sm rounded">
+                                                                        - {new Date(userData.suspendUntil).toLocaleDateString()}
+                                                                    </span>
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    )}
                                                 </div>
                                             </div>
+
 
                                             {/* Reputation Button */}
                                             {currentUser && currentUser.userId !== userData.userId && (
