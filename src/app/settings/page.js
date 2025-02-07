@@ -344,7 +344,7 @@ function OverviewTab({ token, bannerImg, userData, emojis, bio, username, status
                 <span>{renderTextWithEmojis(statusEmoji, emojis)}</span>
               </h2>
               <p className="text-white">{bio}</p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-white">
                 Joined {formatDistanceToNow(new Date(userData.createdAt))} ago
               </p>
             </div>
