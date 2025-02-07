@@ -1189,7 +1189,18 @@ export default function ForumUserProfile() {
                                     </CardContent>
                                 </Card> */}
                                 <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-4">
-                                    <CardContent className="pt-6">
+                                    <CardContent className="pt-6" style={
+                                        userData.bannerImg && userData.bannerImg.trim() !== ""
+                                            ? {
+                                                background: `url(${userData.bannerImg}) no-repeat`,
+                                                backgroundSize: "cover",
+                                                backgroundPosition: "center",
+                                                width: "100%",
+                                                borderRadius: "16px",
+                                                opacity: 0.8,
+                                            }
+                                            : {}
+                                    }>
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center">
                                                 <Avatar className="w-24 h-24 mr-4">
@@ -1206,7 +1217,7 @@ export default function ForumUserProfile() {
 
                                                 <div className="flex flex-col">
                                                     {userData.isBanned ? (
-                                                        <div className="text-2xl font-bold line-through text-gray-400 flex items-center gap-2">
+                                                        <div className="text-2xl font-bold line-through text-white flex items-center gap-2">
                                                             {userData.username}
                                                         </div>
                                                     ) : (
@@ -1220,12 +1231,12 @@ export default function ForumUserProfile() {
 
                                                     {!userData.isBanned && (
                                                         <>
-                                                            <p className="text-gray-400">
+                                                            <p className="text-white">
                                                                 {userData.bio === "Edit your bio..." ? "Bio not set" : userData.bio}
                                                             </p>
                                                             {userData.isSuspended && (
                                                                 <div className="flex items-center gap-2 mt-1 self-start">
-                                                                    <span className="text-xs text-gray-500">
+                                                                    <span className="text-xs text-white">
                                                                         This user is suspended until {new Date(userData.suspendUntil).toLocaleDateString()}
                                                                     </span>
                                                                 </div>

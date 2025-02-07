@@ -73,6 +73,7 @@ export async function GET(req) {
       bio: user.bio,
       createdAt: user.createdAt,
       lastUsernameChange: user.lastUsernameChange,
+      bannerImg: user.bannerImg || "",
       lastPfpChange: user.lastPfpChange,
       isPremium: user.isPremium,
       reputation: user.reputationTaken.length,

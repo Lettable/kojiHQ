@@ -212,6 +212,10 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: null
   },
+  bannerImg: {
+    type: String,
+    default: ""
+  },
   lastPfpChange: {
     type: Date,
     default: null

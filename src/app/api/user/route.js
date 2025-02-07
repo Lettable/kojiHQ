@@ -551,6 +551,7 @@ export async function GET(req) {
         groups: userGroups,
         statusEmoji: user.statusEmoji,
         bio: user.bio,
+        bannerImg: user.bannerImg || "",
         btcAddress: user.btcAddress || "",
         credits: user.credits || 0,
         favYtVideo: user.favYtVideo,

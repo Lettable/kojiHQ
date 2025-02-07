@@ -59,7 +59,8 @@ const ALLOWED_PARAMS = [
     "telegramId",
     "discordId",
     "usernameEffect",
-    "btcAddress"
+    "btcAddress",
+    "bannerImg"
 ];
 
 export async function POST(req) {

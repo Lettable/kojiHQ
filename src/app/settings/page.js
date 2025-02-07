@@ -115,6 +115,7 @@ export default function SettingsPage() {
   const [statusEmoji, setStatusEmoji] = useState()
   const [content, setContent] = useState('')
   const [usernameEffect, setUsernameEffect] = useState()
+  const [bannerImg, setBannerImg] = useState("")
   const [emojis, setEmojis] = useState()
 
   useEffect(() => {
@@ -131,6 +132,7 @@ export default function SettingsPage() {
           setUserData(data)
           setUsernameEffect(data.usernameEffect)
           setStatusEmoji(data.statusEmoji)
+          setBannerImg(data.bannerImg || "")
           setBio(data.bio)
           setUsername(data.username)
         } else {
@@ -259,7 +261,7 @@ export default function SettingsPage() {
                       transition={{ duration: 0.2 }}
                     >
                       <TabsContent value="overview" className="border-0 mt-0">
-                        <OverviewTab token={token} userData={userData} emojis={emojis} bio={bio} username={username} statusEmoji={statusEmoji} profilePic={profilePic} setProfilePic={setProfilePic} usernameEffect={usernameEffect} />
+                        <OverviewTab token={token} userData={userData} bannerImg={bannerImg} emojis={emojis} bio={bio} username={username} statusEmoji={statusEmoji} profilePic={profilePic} setProfilePic={setProfilePic} usernameEffect={usernameEffect} />
                       </TabsContent>
 
                       <TabsContent value="profile" className="mt-0">
@@ -267,7 +269,7 @@ export default function SettingsPage() {
                       </TabsContent>
 
                       <TabsContent value="preferences" className="mt-0">
-                        <PreferencesTab token={token} userData={userData} onSave={handleSavePreferences} setUsernameEffect={setUsernameEffect} />
+                        <PreferencesTab token={token} userData={userData} bannerImg={bannerImg} setBannerImg={setBannerImg} onSave={handleSavePreferences} setUsernameEffect={setUsernameEffect} />
                       </TabsContent>
 
                       <TabsContent value="signature" className="mt-0">
@@ -294,7 +296,7 @@ export default function SettingsPage() {
   )
 }
 
-function OverviewTab({ token, userData, emojis, bio, username, statusEmoji, profilePic, setProfilePic, usernameEffect }) {
+function OverviewTab({ token, bannerImg, userData, emojis, bio, username, statusEmoji, profilePic, setProfilePic, usernameEffect }) {
   const stats = [
     { title: "Reputation", value: userData.reputation, icon: Trophy, color: "text-yellow-500" },
     { title: "Threads", value: userData.threadCount, icon: MessageSquare, color: "text-blue-500" },
@@ -315,7 +317,17 @@ function OverviewTab({ token, userData, emojis, bio, username, statusEmoji, prof
   return (
     <div className="space-y-6 border-0">
       <Card className="bg-zinc-800 text-white border-0 border-zinc-700">
-        <CardContent className="p-6">
+        <CardContent
+          className="p-6"
+          style={{
+            background: `url(${bannerImg}) no-repeat`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            width: "100%",
+            borderRadius: "16px",
+            opacity: 0.8,
+          }}
+        >
           <div className="flex items-start text-white gap-6">
             <Avatar className="h-24 w-24">
               <AvatarImage src={profilePic} />
@@ -404,7 +416,7 @@ function OverviewTab({ token, userData, emojis, bio, username, statusEmoji, prof
   )
 }
 
-function ProfileTab({ token,  userData, profilePic, setProfilePic, setUsername, setBio, setStatusEmoji }) {
+function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, setBio, setStatusEmoji }) {
   const { toast } = useToast()
   const [newUsername, setNewUsername] = useState(userData.username)
   const [newBio, setNewBio] = useState(userData.bio)
@@ -828,7 +840,7 @@ function ProfileTab({ token,  userData, profilePic, setProfilePic, setUsername, 
 //   )
 // }
 
-function PreferencesTab({ token,  userData, onSave, setUsernameEffect }) {
+function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg, setBannerImg }) {
   const [youtubeVideo, setYoutubeVideo] = useState(userData.favYtVideo);
   const [telegramId, setTelegramId] = useState(userData.telegramUID || "");
   const [discordId, setDiscordId] = useState(userData.discordId || "");
@@ -840,6 +852,15 @@ function PreferencesTab({ token,  userData, onSave, setUsernameEffect }) {
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
   };
+
+  function isValidUrl(url) {
+    try {
+      new URL(url);
+      return /\.(jpeg|jpg|gif|png|webp|svg|bmp|gif)$/i.test(url);
+    } catch {
+      return false;
+    }
+  }
 
   const handleSave = async () => {
     const updatedData = {
@@ -871,6 +892,7 @@ function PreferencesTab({ token,  userData, onSave, setUsernameEffect }) {
         setNewUsernameEffect(result.user.usernameEffect)
         setUsernameEffect(result.user.usernameEffect)
         setBtcAddress(result.user.btcAddress)
+        setBannerImg(result.user.bannerImg)
         toast({
           title: "Preferences Updated",
           description: "Your preferences have been successfully updated.",
@@ -901,6 +923,25 @@ function PreferencesTab({ token,  userData, onSave, setUsernameEffect }) {
             placeholder="YouTube URL"
           />
         </div>
+
+        <div>
+          <Label htmlFor="bannerImg">Banner Image/GIF URL</Label>
+          <Input
+            id="bannerImg"
+            value={bannerImg}
+            onChange={(e) => {
+              const url = e.target.value;
+              if (isValidUrl(url)) {
+                setBannerImg(url);
+              } else {
+                alert('Please enter a valid image or GIF URL.');
+              }
+            }}
+            className="bg-zinc-800 border-zinc-700 text-white"
+            placeholder="Enter a valid image or GIF link for your banner"
+          />
+        </div>
+
 
         <div>
           <Label htmlFor="btcaddress">BTC Address</Label>
@@ -1064,7 +1105,7 @@ function PreferencesTab({ token,  userData, onSave, setUsernameEffect }) {
 //   );
 // }
 
-function SignatureTab({ token,  isDarkTheme, userData, onSave }) {
+function SignatureTab({ token, isDarkTheme, userData, onSave }) {
   const [signature, setSignature] = useState(userData.signature);
   const { toast } = useToast()
 
@@ -1264,7 +1305,7 @@ function SignatureTab({ token,  isDarkTheme, userData, onSave }) {
 //   )
 // }
 
-function SecurityTab({ token,  userData }) {
+function SecurityTab({ token, userData }) {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
