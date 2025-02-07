@@ -231,13 +231,26 @@ img[alt^=":"] {
   }
 }
 
-.fire-effect {
+/* .fire-effect {
   position: relative;
-  color: #000000; /* Fire color for the text */
-  text-shadow: 0 0 5px rgba(255, 69, 0, 0.8), 0 0 10px rgba(255, 69, 0, 0.6); /* Optional glow effect */
+  color: #000000;
+  text-shadow: 0 0 5px rgba(255, 69, 0, 0.8), 0 0 10px rgba(255, 69, 0, 0.6);
   overflow: hidden; 
   background: url('https://i.gifer.com/YmoL.gif') no-repeat left top;
   background-size: contain;
+} */
+.fire-effect {
+  position: relative;
+  letter-spacing: .02em;
+  font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+  --bg-pos: .2em -.07em;
+  color: #000000; /* Fire color for the text */
+  text-shadow: 0 0 5px rgba(255, 69, 0, 0.8), 0 0 10px rgba(255, 69, 0, 0.6); /* Optional glow effect */
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: border-box, border-box, text;
+  background-image: url(https://i.gifer.com/YmoL.gif), linear-gradient(125deg, rgba(170, 119, 28, 1) 0%, rgba(255, 242, 138, 1) 26%, rgba(246, 194, 35, 1) 37%, rgba(255, 215, 120, 1) 49%, rgba(238, 187, 29, 1) 61%, rgba(170, 119, 28, 1) 100%);
+  background-size: 3em, 3em, 15em;
 }
 
 .olympus-effect {
