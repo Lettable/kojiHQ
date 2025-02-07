@@ -319,14 +319,18 @@ function OverviewTab({ token, bannerImg, userData, emojis, bio, username, status
       <Card className="bg-zinc-800 text-white border-0 border-zinc-700">
         <CardContent
           className="p-6"
-          style={{
-            background: `url(${bannerImg}) no-repeat`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            width: "100%",
-            borderRadius: "16px",
-            opacity: 0.8,
-          }}
+          style={
+            bannerImg && bannerImg.trim() !== ""
+              ? {
+                background: `url(${bannerImg}) no-repeat`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                width: "100%",
+                borderRadius: "16px",
+                opacity: 0.8,
+              }
+              : {}
+          }
         >
           <div className="flex items-start text-white gap-6">
             <Avatar className="h-24 w-24">
@@ -929,14 +933,7 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
           <Input
             id="bannerImg"
             value={bannerImg}
-            onChange={(e) => {
-              const url = e.target.value;
-              if (isValidUrl(url)) {
-                setBannerImg(url);
-              } else {
-                alert('Please enter a valid image or GIF URL.');
-              }
-            }}
+            onChange={(e) => setBannerImg(e.target.value)}
             className="bg-zinc-800 border-zinc-700 text-white"
             placeholder="Enter a valid image or GIF link for your banner"
           />
@@ -1030,12 +1027,19 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
         <div className="flex justify-end">
           <Button
             type="submit"
-            onClick={handleSave}
+            onClick={() => {
+              if (!bannerImg || isValidUrl(bannerImg)) {
+                handleSave();
+              } else {
+                alert('Please enter a valid image or GIF URL.');
+              }
+            }}
             className="bg-yellow-500 mt-6 text-black hover:bg-yellow-600"
           >
             Save Preference
           </Button>
         </div>
+
       </div>
     </div>
   );
