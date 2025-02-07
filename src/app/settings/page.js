@@ -343,7 +343,7 @@ function OverviewTab({ token, bannerImg, userData, emojis, bio, username, status
                 <span className={usernameEffect}>{username}</span>
                 <span>{renderTextWithEmojis(statusEmoji, emojis)}</span>
               </h2>
-              <p className="text-gray-400">{bio}</p>
+              <p className="text-white">{bio}</p>
               <p className="text-sm text-gray-500">
                 Joined {formatDistanceToNow(new Date(userData.createdAt))} ago
               </p>
@@ -872,7 +872,8 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
       telegramId,
       discordId,
       usernameEffect: newUsernameEffect,
-      btcAddress: btcAddress
+      btcAddress: btcAddress,
+      bannerImg: bannerImg
     };
 
     try {
