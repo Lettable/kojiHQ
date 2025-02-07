@@ -533,7 +533,14 @@ export async function GET(req) {
       // Handle isBanned and isSuspended logic
       let userGroups = user.groups || [];
       if (user.isBanned) {
-        userGroups = ["banned"];
+        
+        userGroups = [
+            {
+                "groupName": "banned",
+                "assignedAt": "2025-01-24T12:31:35.409Z",
+                "_id": "6793882784f67a8d0e3ed743"
+            }
+        ];
       }
   
       const userData = {
