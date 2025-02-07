@@ -1436,7 +1436,7 @@ export default function ForumUserProfile() {
                                 allowFullScreen
                                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                                 loading="lazy"
-                                className="mb-4 mt-6"
+                                className="mb-6 mt-6"
                             ></iframe>
                         ) : null}
 
