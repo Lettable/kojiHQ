@@ -1224,15 +1224,15 @@ export default function ForumUserProfile() {
                                                                 {userData.bio === "Edit your bio..." ? "Bio not set" : userData.bio}
                                                             </p>
                                                             {userData.isSuspended && (
-                                                                <>
-                                                                    <Badge variant="destructive" className="mr-2">
+                                                                <div className="flex items-center gap-2 mt-1 self-start">
+                                                                    <Badge variant="destructive" className="text-xs px-2 py-1">
                                                                         <FaBan className="w-3 h-3 mr-1" />
                                                                         Suspended
                                                                     </Badge>
-                                                                    <span className="ml-2 px-2 py-1 bg-yellow-500 text-white text-sm rounded">
-                                                                        - {new Date(userData.suspendUntil).toLocaleDateString()}
+                                                                    <span className="text-xs text-gray-500">
+                                                                        until {new Date(userData.suspendUntil).toLocaleDateString()}
                                                                     </span>
-                                                                </>
+                                                                </div>
                                                             )}
                                                         </>
                                                     )}

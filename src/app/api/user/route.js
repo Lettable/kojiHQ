@@ -593,7 +593,7 @@ export async function GET(req) {
         })),
         isBanned: user.isBanned || false,
         isSuspended: user.isSuspended || false,
-        suspendUntil: user.isSuspended ? user.suspendUntil : null
+        suspendUntil: user.isSuspended ? user.suspendedUntil : null
       };
   
       return NextResponse.json({ success: true, data: userData }, { status: 200 });
