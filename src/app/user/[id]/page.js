@@ -1283,7 +1283,7 @@ export default function ForumUserProfile() {
                                                 key={index} // Add a key for each mapped element
                                                 src={`/groupimgs/${group.groupName.toLowerCase()}.png`}
                                                 alt={group.groupName}
-                                                style={{ width: '150px', height: '150px' }} // Set inline styles
+                                                style={{ width: '150px', height: '50px' }} // Set inline styles
                                                 className="mr-1" // Keep margin class if needed
                                             />
                                         ))}
