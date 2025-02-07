@@ -1206,7 +1206,7 @@ export default function ForumUserProfile() {
 
                                                 <div className="flex flex-col">
                                                     {userData.isBanned ? (
-                                                        <div className="text-2xl font-bold line-through text-gray-500 flex items-center gap-2">
+                                                        <div className="text-2xl font-bold line-through text-gray-400 flex items-center gap-2">
                                                             {userData.username}
                                                         </div>
                                                     ) : (
