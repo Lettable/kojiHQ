@@ -216,6 +216,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
+  favSpotifyTrack: {
+    type: String,
+    default: ""
+  },
   lastPfpChange: {
     type: Date,
     default: null

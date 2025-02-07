@@ -1359,6 +1359,77 @@ export default function ForumUserProfile() {
 
                     {/* Right Column - User Content */}
                     <div className="lg:w-1/4">
+                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6">
+                            <CardHeader>
+                                <CardTitle>Recent Activity</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ScrollArea className="h-[300px] overflow-y-auto">
+                                    {userData.activity.threads.length > 0 || userData.activity.posts.length > 0 ? (
+                                        <>
+                                            {userData.activity.threads.length > 0 && (
+                                                <div>
+                                                    <h4 className="font-semibold text-lg mb-2">Threads</h4>
+                                                    {userData.activity.threads.map((thread) => (
+                                                        <div key={thread._id} className="mb-4">
+                                                            <a href={`/thread/${thread._id}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
+                                                                <h3 className="font-semibold">{thread.title}</h3>
+                                                            </a>
+                                                            <p className="text-sm text-gray-400">
+                                                                {new Date(thread.createdAt).toLocaleDateString()}
+                                                            </p>
+                                                            <p className="text-sm mt-1">{renderTextWithEmojis(thread.content.substring(0, 100), emojis)}...</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {userData.activity.posts.length > 0 && (
+                                                <div className="mt-6">
+                                                    <h4 className="font-semibold text-lg mb-2">Posts</h4>
+                                                    {userData.activity.posts.map((post) => (
+                                                        <div key={post._id} className="mb-4">
+                                                            <a href={`/thread/${post.threadId}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
+                                                                <h3 className="font-semibold">{post.threadTitle || "Untitled Thread"}</h3>
+                                                            </a>
+                                                            <p className="text-sm text-gray-400">
+                                                                {new Date(post.createdAt).toLocaleDateString()}
+                                                            </p>
+                                                            <p className="text-sm mt-1">{renderTextWithEmojis(post.content.substring(0, 100), emojis)}...</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <p className="text-gray-400 text-center text-sm">
+                                            No recent activity yet.
+                                        </p>
+                                    )}
+                                </ScrollArea>
+                            </CardContent>
+                        </Card>
+
+                        {userData.favSpotifyTrack && userData.favSpotifyTrack.trim() !== "" ? (
+                            <Card className="mt-6">
+                                <CardHeader>
+                                    <CardTitle className="text-lg font-bold">Favorite Track</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <iframe
+                                        style={{ borderRadius: "12px" }}
+                                        src={`${userData.favSpotifyTrack}`}
+                                        width="100%"
+                                        height="152"
+                                        allowFullScreen
+                                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                        loading="lazy"
+                                        className="mt-2"
+                                    ></iframe>
+                                </CardContent>
+                            </Card>
+                        ) : null}
+
+
                         <Card className="bg-zinc-900/50 text-white border-0 shadow-lg rounded-lg mb-6">
                             <CardHeader>
                                 <CardTitle className="text-lg font-semibold">Latest Visitors</CardTitle>
@@ -1410,55 +1481,7 @@ export default function ForumUserProfile() {
                                 </ScrollArea>
                             </CardContent>
                         </Card> */}
-                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6">
-                            <CardHeader>
-                                <CardTitle>Recent Activity</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <ScrollArea className="h-[300px] overflow-y-auto">
-                                    {userData.activity.threads.length > 0 || userData.activity.posts.length > 0 ? (
-                                        <>
-                                            {userData.activity.threads.length > 0 && (
-                                                <div>
-                                                    <h4 className="font-semibold text-lg mb-2">Threads</h4>
-                                                    {userData.activity.threads.map((thread) => (
-                                                        <div key={thread._id} className="mb-4">
-                                                            <a href={`/thread/${thread._id}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
-                                                                <h3 className="font-semibold">{thread.title}</h3>
-                                                            </a>
-                                                            <p className="text-sm text-gray-400">
-                                                                {new Date(thread.createdAt).toLocaleDateString()}
-                                                            </p>
-                                                            <p className="text-sm mt-1">{renderTextWithEmojis(thread.content.substring(0, 100), emojis)}...</p>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            {userData.activity.posts.length > 0 && (
-                                                <div className="mt-6">
-                                                    <h4 className="font-semibold text-lg mb-2">Posts</h4>
-                                                    {userData.activity.posts.map((post) => (
-                                                        <div key={post._id} className="mb-4">
-                                                            <a href={`/thread/${post.threadId}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
-                                                                <h3 className="font-semibold">{post.threadTitle || "Untitled Thread"}</h3>
-                                                            </a>
-                                                            <p className="text-sm text-gray-400">
-                                                                {new Date(post.createdAt).toLocaleDateString()}
-                                                            </p>
-                                                            <p className="text-sm mt-1">{renderTextWithEmojis(post.content.substring(0, 100), emojis)}...</p>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <p className="text-gray-400 text-center text-sm">
-                                            No recent activity yet.
-                                        </p>
-                                    )}
-                                </ScrollArea>
-                            </CardContent>
-                        </Card>
+
                     </div>
                 </div>
                 {/* {currentUser && currentUser.userId !== userData.userId && (

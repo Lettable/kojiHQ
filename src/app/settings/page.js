@@ -851,6 +851,7 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
   const [newUsernameEffect, setNewUsernameEffect] = useState(userData.usernameEffect);
   const [btcAddress, setBtcAddress] = useState(userData.btcAddress || "")
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [favSpotifyTrack, setFavSpotifyTrack] = useState(userData.favSpotifyTrack || "")
   const { toast } = useToast()
 
   const handleOpenDialog = () => {
@@ -866,6 +867,19 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
     }
   }
 
+  function isValidSpotifyTrackUrl(url) {
+    try {
+      const parsedUrl = new URL(url);
+      return (
+        parsedUrl.hostname === "open.spotify.com" &&
+        parsedUrl.pathname.startsWith("/embed/track/")
+      );
+    } catch {
+      return false;
+    }
+  }
+  
+
   const handleSave = async () => {
     const updatedData = {
       favYtVideo: youtubeVideo,
@@ -873,7 +887,8 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
       discordId,
       usernameEffect: newUsernameEffect,
       btcAddress: btcAddress,
-      bannerImg: bannerImg
+      bannerImg: bannerImg,
+      favSpotifyTrack: favSpotifyTrack
     };
 
     try {
@@ -897,6 +912,7 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
         setNewUsernameEffect(result.user.usernameEffect)
         setUsernameEffect(result.user.usernameEffect)
         setBtcAddress(result.user.btcAddress)
+        setFavSpotifyTrack(result.user.favSpotifyTrack || "")
         setBannerImg(result.user.bannerImg)
         toast({
           title: "Preferences Updated",
@@ -919,36 +935,49 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
       <div className="space-y-4">
         {/* YouTube Video */}
         <div>
-          <Label htmlFor="youtubeVideo">Favorite YouTube Video</Label>
+          <Label htmlFor="youtubeVideo">Favorite YouTube Video (optional)</Label>
           <Input
             id="youtubeVideo"
             value={youtubeVideo}
             onChange={(e) => setYoutubeVideo(e.target.value)}
             className="bg-zinc-800 border-zinc-700 text-white"
-            placeholder="YouTube URL"
+            placeholder="YouTube URL (optional)"
           />
         </div>
 
         <div>
-          <Label htmlFor="bannerImg">Banner Image/GIF URL</Label>
+          <Label htmlFor="bannerImg">Banner Image/GIF URL (optional)</Label>
           <Input
             id="bannerImg"
             value={bannerImg}
             onChange={(e) => setBannerImg(e.target.value)}
             className="bg-zinc-800 border-zinc-700 text-white"
-            placeholder="Enter a valid image or GIF link for your banner"
+            placeholder="Enter a valid image or GIF link for your banner (optional)"
           />
         </div>
 
+        <div>
+          <Label htmlFor="spotifySong">Favorite Spotify Song (Optional)</Label>
+          <Input
+            id="spotifySong"
+            value={favSpotifyTrack}
+            onChange={(e) => setFavSpotifyTrack(e.target.value)}
+            className="bg-zinc-800 border-zinc-700 text-white"
+            placeholder="Enter a Spotify track URL (optional)"
+          />
+          <p className="text-sm text-zinc-400 mt-2">
+            Example: <span className="underline">https://open.spotify.com/track/6nRCWTNboe0qbrXTO0QbzX</span>
+          </p>
+        </div>
 
         <div>
-          <Label htmlFor="btcaddress">BTC Address</Label>
+          <Label htmlFor="btcaddress">BTC Address (optional)</Label>
           <Input
             id="btcaddress"
             value={btcAddress}
             onChange={(e) => setBtcAddress(e.target.value)}
             className="bg-zinc-800 border-zinc-700 text-white"
-            placeholder="Your BTC Address"
+            placeholder="Your BTC Address (optional)"
           />
         </div>
 
@@ -966,13 +995,13 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
 
         {/* Discord ID */}
         <div>
-          <Label htmlFor="discordId">Discord ID</Label>
+          <Label htmlFor="discordId">Discord ID (optional)</Label>
           <Input
             id="discordId"
             value={discordId}
             onChange={(e) => setDiscordId(e.target.value)}
             className="bg-zinc-800 border-zinc-700 text-white"
-            placeholder="Your Discord ID"
+            placeholder="Your Discord ID (optional)"
           />
         </div>
 
@@ -1029,16 +1058,17 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
           <Button
             type="submit"
             onClick={() => {
-              if (!bannerImg || isValidUrl(bannerImg)) {
+              if ((!bannerImg || isValidUrl(bannerImg)) && (!favSpotifyTrack || isValidSpotifyTrackUrl(favSpotifyTrack))) {
                 handleSave();
               } else {
-                alert('Please enter a valid image or GIF URL.');
+                alert('Please enter valid URLs for the banner image and/or Spotify track.');
               }
             }}
             className="bg-yellow-500 mt-6 text-black hover:bg-yellow-600"
           >
             Save Preference
           </Button>
+
         </div>
 
       </div>

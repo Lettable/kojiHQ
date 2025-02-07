@@ -560,6 +560,7 @@ export async function GET(req) {
         profilePicture: user.profilePic || "",
         isPremium: user.isPremium,
         planName: user.planName,
+        favSpotifyTrack: user.favSpotifyTrack || "",
         isVerified: user.isVerified,
         createdAt: user.createdAt,
         reputation: user.reputationTaken,

@@ -60,7 +60,8 @@ const ALLOWED_PARAMS = [
     "discordId",
     "usernameEffect",
     "btcAddress",
-    "bannerImg"
+    "bannerImg",
+    "favSpotifyTrack"
 ];
 
 export async function POST(req) {
