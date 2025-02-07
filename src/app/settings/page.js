@@ -872,7 +872,7 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
       const parsedUrl = new URL(url);
       return (
         parsedUrl.hostname === "open.spotify.com" &&
-        parsedUrl.pathname.startsWith("/embed/track/")
+        parsedUrl.pathname.startsWith("/track/")
       );
     } catch {
       return false;

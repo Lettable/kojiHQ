@@ -940,6 +940,16 @@ export default function ForumUserProfile() {
         fetchUserData()
     }, [router, toast])
 
+    function extractSpotifyTrackId(url) {
+        try {
+            const trackIdMatch = url.match(/\/track\/([^?]+)/);
+            return trackIdMatch ? trackIdMatch[1] : null;
+        } catch (error) {
+            console.error('Invalid URL provided', error);
+            return null;
+        }
+    }
+
     const getYouTubeVideoId = (url) => {
         const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^&\n]{11})/;
         const match = url.match(regex);
@@ -1417,7 +1427,7 @@ export default function ForumUserProfile() {
                                 <CardContent>
                                     <iframe
                                         style={{ borderRadius: "12px" }}
-                                        src={`${userData.favSpotifyTrack}`}
+                                        src={`https://open.spotify.com/embed/track/${extractSpotifyTrackId(userData.favSpotifyTrack)}?utm_source=generator`}
                                         width="100%"
                                         height="152"
                                         allowFullScreen
@@ -1428,6 +1438,7 @@ export default function ForumUserProfile() {
                                 </CardContent>
                             </Card>
                         ) : null}
+
 
 
                         <Card className="bg-zinc-900/50 text-white border-0 shadow-lg rounded-lg mb-6">
