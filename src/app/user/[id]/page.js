@@ -1225,12 +1225,8 @@ export default function ForumUserProfile() {
                                                             </p>
                                                             {userData.isSuspended && (
                                                                 <div className="flex items-center gap-2 mt-1 self-start">
-                                                                    <Badge variant="destructive" className="text-xs px-2 py-1">
-                                                                        <FaBan className="w-3 h-3 mr-1" />
-                                                                        Suspended
-                                                                    </Badge>
                                                                     <span className="text-xs text-gray-500">
-                                                                        until {new Date(userData.suspendUntil).toLocaleDateString()}
+                                                                        This user is suspended until {new Date(userData.suspendUntil).toLocaleDateString()}
                                                                     </span>
                                                                 </div>
                                                             )}
