@@ -1420,23 +1420,24 @@ export default function ForumUserProfile() {
                         </Card>
 
                         {userData.favSpotifyTrack && userData.favSpotifyTrack.trim() !== "" ? (
-                            <Card className="mt-6">
-                                <CardHeader>
-                                    <CardTitle className="text-lg font-bold">Favorite Track</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <iframe
-                                        style={{ borderRadius: "12px" }}
-                                        src={`https://open.spotify.com/embed/track/${extractSpotifyTrackId(userData.favSpotifyTrack)}?utm_source=generator`}
-                                        width="100%"
-                                        height="152"
-                                        allowFullScreen
-                                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                        loading="lazy"
-                                        className="mt-2"
-                                    ></iframe>
-                                </CardContent>
-                            </Card>
+                            // <Card className="mt-6">
+                            //     <CardHeader>
+                            //         <CardTitle className="text-lg font-bold">Favorite Track</CardTitle>
+                            //     </CardHeader>
+                            //     <CardContent>
+
+                            //     </CardContent>
+                            // </Card>
+                            <iframe
+                                style={{ borderRadius: "12px" }}
+                                src={`https://open.spotify.com/embed/track/${extractSpotifyTrackId(userData.favSpotifyTrack)}?utm_source=generator`}
+                                width="100%"
+                                height="152"
+                                allowFullScreen
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                loading="lazy"
+                                className="mb-4 mt-6"
+                            ></iframe>
                         ) : null}
 
 
