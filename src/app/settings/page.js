@@ -632,7 +632,15 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
   const handleCropConfirm = async () => {
     let base64Image;
   
-    if (imageRef.current && completedCrop) {
+    if (typeof uploadedImage === 'string' && uploadedImage.startsWith('data:image/')) {
+      base64Image = uploadedImage;
+    } else if (uploadedImage.type === 'image/gif') {
+      base64Image = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(uploadedImage);
+      });
+    } else if (imageRef.current && completedCrop) {
       const canvas = document.createElement('canvas');
       const scaleX = imageRef.current.naturalWidth / imageRef.current.width;
       const scaleY = imageRef.current.naturalHeight / imageRef.current.height;
@@ -652,23 +660,13 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
         completedCrop.height
       );
   
-      if (uploadedImage.type === 'image/gif') {
-        // Handle GIFs: Skip canvas blob conversion for full base64 GIF preservation
-        base64Image = await new Promise((resolve) => {
+      base64Image = await new Promise((resolve) => {
+        canvas.toBlob((blob) => {
           const reader = new FileReader();
           reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(uploadedImage); // Skip canvas for GIFs entirely
+          reader.readAsDataURL(blob);
         });
-      } else {
-        // Handle non-GIF images by converting canvas to base64
-        base64Image = await new Promise((resolve) => {
-          canvas.toBlob((blob) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.readAsDataURL(blob);
-          }, uploadedImage.type || 'image/png');
-        });
-      }
+      });
     }
   
     if (!base64Image) {
