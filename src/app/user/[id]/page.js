@@ -1420,17 +1420,9 @@ export default function ForumUserProfile() {
                         </Card>
 
                         {userData.favSpotifyTrack && userData.favSpotifyTrack.trim() !== "" ? (
-                            // <Card className="mt-6">
-                            //     <CardHeader>
-                            //         <CardTitle className="text-lg font-bold">Favorite Track</CardTitle>
-                            //     </CardHeader>
-                            //     <CardContent>
-
-                            //     </CardContent>
-                            // </Card>
                             <iframe
                                 style={{ borderRadius: "12px" }}
-                                src={`https://open.spotify.com/embed/track/${extractSpotifyTrackId(userData.favSpotifyTrack)}?utm_source=generator`}
+                                src={`https://open.spotify.com/embed/track/${extractSpotifyTrackId(userData.favSpotifyTrack)}?utm_source=generator&theme=0`}
                                 width="100%"
                                 height="152"
                                 allowFullScreen
