@@ -561,56 +561,24 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
   //     })
   //   }
   // }
-
+  
   const handleCropConfirm = async () => {
     if (imageRef.current && completedCrop) {
-      const fileType = uploadedImage?.type || 'image/png';
-
       let base64Image = '';
-
-      if (fileType === 'image/gif') {
-        base64Image = await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result.split(',')[1]);
-          reader.readAsDataURL(uploadedImage);
-        });
-      } else {
-        const canvas = document.createElement('canvas');
-        const scaleX = imageRef.current.naturalWidth / imageRef.current.width;
-        const scaleY = imageRef.current.naturalHeight / imageRef.current.height;
-
-        canvas.width = completedCrop.width;
-        canvas.height = completedCrop.height;
-        const ctx = canvas.getContext('2d');
-
-        ctx.drawImage(
-          imageRef.current,
-          completedCrop.x * scaleX,
-          completedCrop.y * scaleY,
-          completedCrop.width * scaleX,
-          completedCrop.height * scaleY,
-          0,
-          0,
-          completedCrop.width,
-          completedCrop.height
-        );
-
-        base64Image = await new Promise((resolve) => {
-          canvas.toBlob((blob) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result.split(',')[1]);
-            reader.readAsDataURL(blob);
-          }, fileType);
-        });
-      }
-
+  
+      base64Image = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(uploadedImage);
+      });
+  
       try {
         const response = await fetch(`/api/edit-user?action=profilePic&token=${token}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ profilePic: base64Image }),
         });
-
+  
         const result = await response.json();
         if (result.success) {
           localStorage.setItem('accessToken', result.accessToken);
@@ -634,7 +602,6 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
       setUploadedImage('');
     }
   };
-
 
   const handleEmojiSelect = async (emoji) => {
     try {
@@ -952,7 +919,7 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
       return false;
     }
   }
-
+  
 
   const handleSave = async () => {
     const updatedData = {
