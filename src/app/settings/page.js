@@ -632,14 +632,19 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
   const handleCropConfirm = async () => {
     let base64Image;
   
-    if (typeof uploadedImage === 'string' && uploadedImage.startsWith('data:image/')) {
-      base64Image = uploadedImage;
-    } else if (uploadedImage.type === 'image/gif') {
-      base64Image = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(uploadedImage);
-      });
+    const isGifFile = uploadedImage instanceof File && uploadedImage.type === 'image/gif';
+    const isGifBase64 = typeof uploadedImage === 'string' && uploadedImage.startsWith('data:image/gif');
+  
+    if (isGifFile || isGifBase64) {
+      if (isGifFile) {
+        base64Image = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(uploadedImage);
+        });
+      } else {
+        base64Image = uploadedImage;
+      }
     } else if (imageRef.current && completedCrop) {
       const canvas = document.createElement('canvas');
       const scaleX = imageRef.current.naturalWidth / imageRef.current.width;
@@ -665,7 +670,7 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
           const reader = new FileReader();
           reader.onloadend = () => resolve(reader.result);
           reader.readAsDataURL(blob);
-        });
+        }, 'image/png');
       });
     }
   
