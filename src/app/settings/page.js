@@ -561,47 +561,75 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
   //     })
   //   }
   // }
-  
   const handleCropConfirm = async () => {
     if (imageRef.current && completedCrop) {
-      let base64Image = '';
-  
-      base64Image = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(uploadedImage);
-      });
-  
-      try {
-        const response = await fetch(`/api/edit-user?action=profilePic&token=${token}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ profilePic: base64Image }),
-        });
-  
-        const result = await response.json();
-        if (result.success) {
-          localStorage.setItem('accessToken', result.accessToken);
-          setProfilePic(result.user.profilePic);
+      const canvas = document.createElement('canvas');
+      const scaleX = imageRef.current.naturalWidth / imageRef.current.width;
+      const scaleY = imageRef.current.naturalHeight / imageRef.current.height;
+      canvas.width = completedCrop.width;
+      canvas.height = completedCrop.height;
+      const ctx = canvas.getContext('2d');
+
+      ctx.drawImage(
+        imageRef.current,
+        completedCrop.x * scaleX,
+        completedCrop.y * scaleY,
+        completedCrop.width * scaleX,
+        completedCrop.height * scaleY,
+        0,
+        0,
+        completedCrop.width,
+        completedCrop.height
+      );
+
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
           toast({
-            title: "Profile Picture Updated",
-            description: "Your profile picture has been successfully updated.",
+            title: "Error",
+            description: "Failed to generate image blob.",
             variant: "destructive",
           });
-        } else {
-          throw new Error(result.message);
+          return;
         }
-      } catch (error) {
-        toast({
-          title: "Update Failed",
-          description: error.message || "An error occurred while updating your profile picture.",
-          variant: "destructive",
+
+        const base64Image = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(blob);
         });
-      }
-      setIsUploadingImage(false);
-      setUploadedImage('');
+
+        try {
+          const response = await fetch(`/api/edit-user?action=profilePic&token=${token}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ profilePic: base64Image }),
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            localStorage.setItem('accessToken', result.accessToken);
+            setProfilePic(result.user.profilePic);
+            toast({
+              title: "Profile Picture Updated",
+              description: "Your profile picture has been successfully updated.",
+              variant: "destructive",
+            });
+          } else {
+            throw new Error(result.message);
+          }
+        } catch (error) {
+          toast({
+            title: "Update Failed",
+            description: error.message || "An error occurred while updating your profile picture.",
+            variant: "destructive",
+          });
+        }
+        setIsUploadingImage(false);
+        setUploadedImage('');
+      });
     }
   };
+
 
   const handleEmojiSelect = async (emoji) => {
     try {
@@ -919,7 +947,7 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
       return false;
     }
   }
-  
+
 
   const handleSave = async () => {
     const updatedData = {
