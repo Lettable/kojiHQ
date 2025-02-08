@@ -879,6 +879,7 @@ import MarkdownWithEmojis from '@/partials/MarkdownWithEmojis'
 import { Calendar, MessageCircle, FileText, Award, ThumbsUp } from 'lucide-react'
 import { Clipboard, CoinsIcon } from 'lucide-react'
 import { FaCoins } from 'react-icons/fa'
+import { FaTelegram, FaDiscord } from 'react-icons/fa'
 import { usePathname } from 'next/navigation'
 import { AlertCircle } from 'lucide-react'
 import { Toaster } from '@/components/ui/toaster'
@@ -1125,6 +1126,18 @@ export default function ForumUserProfile() {
                                         <FaCoins className="mr-2 h-4 w-4" />
                                         <span>Credits: {userData.credits.toFixed(2)}</span>
                                     </div>
+                                    {userData.telegramUID && userData.telegramUID.trim() !== "" ? (
+                                        <div className="flex items-center">
+                                            <FaTelegram className="mr-2 h-4 w-4" />
+                                            <span>Telegram UID: {userData.telegramUID}</span>
+                                        </div>
+                                    ) :  null}
+                                    {userData.discordId && userData.discordId.trim() !== "" ? (
+                                        <div className="flex items-center">
+                                            <FaDiscord className="mr-2 h-4 w-4" />
+                                            <span>Discord UID: {userData.discordId}</span>
+                                        </div>
+                                    ) :  null}
 
                                     {/* BTC Address with Copy Function */}
                                     {userData.btcAddress && userData.btcAddress.length > 0 && (

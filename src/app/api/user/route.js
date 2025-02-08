@@ -559,6 +559,8 @@ export async function GET(req) {
         lastUsernameChange: user.lastUsernameChange,
         profilePicture: user.profilePic || "",
         isPremium: user.isPremium,
+        telegramUID: user.telegramUID || "",
+        discordId: user.discordId || "",
         planName: user.planName,
         favSpotifyTrack: user.favSpotifyTrack || "",
         isVerified: user.isVerified,
