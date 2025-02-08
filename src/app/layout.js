@@ -1,4 +1,4 @@
-import localFont from "next/font/local";
+import { Kanit } from "next/font/google";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import "../style/globals.css";
 import Head from 'next/head';
@@ -14,6 +14,12 @@ const geistMono = localFont({
   src: "../fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
+});
+
+const kanit = Kanit({
+  subsets: ["latin"],
+  variable: "--font-kanit",
+  weight: ["400", "700"],
 });
 
 export const metadata = {
@@ -42,7 +48,7 @@ export default function RootLayout({ children }) {
         
       </Head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${kanit.className} antialiased`}
       >
         <Script src="https://8x8.vc/vpaas-magic-cookie-e1caf5543ce644e7a0e4632ef7b0229a/external_api.js" strategy="lazyOnload" />
         {children}
