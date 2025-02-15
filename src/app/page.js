@@ -545,9 +545,9 @@ export default function HomePage() {
         },
         body: JSON.stringify({ userId, token }),
       });
-  
+
       const data = await response.json();
-  
+
       if (!response.ok) {
         if (response.status === 403) {
           if (data.message?.includes('banned') || data.message?.includes('suspended')) {
@@ -557,7 +557,7 @@ export default function HomePage() {
         }
         throw new Error(data.error || 'Failed to fetch new token.');
       }
-  
+
       const { token: newToken } = data;
       return newToken;
     } catch (error) {
@@ -565,7 +565,7 @@ export default function HomePage() {
       throw error;
     }
   }
-  
+
 
 
   const fetchAnnouncements = async () => {
@@ -634,6 +634,104 @@ export default function HomePage() {
     })
   }
 
+  const GlitchOverlay = () => (
+    <div className="glitch-overlay">
+      <style jsx>{`
+        .glitch-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: repeating-linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.15) 0px,
+            rgba(0, 0, 0, 0.15) 1px,
+            transparent 1px,
+            transparent 2px
+          );
+          pointer-events: none;
+        }
+        .glitch-overlay::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 0, 0, 0.2) 50%,
+            transparent 100%
+          );
+          animation: glitch-scan 2s linear infinite;
+        }
+        @keyframes glitch-scan {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+      `}</style>
+    </div>
+  );
+
+  const HexButton = ({ text, link }) => (
+    <button onClick={() => router.push(link)} className="hex-button relative text-red-500 border-2 border-red-500 px-6 py-2 transition-colors duration-300 hover:bg-red-500 hover:text-black focus:outline-none">
+      <span className="relative z-10">{text}</span>
+      <style jsx>{`
+        .hex-button::before,
+        .hex-button::after {
+          content: '';
+          position: absolute;
+          width: 20px;
+          height: 2px;
+          background-color: currentColor;
+          transition: transform 0.3s ease;
+        }
+        .hex-button::before {
+          top: -2px;
+          left: -2px;
+          transform-origin: left;
+        }
+        .hex-button::after {
+          bottom: -2px;
+          right: -2px;
+          transform-origin: right;
+        }
+        .hex-button:hover::before,
+        .hex-button:hover::after {
+          transform: scaleX(1.5);
+        }
+      `}</style>
+    </button>
+  );
+
+  const CircuitryBackground = () => (
+    <svg
+      className="absolute inset-0 w-full h-full opacity-10"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <pattern
+        id="circuit-pattern"
+        x="0"
+        y="0"
+        width="100"
+        height="100"
+        patternUnits="userSpaceOnUse"
+      >
+        <path
+          d="M10 10 L90 10 M10 50 L90 50 M10 90 L90 90 M10 10 L10 90 M50 10 L50 90 M90 10 L90 90"
+          stroke="#FF0000"
+          strokeWidth="0.5"
+          fill="none"
+        />
+        <circle cx="10" cy="10" r="2" fill="#FF0000" />
+        <circle cx="90" cy="90" r="2" fill="#FF0000" />
+      </pattern>
+      <rect x="0" y="0" width="100%" height="100%" fill="url(#circuit-pattern)" />
+    </svg>
+  );
+
   return (
     <div className={`min-h-screen ${isDarkTheme ? 'bg-black text-white' : 'bg-white text-black'}`}>
       <Header
@@ -648,7 +746,7 @@ export default function HomePage() {
       />
 
       {/* Hero Section */}
-      <section className={`relative py-16 overflow-hidden ${isDarkTheme ? 'bg-zinc-900/10 text-white border-zinc-300' : 'bg-gray-100'}`}>
+      {/* <section className={`relative py-16 overflow-hidden ${isDarkTheme ? 'bg-zinc-900/10 text-white border-zinc-300' : 'bg-gray-100'}`}>
         <div className="container mx-auto px-4 relative text-center">
 
           <h1 className="text-4xl md:text-6xl font-bold mb-6 text-center relative">
@@ -674,6 +772,40 @@ export default function HomePage() {
         </div>
 
 
+      </section> */}
+      <section className="relative py-16 overflow-hidden bg-black text-red-500 font-mono flex items-center justify-center min-h-[400px]">
+        <GlitchOverlay />
+        <div className="container mx-auto px-4 relative z-10 text-center">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl md:text-5xl font-bold mb-4 glitch-text"
+            data-text="Koji HQ"
+          >
+            Koji HQ
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="text-sm md:text-base text-zinc-400 mb-6"
+          >
+            Your nexus for cutting-edge discussions and elite information exchange.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="flex justify-center space-x-4"
+          >
+            <HexButton text="Telegram" link={'https://telegram.dog/mirzyave'} />
+            <HexButton text="About" link={'/about-us'} />
+          </motion.div>
+        </div>
+        <CircuitryBackground />
       </section>
 
       <Separator className={`${isDarkTheme ? 'bg-white/10' : 'bg-zinc-300'}`} />

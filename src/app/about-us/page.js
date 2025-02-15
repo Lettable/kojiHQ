@@ -362,13 +362,13 @@ export default function AboutUs() {
           </PopoverContent>
         </Popover> */}
 
-          <Button
+          {/* <Button
             ref={popoverTriggerRef}
             className="bg-yellow-400 text-black hover:bg-yellow-500 text-lg px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105"
             onClick={() => window.open('https://t.me/kojiHQ', "_blank")}
           >
             Join Side Projector
-          </Button>
+          </Button> */}
         </motion.section>
 
         {/* <motion.section
