@@ -44,22 +44,22 @@ const sendOtpEmail = async (toEmail, otp, purpose) => {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #1A202C; /* Dark background */
-            color: #EDF2F7; /* Light text color */
+            background-color: #1A202C;
+            color: #EDF2F7; 
           }
           .container {
             max-width: 600px;
             margin: 20px auto;
-            background-color: #2D3748; /* Card background */
+            background-color: #2D3748;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
             overflow: hidden;
           }
           .header {
-            background-color: #4A5568; /* Header background */
+            background-color: #4A5568; 
             text-align: center;
             padding: 20px;
-            color: #F6E05E; /* Accent color */
+            color: #F6E05E;
           }
           .header h1 {
             margin: 0;
@@ -78,7 +78,7 @@ const sendOtpEmail = async (toEmail, otp, purpose) => {
             font-size: 24px;
             font-weight: bold;
             margin: 15px 0;
-            color: #F6E05E; /* Accent color */
+            color: #F6E05E;
             background-color: #1A202C;
             border: 2px solid #F6E05E;
             padding: 10px 20px;
@@ -86,14 +86,14 @@ const sendOtpEmail = async (toEmail, otp, purpose) => {
             display: inline-block;
           }
           .footer {
-            background-color: #4A5568; /* Footer background */
+            background-color: #4A5568; 
             text-align: center;
             padding: 10px;
-            color: #E2E8F0; /* Muted text */
+            color: #E2E8F0; 
             font-size: 12px;
           }
           .footer a {
-            color: #63B3ED; /* Link color */
+            color: #63B3ED;
             text-decoration: none;
           }
           .footer a:hover {

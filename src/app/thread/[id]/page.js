@@ -142,16 +142,6 @@ export default function ThreadView() {
                 throw new Error('Failed to submit reply')
             }
 
-            const ws = new WebSocket('wss://kojihq-ws.onrender.com');
-            ws.onopen = () => {
-                ws.send(JSON.stringify({
-                    type: 'post',
-                    _id: thread._id,
-                    content: replyContent
-                }));
-                ws.close();
-            };
-
             const newPost = await response.json()
             setPosts(prev => [...prev, newPost])
             setIsDialogOpen(false)
