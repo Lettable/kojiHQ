@@ -773,7 +773,7 @@ export default function HomePage() {
 
 
       </section> */}
-      <section className="relative py-16 overflow-hidden bg-black text-red-500 font-mono flex items-center justify-center min-h-[400px]">
+      <section className="relative py-16 overflow-hidden bg-black text-red-500 font-mono flex items-center justify-center">
         <GlitchOverlay />
         <div className="container mx-auto px-4 relative z-10 text-center">
           <motion.h1
