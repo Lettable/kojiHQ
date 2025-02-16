@@ -683,125 +683,125 @@ export default function HomePage() {
 
 
       </section> */}
-      <section className="relative bg-black overflow-hidden font-orbitron">
-      {/* Background Layers */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2070"
-          alt="Cyberpunk city"
-          fill
-          className="object-cover opacity-20"
-          priority
-        />
-        <Image
-          src="https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?q=80&w=2070"
-          alt="Tech overlay"
-          fill
-          className="object-cover opacity-10 mix-blend-screen"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
-      </div>
+      <section className="relative bg-black mb-2 overflow-hidden font-orbitron">
+        {/* Background Layers */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2070"
+            alt="Cyberpunk city"
+            fill
+            className="object-cover opacity-20"
+            priority
+          />
+          <Image
+            src="https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?q=80&w=2070"
+            alt="Tech overlay"
+            fill
+            className="object-cover opacity-10 mix-blend-screen"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+        </div>
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 pt-8">
-        {/* Top Ad Banner */}
-        <div className="flex justify-center gap-4 mb-8">
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-4 pt-8">
+          {/* Top Ad Banner */}
+          <div className="flex justify-center gap-4 mb-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="h-[60px] w-[300px] bg-zinc-900/80 rounded-md border border-yellow-500/20 overflow-hidden group"
+            >
+              <Image
+                src="https://imgur.com/7qVS4nc.gif"
+                alt="RD2D.CC"
+                width={300}
+                height={60}
+                className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="h-[60px] w-[300px] bg-zinc-900/80 rounded-md border border-yellow-500/20 overflow-hidden group"
+            >
+              <Image
+                src="https://s13.gifyu.com/images/b2KLi.gif"
+                alt="Gaming Ad"
+                width={300}
+                height={60}
+                className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
+              />
+            </motion.div>
+          </div>
+
+          {/* Main Title */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="h-[60px] w-[300px] bg-zinc-900/80 rounded-md border border-yellow-500/20 overflow-hidden group"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="text-center mb-8"
           >
-            <Image
-              src="https://imgur.com/7qVS4nc.gif"
-              alt="RD2D.CC"
-              width={300}
-              height={60}
-              className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
-            />
+            <motion.h1
+              className="text-5xl md:text-7xl font-bold mb-2 tracking-wider"
+
+              transition={{
+                repeat: Number.POSITIVE_INFINITY,
+                duration: 5,
+                ease: "linear",
+              }}
+            >
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-700">
+                Koji
+              </span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600"></span>
+            </motion.h1>
+            <motion.div
+              className="text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase"
+            >
+              Seized by Knowledge
+            </motion.div>
           </motion.div>
+
+          {/* Status Ticker */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="h-[60px] w-[300px] bg-zinc-900/80 rounded-md border border-yellow-500/20 overflow-hidden group"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="max-w-4xl mx-auto mb-8 overflow-hidden"
+          >
+            <div className="py-2 px-4 bg-zinc-900/80 border-l-4 border-yellow-500 rounded backdrop-blur-sm">
+              <div className="animate-marquee whitespace-nowrap text-yellow-300 font-light tracking-wider text-sm">
+                <span className="text-yellow-500 font-medium mr-2">LATEST:</span>
+                Ninja.Exchange | No-KYC/AML | Custom Request Accepted | Easy Refunds | [EXOGATOR.com] #1 Crypto Drainer |
+                +300 Wallets | +$800m drained | More....
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Bottom Ad Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+            className="max-w-4xl mx-auto mt-8 h-[90px] mb-2  bg-zinc-900/80 rounded-md border border-yellow-500/20 overflow-hidden group"
           >
             <Image
-              src="https://s13.gifyu.com/images/b2KLi.gif"
-              alt="Gaming Ad"
-              width={300}
-              height={60}
+              src="https://i.imgur.com/UwZXDoG.gif"
+              alt="Bottom Ad"
+              width={100}
+              height={90}
               className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
             />
           </motion.div>
         </div>
 
-        {/* Main Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-center mb-8"
-        >
-          <motion.h1
-            className="text-5xl md:text-7xl font-bold mb-2 tracking-wider"
-            
-            transition={{
-              repeat: Number.POSITIVE_INFINITY,
-              duration: 5,
-              ease: "linear",
-            }}
-          >
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-700">
-              Koji
-            </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600"></span>
-          </motion.h1>
-          <motion.div
-            className="text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase"
-          >
-            Seized by Knowledge
-          </motion.div>
-        </motion.div>
-
-        {/* Status Ticker */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="max-w-4xl mx-auto mb-8 overflow-hidden"
-        >
-          <div className="py-2 px-4 bg-zinc-900/80 border-l-4 border-yellow-500 rounded backdrop-blur-sm">
-            <div className="animate-marquee whitespace-nowrap text-yellow-300 font-light tracking-wider text-sm">
-              <span className="text-yellow-500 font-medium mr-2">LATEST:</span>
-              Ninja.Exchange | No-KYC/AML | Custom Request Accepted | Easy Refunds | [EXOGATOR.com] #1 Crypto Drainer |
-              +300 Wallets | +$800m drained | More....
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Bottom Ad Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-          className="max-w-4xl mx-auto mt-8 h-[90px] bg-zinc-900/80 rounded-md border border-yellow-500/20 overflow-hidden group"
-        >
-          <Image
-            src="https://i.imgur.com/UwZXDoG.gif"
-            alt="Bottom Ad"
-            width={100}
-            height={90}
-            className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
-          />
-        </motion.div>
-      </div>
-
-      {/* Animated Overlay */}
-      <div className="pointer-events-none absolute inset-0 z-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0),rgba(0,0,0,0.7))]" />
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
-      </div>
-    </section>
+        {/* Animated Overlay */}
+        <div className="pointer-events-none absolute inset-0 z-20">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0),rgba(0,0,0,0.7))]" />
+          <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
+        </div>
+      </section>
 
       <Separator className={`${isDarkTheme ? 'bg-white/10' : 'bg-zinc-300'}`} />
 
