@@ -160,7 +160,7 @@ const renderTextWithEmojis = (text, emojis) => {
             src={emoji.emojiUrl}
             alt={emoji.emojiTitle}
             title={emoji.emojiTitle}
-            className="inline-block w-6 h-6"
+            className="inline-block w-4 h-4"
           />
         )
       } else {
@@ -378,7 +378,7 @@ export function ForumSection({ isDarkTheme }) {
                   <span key={user.username}>
                     <span
                       onClick={() => router.push(`/user/${user.username}`)}
-                      className={`text-zinc-300 ${user.usernameEffect} hover:underline cursor-pointer text-inherit`}
+                      className={`text-zinc-300 text-xs ${user.usernameEffect} hover:underline cursor-pointer text-inherit`}
                     >
                       {user.username}
                     </span>
