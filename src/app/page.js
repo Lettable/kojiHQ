@@ -717,7 +717,7 @@ export default function HomePage() {
                 alt="RD2D.CC"
                 width={300}
                 height={60}
-                className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
+                className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity"
               />
             </motion.div>
             <motion.div
@@ -730,7 +730,7 @@ export default function HomePage() {
                 alt="Gaming Ad"
                 width={300}
                 height={60}
-                className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
+                className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity"
               />
             </motion.div>
           </div>
@@ -791,7 +791,7 @@ export default function HomePage() {
               alt="Bottom Ad"
               width={100}
               height={90}
-              className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
+              className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity"
             />
           </motion.div>
         </div>
