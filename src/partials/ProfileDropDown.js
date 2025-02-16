@@ -123,7 +123,7 @@ export function ProfileDropdown({
           <div className="px-2 py-2">
             <Button 
               variant="premium" 
-              className="w-full justify-start bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold hover:from-yellow-500 hover:to-yellow-700 transition-all duration-300"
+              className="w-full justify-start bg-gradient-to-r from-yellow-400 to-yellow-600 text-white font-semibold hover:bg-zinc-800 hover:from-yellow-500 hover:to-yellow-700 transition-all duration-300"
               onClick={() => { router.push('/premium'); onClose(); }}
             >
               <Crown className="mr-2 h-4 w-4" /> Go Premium

@@ -63,11 +63,36 @@ export default function AboutUs() {
   }
 
   const steps = [
-    { title: "Create an account", content: "Sign up to start your journey with Koji." },
-    { title: "Submit your products", content: "Fill out the product submission form with details about your products." },
-    { title: "Build Empire", content: "Intorduce yourself in shoutbox, Checkout notifications, hangout with others and explore like minded peoples on site." },
-    { title: "Engage with the community", content: "Connect with other like minded peoples and business to share insights." },
+    {
+      "title": "Create an Account",
+      "content": "Choose a method to create an account. Want a legit option? Go with Email login. Need it quick? Go with Discord OAuth. Prefer complete anonymity? Choose MetaMask to create an account using just your wallet address—no crypto or money required! It’s simply for identification on our platform."
+    },
+    {
+      "title": "Submit Your Products",
+      "content": "Just like Sellix or SellAuth, you can upload products in the 'Products' tab. These can be digital or physical products, etc."
+    },
+    {
+      "title": "Place Bids",
+      "content": "Yeah, you heard it right! You can place bids on products, allowing the seller to choose the best offer wisely. Just enter your bid amount, and you're good to go!"
+    },
+    {
+      "title": "Live Crypto",
+      "content": "We offer the best crypto price alerts with updates every second—super fast and customizable. Choose your preferred currencies and see live price changes on your home screen."
+    },
+    {
+      "title": "Build Your Empire",
+      "content": "Introduce yourself in the shoutbox, hang out with others, and connect with like-minded people. Create your digital presence, gain reputation points, and build solid relationships."
+    },
+    {
+      "title": "Be Unique",
+      "content": "Earn credits, unlock OG items, customize your username with effects, and use premium emojis to express yourself even better. Stand out in your own way!"
+    },
+    {
+      "title": "Chat with Others",
+      "content": "Yeah, we have a separate page for chatting, packed with features for a great experience. It’s fast as hell!"
+    }
   ]
+
 
   // const sendDiscordNotification = async (user, profilePic) => {
   //   const webhookUrl = 'https://discord.com/api/webhooks/1316066211850620989/_9WGkcypsKTp9KdvRMGFtWQ-eEs8p7HZxwK0XABVOnL8os8wO5hesWHVs_BydHVBN9RA'
@@ -124,7 +149,7 @@ export default function AboutUs() {
             transition={{ duration: 0.5 }}
             className="text-5xl font-bold"
           >
-            About Koji
+            About Suized
           </motion.h1>
           <Link href={`/`} className="text-yellow-400 hover:text-yellow-300">
             <ArrowLeft className="w-6 h-6" />
@@ -139,13 +164,13 @@ export default function AboutUs() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mb-16"
         >
-          <h2 className="text-3xl font-semibold mb-6 text-yellow-400">Project Overview</h2>
+          <h2 className="text-3xl font-semibold mb-6 text-yellow-400">Suized Overview</h2>
           <div className={`${isDarkTheme ? 'bg-white/5' : 'bg-black/5'} p-6 rounded-lg shadow-lg`}>
             <p className={`${isDarkTheme ? 'text-white/80' : 'text-black/80'} mb-4 leading-relaxed`}>
-              Koji is an innovative platform designed to buy, sell, explore and manage products dynamically. It enables users to interact with and track the progress of their digital stuff in real-time. Additionally, it serves as a valuable data source for training AI agents, creating a unique synergy between user-generated content and artificial intelligence.
+              Suized is an innovative platform designed to buy, sell, explore and manage products, create community get in touch, cross the limits dynamically. It enables users to interact with and track the progress of their digital stuff in real-time.
             </p>
             <p className={`${isDarkTheme ? 'text-white/80' : 'text-black/80'} mb-4 leading-relaxed`}>
-              With a modular and scalable design hosted on Vercel, Koji emphasizes user experience, efficiency, and seamless integration. Our platform is continuously updated to meet the evolving needs of business and users alike.
+              With a modular and scalable design, Suized emphasizes user experience, efficiency, and seamless integration. Our platform is continuously updated to meet the evolving needs of business and users alike.
             </p>
           </div>
         </motion.section>
@@ -156,7 +181,7 @@ export default function AboutUs() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mb-16"
         >
-          <h2 className="text-3xl font-semibold mb-6 text-yellow-400">How to Use Koji</h2>
+          <h2 className="text-3xl font-semibold mb-6 text-yellow-400">How to Use Suized</h2>
           <LayoutGroup>
             <motion.div layout className={`${isDarkTheme ? 'bg-white/5' : 'bg-black/5'} rounded-lg shadow-lg overflow-hidden`}>
               {steps.map((step, index) => (
@@ -221,23 +246,22 @@ export default function AboutUs() {
                 image: "https://i.ibb.co/442QP0w/d66220ef0f9b.png",
                 description: "Responsible for overseeing the platform's development and ensuring its success.",
                 links: {
-                  telegram: "https://t.me/kojiguy",
+                  telegram: "https://t.me/mirzyave",
                   github: "https://github.com/lettable",
                   discord: "https://discordapp.com/users/1135747839545323582"
                 }
               },
-              // {
-              //   name: "Arham/Aurum",
-              //   role: "CEO",
-              //   image: "https://i.ibb.co/tCyGTfT/23abf4ba248f.png",
-              //   description: "Leads the business operations and defines the vision of Side Projector.",
-              //   links: {
-              //     discord: "https://discordapp.com/users/1104974475134509106",
-              //     // Placeholder for the other two links
-              //     placeholder1: "",
-              //     placeholder2: ""
-              //   }
-              // },
+              {
+                name: "Mr Shadow",
+                role: "Co-Owner",
+                image: "https://i.ibb.co/tCyGTfT/23abf4ba248f.png",
+                description: "Leads the business operations and defines the vision of Suized.",
+                links: {
+                  telegram: "https://t.me/mrSh4dow",
+                  placeholder1: "",
+                  placeholder2: ""
+                }
+              },
               // {
               //   name: "Rayyan",
               //   role: "Co-Founder",
@@ -309,7 +333,7 @@ export default function AboutUs() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { title: "Sell your digital products", description: "Useless to you might be priceless to someone. Don't hesitate to sell it here—we support everything!" },
-              { title: "Community Engagement", description: "Connect with other kojiers, share insights, and collaborate on projects to enhance your skills and knowledge." },
+              { title: "Community Engagement", description: "Connect with other Suizers, share insights, and collaborate on projects to enhance your skills and knowledge." },
               { title: "Real-Time Updates", description: "Stay informed with real-time updates on your products and the latest trends in the community." }
             ].map((feature, index) => (
               <motion.div
@@ -337,7 +361,7 @@ export default function AboutUs() {
         >
           <h2 className="text-3xl font-semibold mb-6 text-yellow-400">Join Our Community</h2>
           <p className="text-white/70 mb-8 max-w-2xl mx-auto">
-            We invite you to become a part of the Koji community. Whether you&apos;re looking to sell your stuff, gain inspiration, or connect with like-minded individuals, our platform is designed to support your journey.
+            We invite you to become a part of the Suized community. Whether you&apos;re looking to sell your stuff, gain inspiration, or connect with like-minded individuals, our platform is designed to support your journey.
           </p>
           {/* <Popover open={isDiscordWidgetOpen} onOpenChange={setIsDiscordWidgetOpen}>
           <PopoverTrigger asChild>

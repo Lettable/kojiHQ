@@ -317,7 +317,7 @@ export default function NotificationsPage() {
                                                     {notification.projectId && (
                                                         <Link href={`/product/${notification.projectId}`}>
                                                             <Button variant="link" size="sm" className={isDarkTheme ? 'text-yellow-400' : 'text-yellow-600'}>
-                                                                View Project
+                                                                View Product
                                                             </Button>
                                                         </Link>
                                                     )}

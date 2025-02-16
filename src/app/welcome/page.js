@@ -137,7 +137,7 @@ const WelcomePage = () => {
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
         >
-          Welcome to Koji!
+          Welcome to Suized!
         </motion.h1>
         <motion.p
           className="text-xl mb-8 text-gray-300"
@@ -173,7 +173,7 @@ const WelcomePage = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
       >
-        <p>Powered by Koji</p>
+        <p>Powered by Suized</p>
       </motion.div>
     </div>
   );

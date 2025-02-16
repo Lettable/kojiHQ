@@ -126,7 +126,7 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
           <FaBell />
         </Button>
 
-        <Button onClick={() => { router.push('https://t.me/lettables') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
+        <Button onClick={() => { router.push('https://t.me/suizedto') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
           <FaTelegram /> Join Telegram
         </Button>
 
@@ -219,12 +219,12 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
             <Link href="/" className="flex items-center space-x-2">
               
               <img
-                src="/assets/logo.jpg"
+                src="https://i.postimg.cc/fR3zPDtb/suize-364-424-og.png"
                 alt="Logo"
                 className="rounded-full w-10 h-10 object-cover"
               />
               <div className="relative inline-block">
-                <span className={`font-bold text-lg ${isDarkTheme ? 'text-white' : 'text-black'}`}>Koji Marketplace</span>
+                <span className={`font-bold text-lg ${isDarkTheme ? 'text-white' : 'text-black'}`}>Suized</span>
                 <span className="absolute -top-2 -right-2 text-yellow-500 bg-opacity-20 text-xs font-semibold rounded px-1">
                   Beta
                 </span>
