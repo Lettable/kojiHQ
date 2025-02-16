@@ -362,6 +362,7 @@ import PreferredCurrencies from '@/components/PreferedCurrencies'
 import CryptoSelectionDialog from '@/components/CurrencyDialog'
 import { ForumSection } from '@/components/ForumSection'
 import { useRouter } from 'next/navigation'
+import Image from "next/image"
 
 // const renderTextWithEmojis = (text, emojis) => {
 //   if (!text || typeof text !== 'string') return text || '';
@@ -444,6 +445,13 @@ export default function HomePage() {
   const [userStats, setUserStats] = useState({ reputation: 0, totalPosts: 0, totalThreads: 0, credits: 0 })
   const [error, setError] = useState(null);
   const router = useRouter()
+  const [scrollY, setScrollY] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   useEffect(() => {
     const storedCurrencies = localStorage.getItem('preferredCurrencies');
@@ -634,104 +642,6 @@ export default function HomePage() {
     })
   }
 
-  const GlitchOverlay = () => (
-    <div className="glitch-overlay">
-      <style jsx>{`
-        .glitch-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: repeating-linear-gradient(
-            0deg,
-            rgba(0, 0, 0, 0.15) 0px,
-            rgba(0, 0, 0, 0.15) 1px,
-            transparent 1px,
-            transparent 2px
-          );
-          pointer-events: none;
-        }
-        .glitch-overlay::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(255, 0, 0, 0.2) 50%,
-            transparent 100%
-          );
-          animation: glitch-scan 2s linear infinite;
-        }
-        @keyframes glitch-scan {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}</style>
-    </div>
-  );
-
-  const HexButton = ({ text, link }) => (
-    <button onClick={() => router.push(link)} className="hex-button relative text-red-500 border-2 border-red-500 px-6 py-2 transition-colors duration-300 hover:bg-red-500 hover:text-black focus:outline-none">
-      <span className="relative z-10">{text}</span>
-      <style jsx>{`
-        .hex-button::before,
-        .hex-button::after {
-          content: '';
-          position: absolute;
-          width: 20px;
-          height: 2px;
-          background-color: currentColor;
-          transition: transform 0.3s ease;
-        }
-        .hex-button::before {
-          top: -2px;
-          left: -2px;
-          transform-origin: left;
-        }
-        .hex-button::after {
-          bottom: -2px;
-          right: -2px;
-          transform-origin: right;
-        }
-        .hex-button:hover::before,
-        .hex-button:hover::after {
-          transform: scaleX(1.5);
-        }
-      `}</style>
-    </button>
-  );
-
-  const CircuitryBackground = () => (
-    <svg
-      className="absolute inset-0 w-full h-full opacity-10"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <pattern
-        id="circuit-pattern"
-        x="0"
-        y="0"
-        width="100"
-        height="100"
-        patternUnits="userSpaceOnUse"
-      >
-        <path
-          d="M10 10 L90 10 M10 50 L90 50 M10 90 L90 90 M10 10 L10 90 M50 10 L50 90 M90 10 L90 90"
-          stroke="#FF0000"
-          strokeWidth="0.5"
-          fill="none"
-        />
-        <circle cx="10" cy="10" r="2" fill="#FF0000" />
-        <circle cx="90" cy="90" r="2" fill="#FF0000" />
-      </pattern>
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#circuit-pattern)" />
-    </svg>
-  );
-
   return (
     <div className={`min-h-screen ${isDarkTheme ? 'bg-black text-white' : 'bg-white text-black'}`}>
       <Header
@@ -773,40 +683,125 @@ export default function HomePage() {
 
 
       </section> */}
-      <section className="relative py-16 overflow-hidden bg-black text-red-500 font-mono flex items-center justify-center">
-        <GlitchOverlay />
-        <div className="container mx-auto px-4 relative z-10 text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl font-bold mb-4 glitch-text"
-            data-text="Koji HQ"
-          >
-            Koji HQ
-          </motion.h1>
+      <section className="relative bg-black overflow-hidden font-orbitron">
+      {/* Background Layers */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2070"
+          alt="Cyberpunk city"
+          fill
+          className="object-cover opacity-20"
+          priority
+        />
+        <Image
+          src="https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?q=80&w=2070"
+          alt="Tech overlay"
+          fill
+          className="object-cover opacity-10 mix-blend-screen"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+      </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-sm md:text-base text-zinc-400 mb-6"
-          >
-            Your nexus for cutting-edge discussions and elite information exchange.
-          </motion.p>
-
+      {/* Content */}
+      <div className="relative z-10 container mx-auto px-4 pt-8">
+        {/* Top Ad Banner */}
+        <div className="flex justify-center gap-4 mb-8">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="flex justify-center space-x-4"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="h-[60px] w-[300px] bg-zinc-900/80 rounded-md border border-yellow-500/20 overflow-hidden group"
           >
-            <HexButton text="Telegram" link={'https://telegram.dog/mirzyave'} />
-            <HexButton text="About" link={'/about-us'} />
+            <Image
+              src="https://imgur.com/7qVS4nc.gif"
+              alt="RD2D.CC"
+              width={300}
+              height={60}
+              className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
+            />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="h-[60px] w-[300px] bg-zinc-900/80 rounded-md border border-yellow-500/20 overflow-hidden group"
+          >
+            <Image
+              src="https://s13.gifyu.com/images/b2KLi.gif"
+              alt="Gaming Ad"
+              width={300}
+              height={60}
+              className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
+            />
           </motion.div>
         </div>
-        <CircuitryBackground />
-      </section>
+
+        {/* Main Title */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="text-center mb-8"
+        >
+          <motion.h1
+            className="text-5xl md:text-7xl font-bold mb-2 tracking-wider"
+            
+            transition={{
+              repeat: Number.POSITIVE_INFINITY,
+              duration: 5,
+              ease: "linear",
+            }}
+          >
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-700">
+              Koji
+            </span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600"></span>
+          </motion.h1>
+          <motion.div
+            className="text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase"
+          >
+            Seized by Knowledge
+          </motion.div>
+        </motion.div>
+
+        {/* Status Ticker */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="max-w-4xl mx-auto mb-8 overflow-hidden"
+        >
+          <div className="py-2 px-4 bg-zinc-900/80 border-l-4 border-yellow-500 rounded backdrop-blur-sm">
+            <div className="animate-marquee whitespace-nowrap text-yellow-300 font-light tracking-wider text-sm">
+              <span className="text-yellow-500 font-medium mr-2">LATEST:</span>
+              Ninja.Exchange | No-KYC/AML | Custom Request Accepted | Easy Refunds | [EXOGATOR.com] #1 Crypto Drainer |
+              +300 Wallets | +$800m drained | More....
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Bottom Ad Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 }}
+          className="max-w-4xl mx-auto mt-8 h-[90px] bg-zinc-900/80 rounded-md border border-yellow-500/20 overflow-hidden group"
+        >
+          <Image
+            src="https://i.imgur.com/UwZXDoG.gif"
+            alt="Bottom Ad"
+            width={100}
+            height={90}
+            className="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
+          />
+        </motion.div>
+      </div>
+
+      {/* Animated Overlay */}
+      <div className="pointer-events-none absolute inset-0 z-20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0),rgba(0,0,0,0.7))]" />
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
+      </div>
+    </section>
 
       <Separator className={`${isDarkTheme ? 'bg-white/10' : 'bg-zinc-300'}`} />
 
