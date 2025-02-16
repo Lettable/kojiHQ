@@ -159,8 +159,12 @@ const renderTextWithEmojis = (text, emojis) => {
             key={index}
             src={emoji.emojiUrl}
             alt={emoji.emojiTitle}
-            title={emoji.emojiTitle}
             className="inline-block w-4 h-4"
+            style={{
+              height: "12px",
+              width: "12px",
+            }}
+            title={emoji.emojiTitle}
           />
         )
       } else {
@@ -184,15 +188,15 @@ export function ForumSection({ isDarkTheme }) {
       const response = await fetch("/api/mics/users");
       if (!response.ok) throw new Error("Failed to fetch active users");
       const users = await response.json();
-  
+
       const shuffledUsers = shuffleArray(users);
-  
+
       setActiveUsers(shuffledUsers);
     } catch (error) {
       console.error("Error fetching active users:", error);
     }
   };
-  
+
   const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -373,7 +377,7 @@ export function ForumSection({ isDarkTheme }) {
                   </span>
                 ))}
               </div> */}
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap gap-1 mb-4">
                 {activeUsers.map((user, index) => (
                   <span key={user.username}>
                     <span
@@ -387,7 +391,7 @@ export function ForumSection({ isDarkTheme }) {
                         {renderTextWithEmojis(user.statusEmoji, emojis)}
                       </span>
                     )}
-                    {index < activeUsers.length - 1 && <span className="text-zinc-300 ml-1">,</span>}
+                    {index < activeUsers.length - 1 && <span className="text-zinc-300 text-xs">,</span>}
                   </span>
                 ))}
               </div>

@@ -219,9 +219,9 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
             <Link href="/" className="flex items-center space-x-2">
               
               <img
-                src="https://i.postimg.cc/fR3zPDtb/suize-364-424-og.png"
+                src="https://i.postimg.cc/85s7TkJz/suize-364-424-og-white-logo.png"
                 alt="Logo"
-                className="rounded-full w-10 h-10 object-cover"
+                className="w-10 h-10 object-cover"
               />
               <div className="relative inline-block">
                 <span className={`font-bold text-lg ${isDarkTheme ? 'text-white' : 'text-black'}`}>Suized</span>

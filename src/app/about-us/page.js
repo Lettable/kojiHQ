@@ -242,7 +242,7 @@ export default function AboutUs() {
             {[
               {
                 name: "Mirza (Mirzya)",
-                role: "Founder, Developer & Owner",
+                role: "Owner & Developer ",
                 image: "https://i.ibb.co/442QP0w/d66220ef0f9b.png",
                 description: "Responsible for overseeing the platform's development and ensuring its success.",
                 links: {
@@ -253,8 +253,8 @@ export default function AboutUs() {
               },
               {
                 name: "Mr Shadow",
-                role: "Co-Owner",
-                image: "https://i.ibb.co/tCyGTfT/23abf4ba248f.png",
+                role: "Founder & Co-Owner",
+                image: "https://i.postimg.cc/sxNXBXQt/photo-2025-02-16-23-24-29.jpg",
                 description: "Leads the business operations and defines the vision of Suized.",
                 links: {
                   telegram: "https://t.me/mrSh4dow",
