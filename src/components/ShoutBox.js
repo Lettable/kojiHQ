@@ -37,7 +37,7 @@ export default function Shoutbox() {
   const [user, setUser] = useState(null);
   const [statusEmoji, setStatusEmoji] = useState(null);
   const [emojis, setEmojis] = useState([]);
-  const [userData, setUserData] = useState([])
+  const [userData, setUserData] = useState()
   const scrollAreaRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const wsRef = useRef(null);
@@ -111,7 +111,7 @@ export default function Shoutbox() {
       setIsWebSocketConnected(false);
       setTimeout(connectWebSocket, 5000);
     };
-  }, []);
+  }, [scrollToBottom]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -123,15 +123,15 @@ export default function Shoutbox() {
           fetch('/api/mics/mention-regex')
         ]);
 
-        if (!emojisResponse.ok || !messagesResponse.ok) {
-          throw new Error('Failed to fetch emojis or messages');
+        if (!emojisResponse.ok || !messagesResponse.ok || !userDataResponse.ok) {
+          throw new Error('Failed to fetch emojis or messages or user Data');
         }
 
         const emojisData = await emojisResponse.json();
         const messagesData = await messagesResponse.json();
         const userfuckingData = await userDataResponse.json();
 
-        setUserData(userfuckingData)
+        setUserData(userfuckingData.data)
         setEmojis(emojisData);
         setMessages(messagesData.messages);
         scrollToBottom();
@@ -174,7 +174,7 @@ export default function Shoutbox() {
         wsRef.current.close();
       }
     };
-  }, [connectWebSocket]);
+  }, [connectWebSocket, scrollToBottom]);
 
   useEffect(() => {
     scrollToBottom();
