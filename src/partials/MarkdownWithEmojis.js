@@ -36,10 +36,20 @@ const fetchEmojis = async () => {
   }
 };
 
+const fetchUsers = async () => {
+  try {
+    const response = await fetch("/api/mics/mention-regex");
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return [];
+  }
+};
 
 const MarkdownWithEmojis = ({ content, style = {}, users }) => {
   const [emojis, setEmojis] = useState([]);
-  const [allUsers, setAllUsers] = useState(users || []);
+  const [allUsers, setAllUsers] = useState(users);
   const emojisCache = useMemo(() => new Map(), []);
 
   useEffect(() => {
@@ -55,8 +65,16 @@ const MarkdownWithEmojis = ({ content, style = {}, users }) => {
       }
     };
 
+    const loadUsers = async () => {
+      if (!users) {
+        const fetchedUsers = await fetchUsers();
+        setAllUsers(fetchedUsers);
+      }
+    };
+
+    loadUsers();
     loadEmojis();
-  }, [emojisCache]);
+  }, [emojisCache, users]);
 
   // const processedContent = useMemo(() => renderTextWithEmojis(content, emojis), [content, emojis]);
   const processedContent = useMemo(
