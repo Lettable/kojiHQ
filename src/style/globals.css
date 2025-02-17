@@ -274,7 +274,7 @@ img[alt^=":"] {
 }
 
 .mention {
-  color: #94a3b8 !important;
+  color: #94a3b8;
   text-decoration: none !important;
 }
 
