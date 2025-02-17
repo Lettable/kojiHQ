@@ -279,6 +279,7 @@ export default function Shoutbox() {
                           content={message.content}
                           style={{ backgroundColor: 'transparent', padding: 0, color: 'white' }}
                           users={userData}
+                          emojisData={emojis}
                         />
                       </div>
                       <span className={`text-xs ${isDarkTheme ? 'text-gray-400' : 'text-gray-500'} mt-1`}>

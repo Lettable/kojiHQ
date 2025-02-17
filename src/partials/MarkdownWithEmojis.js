@@ -47,8 +47,8 @@ const fetchUsers = async () => {
   }
 };
 
-const MarkdownWithEmojis = ({ content, style = {}, users }) => {
-  const [emojis, setEmojis] = useState([]);
+const MarkdownWithEmojis = ({ content, style = {}, users, emojisData }) => {
+  const [emojis, setEmojis] = useState(emojisData || []);
   const [allUsers, setAllUsers] = useState(users);
   const emojisCache = useMemo(() => new Map(), []);
 
