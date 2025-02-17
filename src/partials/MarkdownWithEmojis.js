@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 
-const renderTextWithEmojis = (content, emojis) => {
+const renderTextWithEmojis = (content, emojis, users) => {
   if (!emojis || !Array.isArray(emojis)) {
     return content;
   }
@@ -17,7 +17,9 @@ const renderTextWithEmojis = (content, emojis) => {
 
   const mentionRegex = /@([\w-]+)/g;
   processed = processed.replace(mentionRegex, (match, username) => {
-    return `<a href="/user/${username}" class="mention">@${username}</a>`;
+    const user = users.find(u => u.username === username);
+    const effectClass = user ? user.usernameEffect : 'mention-default';
+    return `<a href="/user/${username}" class="${effectClass}">@${username}</a>`;
   });
 
   return processed;
@@ -35,8 +37,9 @@ const fetchEmojis = async () => {
 };
 
 
-const MarkdownWithEmojis = ({ content, style = {} }) => {
+const MarkdownWithEmojis = ({ content, style = {}, users }) => {
   const [emojis, setEmojis] = useState([]);
+  const [allUsers, setAllUsers] = useState(users || []);
   const emojisCache = useMemo(() => new Map(), []);
 
   useEffect(() => {
@@ -55,7 +58,11 @@ const MarkdownWithEmojis = ({ content, style = {} }) => {
     loadEmojis();
   }, [emojisCache]);
 
-  const processedContent = useMemo(() => renderTextWithEmojis(content, emojis), [content, emojis]);
+  // const processedContent = useMemo(() => renderTextWithEmojis(content, emojis), [content, emojis]);
+  const processedContent = useMemo(
+    () => renderTextWithEmojis(content, emojis, allUsers),
+    [content, emojis, allUsers]
+  );
 
   const defaultStyle = {
     margin: 0,
