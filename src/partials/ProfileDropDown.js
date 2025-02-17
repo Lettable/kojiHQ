@@ -70,7 +70,7 @@ export function ProfileDropdown({
       exit="hidden"
       variants={dropdownVariants}
       transition={{ duration: 0.2 }}
-      className={`absolute right-0 top-14 w-72 rounded-md shadow-lg py-1 bg-zinc-900 ring-1 ring-black ring-opacity-5 z-50`}
+      className={`absolute right-0 top-14 w-72 rounded-md shadow-lg py-1 bg-zinc-900/50 ring-1 ring-black ring-opacity-5 z-50`}
     >
       <div className="px-4 py-3">
         <div className="flex items-center">
