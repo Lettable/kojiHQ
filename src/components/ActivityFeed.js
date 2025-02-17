@@ -9,9 +9,46 @@ import Image from "next/image"
 import Link from "next/link"
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card"
 
+const dummyData = {
+  threads: [
+    {
+      id: 1,
+      title: "Thread",
+      profilePic: "https://i.postimg.cc/sxNXBXQt/photo-2025-02-16-23-24-29.jpg",
+      username: "Shadow",
+      usernameEffect: "olympus-effect",
+      link: "/thread/1",
+      createdAt: "2025-02-16T10:30:00Z",
+    }
+  ],
+  posts: [
+    {
+      id: 1,
+      title: "Post",
+      profilePic: "https://i.postimg.cc/sxNXBXQt/photo-2025-02-16-23-24-29.jpg",
+      username: "Shadow",
+      usernameEffect: "pixel-effect",
+      link: "/post/1",
+      createdAt: "2025-02-16T10:45:00Z",
+    },
+  ],
+  products: [
+    {
+      id: 1,
+      title: "Product",
+      profilePic: "https://i.postimg.cc/sxNXBXQt/photo-2025-02-16-23-24-29.jpg",
+      username: "Shadow",
+      usernameEffect: "pixel-effect",
+      link: "/product/1",
+      createdAt: "2025-02-16T10:50:00Z",
+    },
+  ],
+}
+
+
 export default function ActivityFeed() {
-  const [activeTab, setActiveTab] = useState('')
-  const [data, setData] = useState()
+  const [activeTab, setActiveTab] = useState("threads")
+  const [data, setData] = useState(dummyData)
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -56,7 +93,7 @@ export default function ActivityFeed() {
         </Link>
         <div className="flex items-center gap-2 mt-0.5">
           <span className="text-xs text-zinc-400">
-            By <span className="text-yellow-500/70">{item.username}</span>
+            By <span className={`${item.usernameEffect}`}>{item.username}</span>
           </span>
           <span className="text-xs text-zinc-500">•</span>
           <span className="text-xs text-zinc-400">
