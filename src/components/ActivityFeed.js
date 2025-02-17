@@ -118,7 +118,7 @@ export default function ActivityFeed() {
   )
 
   return (
-    <div className="w-full lg:w-1/4 space-y-6">
+    <div className="w-full bg-zinc-900/50 flex-1 text-white border-0 shadow-lg space-y-6">
       <div className="w-full bg-zinc-900/50 rounded-xl shadow-lg backdrop-blur-sm border border-zinc-800/50">
         <Tabs defaultValue="threads" className="w-full" onValueChange={setActiveTab}>
           <div className="border-b border-zinc-800/50">
