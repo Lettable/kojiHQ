@@ -52,30 +52,30 @@ export default function ActivityFeed() {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    let interval;
+    let isMounted = true;
 
     const fetchData = async () => {
       try {
-        setIsLoading(true);
         const response = await fetch('/api/mics/ticker');
         if (!response.ok) throw new Error("Failed to fetch data");
         const newData = await response.json();
-        setData(newData);
+
+        if (isMounted) {
+          setData(newData);
+        }
       } catch (error) {
         console.error("Error fetching ticker data:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
-    fetchData().then(() => {
-      interval = setInterval(fetchData, 5000);
-    });
+    fetchData();
+    const interval = setInterval(fetchData, 5000);
 
-    return () => clearInterval(interval);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
-
-
 
   const renderActivityItem = (item) => (
     <motion.div
@@ -86,7 +86,7 @@ export default function ActivityFeed() {
       className="flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-800/50 transition-colors group"
     >
       <div className="relative h-8 w-8 rounded-full overflow-hidden shrink-0">
-        <Image src={item.profilePic || "/placeholder.svg"} alt={item.username} fill className="object-cover" />
+        <Image src={item.profilePic} alt={item.username} fill className="object-cover" />
       </div>
       <div className="flex-1 min-w-0">
         <Link
@@ -109,8 +109,8 @@ export default function ActivityFeed() {
   )
 
   return (
-    <Card className="w-full p-0 bg-zinc-900/50 flex-1 text-white border-0 shadow-lg space-y-6">
-      <CardContent>
+    <Card className="w-full bg-zinc-900/50 flex-1 text-white border-0 shadow-lg space-y-6 !p-0">
+      <CardContent className='!p-0'>
         <div className="w-full rounded-xl backdrop-blur-sm">
           <Tabs defaultValue="threads" className="w-full" onValueChange={setActiveTab}>
             <div className="border-b border-zinc-800/50">
@@ -136,20 +136,7 @@ export default function ActivityFeed() {
               </TabsList>
             </div>
             <div className="p-3 space-y-1">
-              <AnimatePresence mode="wait">
-                {isLoading ? (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="flex items-center justify-center py-8"
-                  >
-                    <div className="h-6 w-6 border-2 border-yellow-500/20 border-t-yellow-500 rounded-full animate-spin" />
-                  </motion.div>
-                ) : (
-                  data[activeTab]?.map(renderActivityItem)
-                )}
-              </AnimatePresence>
+              {data[activeTab]?.map(renderActivityItem)}
             </div>
           </Tabs>
         </div>
