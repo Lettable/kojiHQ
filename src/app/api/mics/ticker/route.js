@@ -29,7 +29,7 @@ export async function GET() {
       }, {});
   
       const threadIds = [...new Set(posts.map(p => p.threadId.toString()))];
-      const threadData = await Thread.find({ _id: { $in: threadIds } }).lean();
+      const threadData = await ThreadModel.find({ _id: { $in: threadIds } }).lean();
       const threadMap = threadData.reduce((acc, thread) => {
         acc[thread._id.toString()] = `/thread/${thread._id}`;
         return acc;
