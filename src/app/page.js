@@ -471,7 +471,7 @@ export default function HomePage() {
             </motion.div>
           </motion.div>
 
-          <motion.div className="text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase mt-4">
+          <motion.div className="text-yellow-500 text-lg items-center justify-center mb-2 md:text-xl font-light tracking-[0.2em] uppercase mt-4">
             Seized, but Never Silenced
           </motion.div>
 
