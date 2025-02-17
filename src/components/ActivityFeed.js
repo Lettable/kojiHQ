@@ -10,7 +10,7 @@ import Link from "next/link"
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card"
 
 export default function ActivityFeed() {
-  const [activeTab, setActiveTab] = useState("threads")
+  const [activeTab, setActiveTab] = useState()
   const [data, setData] = useState()
   const [isLoading, setIsLoading] = useState(false)
 
