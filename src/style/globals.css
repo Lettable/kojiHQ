@@ -273,11 +273,9 @@ img[alt^=":"] {
   background-size: 3em, 3em, 15em;
 }
 
-.mention-default {
-  background-color: rgba(255, 255, 255, 0.1);
-  font-weight: bold;
-  text-decoration: none;
-  color: inherit;
+.mention {
+  color: #94a3b8 !important;
+  text-decoration: none !important;
 }
 
 

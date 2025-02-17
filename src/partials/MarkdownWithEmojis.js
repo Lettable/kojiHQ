@@ -23,7 +23,7 @@ const renderTextWithEmojis = (content, emojis, users) => {
     );
 
     const effectClass = user ? user.usernameEffect : 'mention-default';
-    return `<a href="/user/${username}" class="${effectClass}">@${username}</a>`;
+    return `<a href="/user/${username}" class="mention ${effectClass}">@${username}</a>`;
   });
 
   return processed;
