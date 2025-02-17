@@ -9,83 +9,32 @@ import Image from "next/image"
 import Link from "next/link"
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card"
 
-// Dummy data matching API structure
-const dummyData = {
-  threads: [
-    {
-      id: 1,
-      title: "🔥 DOING INSTAGRAM 🔥 REMOVALS CHEAP",
-      profilePic: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KbxPBteWTW1OsVEZ7kKOFjB8N1p7xv.png",
-      username: "adolf",
-      link: "/thread/1",
-      createdAt: "2025-02-16T10:30:00Z",
-      replies: 3,
-    },
-    {
-      id: 2,
-      title: "⚡ NEW AMAZON REFUND METHOD | ⚡",
-      profilePic: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KbxPBteWTW1OsVEZ7kKOFjB8N1p7xv.png",
-      username: "TyphonServices",
-      link: "/thread/2",
-      createdAt: "2025-02-16T10:35:00Z",
-      replies: 2,
-    },
-    {
-      id: 3,
-      title: "HOW TO GET INFINITE VCCS | NO KYC",
-      profilePic: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KbxPBteWTW1OsVEZ7kKOFjB8N1p7xv.png",
-      username: "Hitler",
-      link: "/thread/3",
-      createdAt: "2025-02-16T10:40:00Z",
-      replies: 1,
-    },
-  ],
-  posts: [
-    {
-      id: 1,
-      title: "💫 2.9K HQ ★ 100% PRIVATE COMBOLIST",
-      profilePic: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KbxPBteWTW1OsVEZ7kKOFjB8N1p7xv.png",
-      username: "equwave",
-      link: "/post/1",
-      createdAt: "2025-02-16T10:45:00Z",
-      replies: 0,
-    },
-  ],
-  products: [
-    {
-      id: 1,
-      title: "❤️ [TEEN] SUPER YOUNG + ⭐ RARE LEAK",
-      profilePic: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KbxPBteWTW1OsVEZ7kKOFjB8N1p7xv.png",
-      username: "LeggyAfrican",
-      link: "/product/1",
-      createdAt: "2025-02-16T10:50:00Z",
-      replies: 4,
-    },
-  ],
-}
-
-
 export default function ActivityFeed() {
   const [activeTab, setActiveTab] = useState("threads")
-  const [data, setData] = useState(dummyData)
+  const [data, setData] = useState()
   const [isLoading, setIsLoading] = useState(false)
 
-  // Simulate API fetch every 5 seconds
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true)
-      // In real implementation, fetch from API
-      // const response = await fetch('/api/activity')
-      // const newData = await response.json()
-      setData(dummyData)
-      setIsLoading(false)
-    }
-
-    const interval = setInterval(fetchData, 5000)
-    fetchData() // Initial fetch
-
-    return () => clearInterval(interval)
-  }, [])
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/mics/ticker');
+        if (!response.ok) throw new Error("Failed to fetch data");
+        const newData = await response.json();
+        setData(newData);
+      } catch (error) {
+        console.error("Error fetching ticker data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    const interval = setInterval(fetchData, 5000);
+    fetchData();
+  
+    return () => clearInterval(interval);
+  }, []);
+  
 
   const renderActivityItem = (item) => (
     <motion.div
@@ -119,7 +68,7 @@ export default function ActivityFeed() {
   )
 
   return (
-    <Card className="w-full bg-zinc-900/50 flex-1 text-white border-0 shadow-lg space-y-6">
+    <Card className="w-full p-0 bg-zinc-900/50 flex-1 text-white border-0 shadow-lg space-y-6">
       <CardContent>
         <div className="w-full rounded-xl backdrop-blur-sm">
           <Tabs defaultValue="threads" className="w-full" onValueChange={setActiveTab}>
