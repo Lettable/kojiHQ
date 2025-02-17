@@ -119,7 +119,7 @@ img[alt^=":"] {
 
 .sparkle-effect {
   position: relative;
-  color: #ff69b4;
+  color: #ff69b4 !important;
   background: url('https://i.gifer.com/XZ5V.gif') no-repeat left top;
   background-size: contain;
   overflow: hidden;
@@ -155,7 +155,7 @@ img[alt^=":"] {
 /* Neon Effect */
 .neon-effect {
   position: relative;
-  color: #FF69B4;
+  color: #FF69B4 !important;
   text-shadow: 0 0 5px purple, 0 0 10px purple, 0 0 15px purple, 0 0 20px purple;
   animation: neon 1.5s infinite alternate;
 }
@@ -181,7 +181,7 @@ img[alt^=":"] {
   violet, 
   purple);
   background-size: 400%;
-  color: transparent;
+  color: transparent !important;
   background-clip: text;
   animation: rainbow 4s ease infinite;
 }
@@ -198,7 +198,7 @@ img[alt^=":"] {
 /* Glitch Effect */
 .glitch-effect {
   position: relative;
-  color: white;
+  color: white !important;
   text-shadow: 1px 0 red, -1px 0 blue;
   animation: glitch 1s infinite;
   background: url('https://i.gifer.com/D5XM.gif') no-repeat left top;
@@ -245,7 +245,7 @@ img[alt^=":"] {
   font-weight: bold;
   font-family: 'Roboto', sans-serif;
   --bg-pos: .2em -.07em;
-  color: #000000; /* Fire color for the text */
+  color: #000000 !important; /* Fire color for the text */
   text-shadow: 0 0 5px rgba(255, 69, 0, 0.8), 0 0 10px rgba(255, 69, 0, 0.6); /* Optional glow effect */
   -webkit-background-clip: border-box, border-box, text;
   background-image: url(https://i.gifer.com/YmoL.gif);
@@ -302,7 +302,7 @@ img[alt^=":"] {
 /* Snow Effect */
 .snow-effect {
   position: relative;
-  color: #ffffff;
+  color: #ffffff !important;
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(187, 187, 187, 0.6);
   overflow: hidden;
   background: url('https://i.gifer.com/2yqT.gif') no-repeat left top;
@@ -337,7 +337,7 @@ img[alt^=":"] {
 /* Shadow Effect */
 .shadow-effect {
   position: relative;
-  color: #000000;
+  color: #000000 !important;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6);
   background: url('https://i.gifer.com/2yqT.gif') no-repeat left top;
   background-size: contain;
@@ -360,7 +360,7 @@ img[alt^=":"] {
 /* Holo Effect */
 .holo-effect {
   position: relative;
-  color: #00ffff;
+  color: #00ffff !important;
   text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff;
 }
 
@@ -387,7 +387,7 @@ img[alt^=":"] {
 /* Retro Effect */
 .retro-effect {
   position: relative;
-  color: #ff6347;
+  color: #ff6347 !important;
   text-shadow: 0 0 10px rgba(255, 99, 71, 0.8), 0 0 20px rgba(255, 99, 71, 0.5);
   font-family: 'Press Start 2P', cursive;
   background: url('https://i.gifer.com/xx.gif') no-repeat left top;
@@ -422,7 +422,7 @@ img[alt^=":"] {
 /* Cosmic Effect */
 .cosmic-effect {
   position: relative;
-  color: #8a2be2;
+  color: #8a2be2 !important;
   text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2;
   animation: cosmic 3s ease infinite;
   background: url('https://i.gifer.com/2iiH.gif') no-repeat left top;
@@ -433,7 +433,7 @@ img[alt^=":"] {
 .bubble-effect {
   position: relative;
   font-size: 2rem; /* Adjust the font size as needed */
-  color: #bad4f3; /* Fire color for the text */
+  color: #bad4f3 !important; /* Fire color for the text */
   text-shadow: 0 0 5px rgba(193, 192, 236, 0.8), 0 0 10px rgba(255, 69, 0, 0.6); /* Optional glow effect */
   overflow: hidden; /* Ensure the pseudo-element doesn't overflow */
 }
@@ -483,7 +483,7 @@ img[alt^=":"] {
 /* Pixel Effect */
 .pixel-effect {
   position: relative;
-  color: #32cd32;
+  color: #32cd32 !important;
   font-family: 'PixelFont', monospace;
   background: url('https://i.gifer.com/3sjl.gif') no-repeat left top;
   background-size: contain;
