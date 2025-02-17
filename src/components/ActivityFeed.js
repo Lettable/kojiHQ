@@ -52,6 +52,8 @@ export default function ActivityFeed() {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
+    let interval;
+
     const fetchData = async () => {
       try {
         setIsLoading(true);
@@ -65,13 +67,15 @@ export default function ActivityFeed() {
         setIsLoading(false);
       }
     };
-  
-    const interval = setInterval(fetchData, 5000);
-    fetchData();
-  
+
+    fetchData().then(() => {
+      interval = setInterval(fetchData, 5000);
+    });
+
     return () => clearInterval(interval);
   }, []);
-  
+
+
 
   const renderActivityItem = (item) => (
     <motion.div
