@@ -457,10 +457,8 @@ export default function HomePage() {
               <motion.div
                 className="absolute inset-0 flex items-center justify-center text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase opacity-0 hover:opacity-100 transition-opacity duration-300"
               >
-                Seized, but Never Silenced
               </motion.div>
 
-              {/* Logo Image */}
               <Image
                 src="https://i.postimg.cc/hjs7pc6G/suizedto-OG-hero-Logo.png"
                 alt="Suized Logo"
@@ -471,6 +469,10 @@ export default function HomePage() {
                 onContextMenu={(e) => e.preventDefault()}
               />
             </motion.div>
+          </motion.div>
+
+          <motion.div className="text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase mt-4">
+            Seized, but Never Silenced
           </motion.div>
 
           {/* Status Ticker */}
