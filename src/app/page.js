@@ -445,30 +445,31 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="text-center mb-8"
+            className="text-center mb-8 select-none"
           >
             <motion.div
-              className="relative inline-block"
-              whileHover={{ scale: 0.98 }}
+              className="relative inline-block cursor-pointer"
+              whileHover={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 300, damping: 10 }}
+              onClick={() => (window.location.href = "/")}
             >
+              {/* Overlay for Hover Effect */}
               <motion.div
-                whileHover={{
-                  opacity: 0.7,
-                  filter: "brightness(0.8)",
-                }}
+                className="absolute inset-0 flex items-center justify-center text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase opacity-0 hover:opacity-100 transition-opacity duration-300"
               >
-                <Image
-                  src="https://i.postimg.cc/hjs7pc6G/suizedto-OG-hero-Logo.png"
-                  alt="Suized Logo"
-                  width={400}
-                  height={100}
-                  className="drop-shadow-[0_0_25px_rgba(234,179,8,0.3)]"
-                />
+                Seized, but Never Silenced
               </motion.div>
-            </motion.div>
-            <motion.div className="text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase mt-4">
-              Seized, but Never Silenced
+
+              {/* Logo Image */}
+              <Image
+                src="https://i.postimg.cc/hjs7pc6G/suizedto-OG-hero-Logo.png"
+                alt="Suized Logo"
+                width={400}
+                height={100}
+                className="drop-shadow-[0_0_25px_rgba(234,179,8,0.3)] pointer-events-none"
+                draggable="false"
+                onContextMenu={(e) => e.preventDefault()}
+              />
             </motion.div>
           </motion.div>
 
