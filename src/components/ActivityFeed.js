@@ -120,11 +120,8 @@ export default function ActivityFeed() {
 
   return (
     <Card className="w-full bg-zinc-900/50 flex-1 text-white border-0 shadow-lg space-y-6">
-      <CardHeader>
-        <CardTitle className="text-lg">Activity Feed</CardTitle>
-      </CardHeader>
       <CardContent>
-        <div className="w-full rounded-xl backdrop-blur-sm border border-zinc-800/50">
+        <div className="w-full rounded-xl backdrop-blur-sm">
           <Tabs defaultValue="threads" className="w-full" onValueChange={setActiveTab}>
             <div className="border-b border-zinc-800/50">
               <TabsList className="h-14 w-full bg-transparent flex justify-between px-6">
