@@ -17,7 +17,11 @@ const renderTextWithEmojis = (content, emojis, users) => {
 
   const mentionRegex = /@([\w-]+)/g;
   processed = processed.replace(mentionRegex, (match, username) => {
-    const user = users.find(u => u.username === username);
+    const cleanUsername = username.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const user = allUsers.find(u =>
+      u.username.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanUsername
+    );
+
     const effectClass = user ? user.usernameEffect : 'mention-default';
     return `<a href="/user/${username}" class="${effectClass}">@${username}</a>`;
   });
@@ -29,7 +33,7 @@ const fetchEmojis = async () => {
   try {
     const response = await fetch("/api/emojis");
     const data = await response.json();
-    return data;
+    return data.data;
   } catch (error) {
     console.error("Error fetching emojis:", error);
     return [];
