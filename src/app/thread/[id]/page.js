@@ -244,21 +244,9 @@ export default function ThreadView() {
 
                                 <h1 className="text-3xl text-white text-center justify-center mt-2 items-center font-bold mb-6">{thread.title}</h1>
 
-                                {/* <div className={`prose ${isDarkTheme ? 'prose-invert' : ''} max-w-none mb-6`}>
-                                    <MarkdownPreview
-                                    style={{ backgroundColor: 'rgba(24, 24, 27, 0.5)' }}
-                                        className="m-0 bg-[#0d1117] text-[#c9d1d9] p-4 rounded-md markdown-body"
-                                        source={thread.content}
-                                    />
-                                </div> */}
-
                                 {currentUser ? (
                                     <div className={`prose ${isDarkTheme ? 'prose-invert' : ''} max-w-none mb-6`}>
-                                        {/* <MarkdownPreview
-                                            style={{ backgroundColor: 'rgba(24, 24, 27, 0.5)' }}
-                                            className="m-0 bg-[#0d1117] text-[#c9d1d9] p-4 rounded-md markdown-body"
-                                            source={thread.content}
-                                        /> */}
+                                        
                                         <MarkdownWithEmojis content={thread.content} />
                                     </div>
                                 ) : (
@@ -387,19 +375,7 @@ export default function ThreadView() {
                                                                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
                                                             </div>
                                                             <div className="flex items-center mt-4 space-x-4">
-                                                                {/* <Button
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                    onClick={() => handleLike('post', post._id)}
-                                                                    className={`${
-                                                                        post.likes.includes(currentUser?._id)
-                                                                        ? 'text-yellow-500'
-                                                                        : 'text-gray-400'
-                                                                    }`}
-                                                                >
-                                                                    <Heart className="w-4 h-4 mr-2" />
-                                                                    <span>{post.likes.length}</span>
-                                                                </Button> */}
+                                                                
                                                                 <Button
                                                                     variant="ghost"
                                                                     size="sm"
@@ -423,37 +399,6 @@ export default function ThreadView() {
 
                     {/* Right Sidebar */}
                     <div className="lg:w-1/4 space-y-6">
-                        {/* <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
-                            <CardHeader>
-                                <CardTitle className="text-lg">Live Prices</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center">
-                                            <Bitcoin className="h-4 w-4 mr-2" />
-                                            <span>BTC</span>
-                                        </div>
-                                        <span>${cryptoPrices.BTC}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center">
-                                            <FaEthereum className="h-4 w-4 mr-2" />
-                                            <span>ETH</span>
-                                        </div>
-                                        <span>${cryptoPrices.ETH}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center">
-                                            <DollarSign className="h-4 w-4 mr-2" />
-                                            <span>LTC</span>
-                                        </div>
-                                        <span>${cryptoPrices.LTC}</span>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card> */}
-
                         <PreferredCurrencies preferredCurrencies={currencies} />
 
                         <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} border-0 text-white shadow-lg`}>
