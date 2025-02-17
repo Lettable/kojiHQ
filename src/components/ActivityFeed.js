@@ -91,7 +91,7 @@ export default function ActivityFeed() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-800/50 transition-colors group"
+      className="flex items-center gap-3 p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-800/50 transition-colors group"
     >
       <div className="relative h-8 w-8 rounded-full overflow-hidden shrink-0">
         <Image src={item.profilePic || "/placeholder.svg"} alt={item.username} fill className="object-cover" />
@@ -120,24 +120,24 @@ export default function ActivityFeed() {
   return (
     <div className="w-full bg-zinc-900/50 flex-1 text-white border-0 shadow-lg space-y-6">
       <div className="w-full bg-zinc-900/50 rounded-xl shadow-lg backdrop-blur-sm">
-        <Tabs defaultValue="threads" className="w-full bg-zinc-900/50" onValueChange={setActiveTab}>
-          <div className="border-b border-zinc-800/50">
+        <Tabs defaultValue="threads" className="bg-zinc-900/50 w-full" onValueChange={setActiveTab}>
+          <div className="border-b bg-zinc-900/50 border-zinc-800/50">
             <TabsList className="h-14 w-full bg-transparent flex justify-between px-6">
               <TabsTrigger
                 value="threads"
-                className="data-[state=active]:bg-zinc-900/50 data-[state=active]:text-yellow-500 transition-all text-yellow-500/70"
+                className="data-[state=active]:bg-zinc-800/50 data-[state=active]:text-yellow-500 transition-all text-yellow-500/70"
               >
                 <MessageSquare className="h-5 w-5" />
               </TabsTrigger>
               <TabsTrigger
                 value="posts"
-                className="data-[state=active]:bg-zinc-900/50 data-[state=active]:text-yellow-500 transition-all text-yellow-500/70"
+                className="data-[state=active]:bg-zinc-800/50 data-[state=active]:text-yellow-500 transition-all text-yellow-500/70"
               >
                 <MessagesSquare className="h-5 w-5" />
               </TabsTrigger>
               <TabsTrigger
                 value="products"
-                className="data-[state=active]:bg-zinc-900/50 data-[state=active]:text-yellow-500 transition-all text-yellow-500/70"
+                className="data-[state=active]:bg-zinc-800/50 data-[state=active]:text-yellow-500 transition-all text-yellow-500/70"
               >
                 <ShoppingBag className="h-5 w-5" />
               </TabsTrigger>
