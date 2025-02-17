@@ -408,9 +408,7 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
         </div>
 
-        {/* Content */}
         <div className="relative z-10 container mx-auto px-4 pt-8">
-          {/* Top Ad Banner */}
           <div className="flex justify-center gap-4 mb-8">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -440,7 +438,6 @@ export default function HomePage() {
             </motion.div>
           </div>
 
-          {/* Main Title */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -452,13 +449,8 @@ export default function HomePage() {
               whileHover={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 300, damping: 10 }}
               onClick={() => (window.location.href = "/")}
+              title="Seized, but Never Silenced"
             >
-              {/* Overlay for Hover Effect */}
-              <motion.div
-                className="absolute inset-0 flex items-center justify-center text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase opacity-0 hover:opacity-100 transition-opacity duration-300"
-              >
-              </motion.div>
-
               <Image
                 src="https://i.postimg.cc/hjs7pc6G/suizedto-OG-hero-Logo.png"
                 alt="Suized Logo"
@@ -469,25 +461,10 @@ export default function HomePage() {
                 onContextMenu={(e) => e.preventDefault()}
               />
             </motion.div>
-          </motion.div>
 
-          <motion.div className="text-yellow-500 text-lg items-center justify-center mb-2 md:text-xl font-light tracking-[0.2em] uppercase mt-4">
-            Seized, but Never Silenced
-          </motion.div>
-
-          {/* Status Ticker */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="max-w-4xl mx-auto mb-8 overflow-hidden"
-          >
-            <div className="py-2 px-4 bg-zinc-900/80 border-l-4 border-yellow-500 rounded backdrop-blur-sm">
-              <div className="animate-marquee whitespace-nowrap text-yellow-300 font-light tracking-wider text-sm">
-                <span className="text-yellow-500 font-medium mr-2">LATEST:</span>
-                Exciting updates ahead! We&apos;re rolling out new features, optimizing performance, and adding the final touches to launch a revolutionary forum. Stay tuned for something big!
-              </div>
-            </div>
+            <motion.div className="text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase mt-4">
+              Seized, but Never Silenced
+            </motion.div>
           </motion.div>
 
           {/* Bottom Ad Banner */}
