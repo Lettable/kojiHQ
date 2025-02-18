@@ -33,7 +33,7 @@ const fetchEmojis = async () => {
   try {
     const response = await fetch("/api/emojis");
     const data = await response.json();
-    return data.data;
+    return data;
   } catch (error) {
     console.error("Error fetching emojis:", error);
     return [];
@@ -44,7 +44,7 @@ const fetchUsers = async () => {
   try {
     const response = await fetch("/api/mics/mention-regex");
     const data = await response.json();
-    return data;
+    return data.data;
   } catch (error) {
     console.error("Error fetching users:", error);
     return [];
