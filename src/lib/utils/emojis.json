@@ -27,6 +27,7 @@
     "isAnimated": false,
     "isPremium": false
   },
+  
   {
     "id": "16845392716",
     "emojiTitle": ":facepalm:",
@@ -66,6 +67,13 @@
     "id": "25896314702",
     "emojiTitle": ":troll:",
     "emojiUrl": "/emojis/troll.png",
+    "isAnimated": false,
+    "isPremium": false
+  },
+  {
+    "id": "258963147026745645",
+    "emojiTitle": ":suized:",
+    "emojiUrl": "https://i.postimg.cc/kGPXHQfw/suize-364-424-og-white-logo.png",
     "isAnimated": false,
     "isPremium": false
   },
@@ -206,6 +214,13 @@
     "id": "8728961327334265453",
     "emojiTitle": ":thinkrotate:",
     "emojiUrl": "https://cdn3.emoji.gg/emojis/14808-thinkrotate.gif",
+    "isAnimated": false,
+    "isPremium": true
+  },
+  {
+    "id": "157962843154564543534523",
+    "emojiTitle": ":ghost:",
+    "emojiUrl": "https://i.postimg.cc/bNXtXbs7/ghost.webp",
     "isAnimated": false,
     "isPremium": true
   },
