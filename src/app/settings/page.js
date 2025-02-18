@@ -631,10 +631,10 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
   // };
   const handleCropConfirm = async () => {
     let base64Image;
-  
+
     const isGifFile = uploadedImage instanceof File && uploadedImage.type === 'image/gif';
     const isGifBase64 = typeof uploadedImage === 'string' && uploadedImage.startsWith('data:image/gif');
-  
+
     if (isGifFile || isGifBase64) {
       if (isGifFile) {
         base64Image = await new Promise((resolve) => {
@@ -652,7 +652,7 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
       canvas.width = completedCrop.width;
       canvas.height = completedCrop.height;
       const ctx = canvas.getContext('2d');
-  
+
       ctx.drawImage(
         imageRef.current,
         completedCrop.x * scaleX,
@@ -664,7 +664,7 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
         completedCrop.width,
         completedCrop.height
       );
-  
+
       base64Image = await new Promise((resolve) => {
         canvas.toBlob((blob) => {
           const reader = new FileReader();
@@ -673,7 +673,7 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
         }, 'image/png');
       });
     }
-  
+
     if (!base64Image) {
       toast({
         title: "Error",
@@ -682,14 +682,14 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
       });
       return;
     }
-  
+
     try {
       const response = await fetch(`/api/edit-user?action=profilePic&token=${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ profilePic: base64Image }),
       });
-  
+
       const result = await response.json();
       if (result.success) {
         localStorage.setItem('accessToken', result.accessToken);
@@ -709,11 +709,11 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
         variant: "destructive",
       });
     }
-  
+
     setIsUploadingImage(false);
     setUploadedImage('');
   };
-  
+
 
 
   const handleEmojiSelect = async (emoji) => {
@@ -925,78 +925,6 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
   )
 }
 
-// function PreferencesTab({ userData, onSave }) {
-//   const [spotifySong, setSpotifySong] = useState(userData.favSpotifySongOrPlaylist)
-//   const [youtubeVideo, setYoutubeVideo] = useState(userData.favYtVideo)
-//   const [darkMode, setDarkMode] = useState(true)
-//   const [newUsernameEffect, setNewUsernameEffect] = useState(userData.usernameEffect)
-
-//   const handleSave = (key, value) => {
-//     onSave(key, value)
-//   }
-
-//   return (
-//     <div className="space-y-6">
-//       <h2 className="text-2xl text-white font-bold">Preferences</h2>
-//       <div className="space-y-4">
-//         <div>
-//           <Label htmlFor="spotifySong">Favorite Spotify Song/Playlist</Label>
-//           <Input
-//             id="spotifySong"
-//             value={spotifySong}
-//             onChange={(e) => setSpotifySong(e.target.value)}
-//             onBlur={() => handleSave('favSpotifySongOrPlaylist', spotifySong)}
-//             className="bg-zinc-800 border-zinc-700 text-white"
-//             placeholder="Spotify URI"
-//           />
-//         </div>
-//         <div>
-//           <Label htmlFor="youtubeVideo">Favorite YouTube Video</Label>
-//           <Input
-//             id="youtubeVideo"
-//             value={youtubeVideo}
-//             onChange={(e) => setYoutubeVideo(e.target.value)}
-//             onBlur={() => handleSave('favYtVideo', youtubeVideo)}
-//             className="bg-zinc-800 border-zinc-700 text-white"
-//             placeholder="YouTube URL"
-//           />
-//         </div>
-//         <div>
-//           <Label htmlFor="usernameEffect">Username Effect</Label>
-//           <Select
-//             value={newUsernameEffect}
-//             onValueChange={setNewUsernameEffect}
-//           >
-//             <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
-//               <SelectValue placeholder="Select an effect" />
-//             </SelectTrigger>
-//             <SelectContent className="bg-zinc-800 border-0">
-//               {userData.storedUsernameEffects.map((effect) => (
-//                 <SelectItem key={effect.value} className={`${effect.value} hover:bg-transparent`} value={effect.value}>
-//                   {effect.label}
-//                 </SelectItem>
-//               ))}
-//             </SelectContent>
-//           </Select>
-//         </div>
-//         <div>
-//           <Label>Dark Mode</Label>
-//           <div className="flex text-white items-center space-x-2 mt-2">
-//             <Switch
-//               id="dark-mode"
-//               checked={darkMode}
-//               onCheckedChange={(checked) => {
-//                 setDarkMode(checked)
-//                 handleSave('darkMode', checked)
-//               }}
-//             />
-//             <Label htmlFor="dark-mode">Enable Dark Mode</Label>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
 
 function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg, setBannerImg }) {
   const [youtubeVideo, setYoutubeVideo] = useState(userData.favYtVideo);
@@ -1212,7 +1140,10 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
           <Button
             type="submit"
             onClick={() => {
-              if ((!bannerImg || isValidUrl(bannerImg)) && (!favSpotifyTrack || isValidSpotifyTrackUrl(favSpotifyTrack))) {
+              if (
+                (!bannerImg || (bannerImg && isValidUrl(bannerImg))) &&
+                (!favSpotifyTrack || (favSpotifyTrack && isValidSpotifyTrackUrl(favSpotifyTrack)))
+              ) {
                 handleSave();
               } else {
                 alert('Please enter valid URLs for the banner image and/or Spotify track.');
@@ -1222,77 +1153,12 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
           >
             Save Preference
           </Button>
-
         </div>
-
       </div>
     </div>
   );
 }
 
-// function SignatureTab({ isDarkTheme, handleEditorChange, handleEmojiSelect, content, userData, onSave }) {
-//   const [signature, setSignature] = useState(userData.signature);
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     onSave({ signature });
-//   };
-
-//   return (
-//     <div className={`space-y-8 p-6 rounded-lg ${isDarkTheme ? "bg-zinc-900" : "bg-white"}`}>
-//       <h2 className={`text-3xl font-bold ${isDarkTheme ? "text-white" : "text-gray-800"}`}>Signature</h2>
-//         <div className="flex items-start space-x-4">
-//           <div className="markdown-editor-container flex-1">
-//             <ReactMarkdownEditorLite
-//               value={content}
-//               onChange={handleEditorChange}
-//               className="w-full h-64 bg-zinc-800 text-black border-0"
-//               style={{ backgroundColor: '#27272a' }}
-//               config={{
-//                 view: {
-//                   menu: true,
-//                   md: true,
-//                   html: false,
-//                 },
-//                 theme: 'dark',
-//               }}
-//             />
-//           </div>
-
-//           <EnhancedEmojiPicker
-//             className="w-1/3 mt-1 ml-1"
-//             onEmojiSelect={handleEmojiSelect}
-//             isDarkTheme={isDarkTheme}
-//           />
-//         </div>
-
-//         {/* Preview Section */}
-//         <div className="space-y-2">
-//           <Label className="text-lg font-semibold">Preview</Label>
-//           <Card className={`border-0 w-[860px] rounded-lg p-4 ${isDarkTheme ? "bg-zinc-800" : "bg-gray-100"}`}>
-//             <ScrollArea className={`w-full h-64 rounded-md overflow-y-auto ${isDarkTheme ? "bg-zinc-800" : "bg-gray-50"}`}>
-//               <MarkdownWithEmojis
-//                 style={{ backgroundColor: isDarkTheme ? "#1E1E24" : "#FFFFFF" }}
-//                 className="p-4"
-//                 content={content}
-//               />
-//             </ScrollArea>
-//           </Card>
-//         </div>
-
-//         {/* Save Button */}
-//         <div className="flex justify-end">
-//           <Button
-//             type="submit"
-//             className="bg-yellow-500 mr-16 text-black hover:bg-yellow-600"
-//           >
-//             Save Signature
-//           </Button>
-//         </div>
-
-//     </div>
-//   );
-// }
 
 function SignatureTab({ token, isDarkTheme, userData, onSave }) {
   const [signature, setSignature] = useState(userData.signature);
