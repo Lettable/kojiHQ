@@ -53,12 +53,12 @@ const fetchUsers = async () => {
 
 const MarkdownWithEmojis = ({ content, style = {}, users = [], emojisData = []}) => {
   const [emojis, setEmojis] = useState(emojisData || []);
-  const [allUsers, setAllUsers] = useState(users);
+  const [allUsers, setAllUsers] = useState(users || []);
   const emojisCache = useMemo(() => new Map(), []);
 
   useEffect(() => {
     const loadEmojis = async () => {
-      if (emojisCache.size === 0 || emojis.length > 0) {
+      if (emojisCache.size === 0) {
         const fetchedEmojis = await fetchEmojis();
         fetchedEmojis.forEach((emoji) => {
           emojisCache.set(emoji.emojiTitle, emoji);
@@ -70,7 +70,7 @@ const MarkdownWithEmojis = ({ content, style = {}, users = [], emojisData = []})
     };
 
     const loadUsers = async () => {
-      if (user.length > 0 || allUsers.length > 0) {
+      if (user.length > 0) {
         const fetchedUsers = await fetchUsers();
         setAllUsers(fetchedUsers);
       }
@@ -78,7 +78,7 @@ const MarkdownWithEmojis = ({ content, style = {}, users = [], emojisData = []})
 
     loadUsers();
     loadEmojis();
-  }, [emojisCache, users, allUsers]);
+  }, [emojisCache, users]);
 
   // const processedContent = useMemo(() => renderTextWithEmojis(content, emojis), [content, emojis]);
   const processedContent = useMemo(
