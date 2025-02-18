@@ -180,17 +180,17 @@ const MarkdownWithEmojis = ({ content, style = {}, users = [], emojisData = [] }
     };
 
     const loadUsers = async () => {
-      if (!users || users.length === 0) {
+      if ((!users || users.length === 0) && allUsers.length === 0) {
         const fetchedUsers = await fetchUsers();
         setAllUsers(fetchedUsers);
-      } else {
+      } else if (users && users.length > 0) {
         setAllUsers(users);
       }
     };
 
     loadUsers();
     loadEmojis();
-  }, [emojisCache, users]);
+  }, [emojisCache, users, allUsers]);
 
   const processedContent = useMemo(
     () => renderTextWithEmojis(content, emojis, allUsers),
