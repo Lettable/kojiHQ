@@ -246,7 +246,6 @@ export default function ThreadView() {
 
                                 {currentUser ? (
                                     <div className={`prose ${isDarkTheme ? 'prose-invert' : ''} max-w-none mb-6`}>
-                                        
                                         <MarkdownWithEmojis content={thread.content} />
                                     </div>
                                 ) : (
