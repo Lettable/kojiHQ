@@ -635,7 +635,6 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     scrollToBottom();
   };
 
-  // Handlers for Delete/Edit modals
   const handleDeleteClick = (message) => {
     setSelectedMessage(message);
     setShowDeleteModal(true);
@@ -876,10 +875,10 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
                   className="bg-zinc-800 text-white border-zinc-700"
                 />
               </div>
-              <div>
-                <Label htmlFor="new-message" className="text-zinc-400">
+              <Label htmlFor="new-message" className="text-zinc-400 mt-2">
                   New Message
                 </Label>
+              <div className='flex'>
                 <Textarea
                   id="new-message"
                   value={editContent}
