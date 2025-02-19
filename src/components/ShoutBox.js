@@ -297,39 +297,36 @@ export default function Shoutbox() {
           {isWebSocketConnected ? (
             user ? (
               user.isAuthorized ? (
-                // <div className="flex items-center space-x-2 min-h-[31px] max-h-[41px] ">
-                //   <Textarea
-                //     placeholder="Type your message..."
-                //     value={newMessage}
-                //     onChange={(e) => setNewMessage(e.target.value.slice(0, MAX_MESSAGE_LENGTH))}
-                //     className={`flex-grow min-h-[31px] max-h-[41px] resize-none ${isDarkTheme
-                //       ? 'bg-white/5 border-white/10 focus:border-yellow-400/50'
-                //       : 'bg-black/5 border-black/10 focus:border-yellow-600/50'
-                //       } rounded-full py-2 px-4`}
-                //     onKeyDown={(e) => {
-                //       if (e.key === 'Enter' && !e.shiftKey) {
-                //         e.preventDefault();
-                //         sendMessage();
-                //       }
-                //     }}
-                //   />
-                //   <EnhancedEmojiPicker onEmojiSelect={handleEmojiSelect} isDarkTheme={isDarkTheme} />
-                //   <Button
-                //     onClick={sendMessage}
-                //     disabled={!newMessage.trim()}
-                //     className="bg-yellow-600 hover:bg-yellow-700 rounded-full p-auto"
-                //   >
-                //     <Send className="h-auto w-auto" />
-                //   </Button>
-                // </div>
-                <div className="flex items-center justify-center space-x-2 text-yellow-400">
-                  <AlertTriangle className="w-4 h-4" />
-                  <p>The shout box is currently turned off. Please wait until the launch to send your shouts!</p>
+                <div className="flex items-center space-x-2 min-h-[31px] max-h-[41px] ">
+                  <Textarea
+                    placeholder="Type your message..."
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value.slice(0, MAX_MESSAGE_LENGTH))}
+                    className={`flex-grow min-h-[31px] max-h-[41px] resize-none ${isDarkTheme
+                      ? 'bg-white/5 border-white/10 focus:border-yellow-400/50'
+                      : 'bg-black/5 border-black/10 focus:border-yellow-600/50'
+                      } rounded-full py-2 px-4`}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                      }
+                    }}
+                  />
+                  <EnhancedEmojiPicker onEmojiSelect={handleEmojiSelect} isDarkTheme={isDarkTheme} />
+                  <Button
+                    onClick={sendMessage}
+                    disabled={!newMessage.trim()}
+                    className="bg-yellow-600 hover:bg-yellow-700 rounded-full p-auto"
+                  >
+                    <Send className="h-auto w-auto" />
+                  </Button>
                 </div>
               ) : (
                 <div className="flex items-center justify-center space-x-2 text-yellow-400">
                   <AlertTriangle className="w-4 h-4" />
-                  <p>You may have done something unusual. It should be fixed soon, or contact support.</p>
+                  {/* <p>You may have done something unusual. It should be fixed soon, or contact support.</p> */}
+                  <p>Shoutbox is for admins only until launch.</p>
                 </div>
               )
             ) : (
