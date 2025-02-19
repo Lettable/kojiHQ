@@ -500,10 +500,17 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     wsRef.current.onmessage = (event) => {
       try {
         const parsedData = JSON.parse(event.data);
+        console.log('Parsed Data', parsedData)
+        console.log('Audio URL', parsedData.message.audioUrl)
+        console.log('Type', parsedData.message.type)
+
         if (parsedData.type === "vb88_command") {
+          console.log('identified command type')
           if (audioRef.current) {
-            audioRef.current = new Audio(parsedData.audioUrl)
+            console.log('Current Audio Ref Identified')
+            audioRef.current = new Audio(parsedData.message.audioUrl)
             audioRef.current.load()
+            console.log('Audio Loaded')
             audioRef.current.currentTime = 0
             audioRef.current.play().catch((error) => {
               console.error("Error playing audio:", error)
