@@ -66,7 +66,7 @@ export async function GET() {
       );
     }
 
-    const adminUserIds = adminUsers.map((user) => user._id);
+    const adminUserIds = adminUsers.map((user) => user._id.toString());
 
     const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
 
@@ -89,7 +89,7 @@ export async function GET() {
 
     const messageMap = new Map();
     latestMessages.forEach((msg) => {
-      messageMap.set(msg._id.toString(), msg.latestCreatedAt);
+      messageMap.set(msg._id, msg.latestCreatedAt);
     });
 
     const staffData = adminUsers.map((user) => {
