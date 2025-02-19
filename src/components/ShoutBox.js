@@ -370,7 +370,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import MarkdownWithEmojis from '@/partials/MarkdownWithEmojis';
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
 const MAX_MESSAGE_LENGTH = 500;
 
 const formatTimestamp = (date) => {
@@ -729,13 +739,12 @@ export default function Shoutbox() {
                     <div className={`flex flex-col ${message.userId === user?.userId ? 'items-end' : 'items-start'}`}>
                       <div className="relative group">
                         <div
-                          className={`px-4 py-2 rounded-lg max-w-sm sm:max-w-sm md:max-w-md lg:max-w-lg ${
-                            message.userId === user?.userId
+                          className={`px-4 py-2 rounded-lg max-w-sm sm:max-w-sm md:max-w-md lg:max-w-lg ${message.userId === user?.userId
                               ? 'bg-blue-600 text-white'
                               : isDarkTheme
-                              ? 'bg-zinc-800 text-white'
-                              : 'bg-zinc-200 text-black'
-                          }`}
+                                ? 'bg-zinc-800 text-white'
+                                : 'bg-zinc-200 text-black'
+                            }`}
                         >
                           {message.userId !== user?.userId && (
                             <>
@@ -791,11 +800,10 @@ export default function Shoutbox() {
                     placeholder="Type your message..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value.slice(0, MAX_MESSAGE_LENGTH))}
-                    className={`flex-grow min-h-[31px] max-h-[41px] resize-none ${
-                      isDarkTheme
+                    className={`flex-grow min-h-[31px] max-h-[41px] resize-none ${isDarkTheme
                         ? 'bg-white/5 border-white/10 focus:border-yellow-400/50'
                         : 'bg-black/5 border-black/10 focus:border-yellow-600/50'
-                    } rounded-full py-2 px-4`}
+                      } rounded-full py-2 px-4`}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
@@ -833,120 +841,140 @@ export default function Shoutbox() {
         </div>
       </main>
 
-      {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-4 rounded shadow-lg max-w-sm w-full">
-            <h2 className="text-lg font-bold mb-4">Confirm Delete</h2>
-            <p>Are you sure you want to delete this message?</p>
-            <div className="flex justify-end space-x-2 mt-4">
-              <button onClick={() => setShowDeleteModal(false)} className="px-4 py-2 bg-gray-300 rounded">
+        <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
+          <DialogContent className="bg-zinc-900 border border-yellow-500/20 text-white">
+            <DialogHeader>
+              <DialogTitle>Confirm Delete</DialogTitle>
+              <DialogDescription className="text-zinc-400">
+                Are you sure you want to delete this message?
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setShowDeleteModal(false)}
+                className="bg-zinc-800 text-white hover:bg-zinc-700"
+              >
                 Cancel
-              </button>
-              <button onClick={confirmDelete} className="px-4 py-2 bg-red-600 text-white rounded">
+              </Button>
+              <Button variant="destructive" onClick={confirmDelete}>
                 Delete
-              </button>
-            </div>
-          </div>
-        </div>
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
 
-      {/* Edit Message Modal */}
       {showEditModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-4 rounded shadow-lg max-w-md w-full">
-            <h2 className="text-lg font-bold mb-4">Edit Message</h2>
-            <div className="mb-2">
-              <label className="block text-sm font-medium mb-1">Original Message</label>
-              <input
-                type="text"
-                value={selectedMessage?.content}
-                disabled
-                className="w-full p-2 border rounded bg-gray-100"
+        <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+          <DialogContent className="bg-zinc-900 border border-yellow-500/20 text-white">
+            <DialogHeader>
+              <DialogTitle>Edit Message</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="original-message" className="text-zinc-400">
+                  Original Message
+                </Label>
+                <Input
+                  id="original-message"
+                  value={selectedMessage?.content}
+                  disabled
+                  className="bg-zinc-800 text-white border-zinc-700"
+                />
+              </div>
+              <div>
+                <Label htmlFor="new-message" className="text-zinc-400">
+                  New Message
+                </Label>
+                <Textarea
+                  id="new-message"
+                  value={editContent}
+                  onChange={(e) => setEditContent(e.target.value)}
+                  className="bg-zinc-800 text-white border-zinc-700"
+                  rows={3}
+                />
+              </div>
+              <EnhancedEmojiPicker
+                onEmojiSelect={(emojiTitle) =>
+                  setEditContent((prev) => `${prev} ${emojiTitle}`.slice(0, MAX_MESSAGE_LENGTH))
+                }
+                isDarkTheme={isDarkTheme}
               />
             </div>
-            <div className="mb-2">
-              <label className="block text-sm font-medium mb-1">New Message</label>
-              <textarea
-                value={editContent}
-                onChange={(e) => setEditContent(e.target.value)}
-                className="w-full p-2 border rounded"
-                rows={3}
-              />
-            </div>
-            <EnhancedEmojiPicker
-              onEmojiSelect={(emojiTitle) =>
-                setEditContent((prev) => `${prev} ${emojiTitle}`.slice(0, MAX_MESSAGE_LENGTH))
-              }
-              isDarkTheme={isDarkTheme}
-            />
-            <div className="flex justify-end space-x-2 mt-4">
-              <button onClick={() => setShowEditModal(false)} className="px-4 py-2 bg-gray-300 rounded">
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setShowEditModal(false)}
+                className="bg-zinc-800 text-white hover:bg-zinc-700"
+              >
                 Cancel
-              </button>
-              <button onClick={confirmEdit} className="px-4 py-2 bg-blue-600 text-white rounded">
+              </Button>
+              <Button onClick={confirmEdit} className="bg-yellow-500 text-black hover:bg-yellow-600">
                 Save
-              </button>
-            </div>
-          </div>
-        </div>
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
 
-      {/* Settings Modal */}
       {isSettingsDialogOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-4 rounded shadow-lg max-w-md w-full">
-            <h2 className="text-lg font-bold mb-4">Shoutbox Settings</h2>
-            <div className="mb-2">
-              <label className="block text-sm font-medium mb-1">
-                Notification Audio URL (must end with .mp3)
-              </label>
-              <input
-                type="text"
-                value={fva}
-                onChange={(e) => setFva(e.target.value)}
-                className="w-full p-2 border rounded"
-                placeholder="/emojis/notify.mp3"
-              />
+        <Dialog open={isSettingsDialogOpen} onOpenChange={setIsSettingsDialogOpen}>
+          <DialogContent className="bg-zinc-900 border border-yellow-500/20 text-white">
+            <DialogHeader>
+              <DialogTitle>Shoutbox Settings</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="notification-audio" className="text-zinc-400">
+                  Notification Audio URL (must end with .mp3)
+                </Label>
+                <Input
+                  id="notification-audio"
+                  type="text"
+                  value={fva}
+                  onChange={(e) => setFva(e.target.value)}
+                  className="bg-zinc-800 text-white border-zinc-700"
+                  placeholder="/emojis/notify.mp3"
+                />
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox id="mute-sb" checked={msb} onCheckedChange={(checked) => setMsb(checked)} />
+                <Label htmlFor="mute-sb" className="text-zinc-400">
+                  Mute Shoutbox (no notifications)
+                </Label>
+              </div>
             </div>
-            <div className="mb-2 flex items-center">
-              <input
-                type="checkbox"
-                checked={msb}
-                onChange={(e) => setMsb(e.target.checked)}
-                id="mute-sb"
-                className="mr-2"
-              />
-              <label htmlFor="mute-sb" className="text-sm">
-                Mute Shoutbox (no notifications)
-              </label>
-            </div>
-            <div className="flex justify-end space-x-2 mt-4">
-              <button onClick={() => setIsSettingsDialogOpen(false)} className="px-4 py-2 bg-gray-300 rounded">
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setIsSettingsDialogOpen(false)}
+                className="bg-zinc-800 text-white hover:bg-zinc-700"
+              >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
-                  if (!fva.trim().endsWith('.mp3')) {
-                    alert('Audio URL must end with .mp3');
-                    return;
+                  if (!fva.trim().endsWith(".mp3")) {
+                    alert("Audio URL must end with .mp3")
+                    return
                   }
-                  localStorage.setItem('fva', fva);
-                  localStorage.setItem('msb', msb);
-                  // Reinitialize the audio if not muted
+                  localStorage.setItem("fva", fva)
+                  localStorage.setItem("msb", msb.toString())
                   if (!msb) {
-                    audioRef.current = new Audio(fva);
-                    audioRef.current.load();
+                    audioRef.current = new Audio(fva)
+                    audioRef.current.load()
                   }
-                  setIsSettingsDialogOpen(false);
+                  setIsSettingsDialogOpen(false)
                 }}
-                className="px-4 py-2 bg-blue-600 text-white rounded"
+                className="bg-yellow-500 text-black hover:bg-yellow-600"
               >
                 Save
-              </button>
-            </div>
-          </div>
-        </div>
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
 
       <style jsx global>{`
