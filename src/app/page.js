@@ -442,29 +442,26 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="text-center mb-8 select-none"
+            className="text-center mb-8"
           >
-            {/* Image Wrapper */}
             <motion.div
               className="relative inline-block cursor-pointer"
+              whileHover={{ filter: "brightness(0.8)" }}
+              transition={{ duration: 0.2 }}
               onClick={() => (window.location.href = "/")}
               title="Seized, but Never Silenced"
             >
-              {/* Logo Image with Shadow & Hover Effect */}
               <Image
                 src="https://i.postimg.cc/hjs7pc6G/suizedto-OG-hero-Logo.png"
                 alt="Suized Logo"
                 width={550}
-                height={120}
-                className="drop-shadow-[0_10px_20px_rgba(255,215,0,0.5)] 
-                     hover:brightness-90 transition-all duration-300 
-                     pointer-events-none"
+                height={138}
+                className="drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] filter drop-shadow-[0_0_25px_rgba(234,179,8,0.3)] pointer-events-none max-w-full h-auto"
                 draggable="false"
                 onContextMenu={(e) => e.preventDefault()}
+                priority
               />
             </motion.div>
-
-            {/* Bottom Text (Should Not Be Removed) */}
             <motion.div className="text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase mt-4">
               Seized, but Never Silenced
             </motion.div>
