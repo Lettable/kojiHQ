@@ -731,10 +731,10 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
                       <div className="relative group">
                         <div
                           className={`px-4 py-2 rounded-lg max-w-sm sm:max-w-sm md:max-w-md lg:max-w-lg ${message.userId === user?.userId
-                              ? "bg-blue-600 text-white"
-                              : isDarkTheme
-                                ? "bg-zinc-800 text-white"
-                                : "bg-zinc-200 text-black"
+                            ? "bg-blue-600 text-white"
+                            : isDarkTheme
+                              ? "bg-zinc-800 text-white"
+                              : "bg-zinc-200 text-black"
                             }`}
                         >
                           {message.userId !== user?.userId && (
@@ -756,7 +756,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
                           />
                         </div>
                         {message.userId === user?.userId && (
-                          <div className="absolute -top-2 right-2 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="absolute -top-3 right-7 mr-10 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
                               onClick={() => handleEditClick(message)}
                               className="p-1 rounded-sm bg-black/50 hover:bg-black/70 text-white/70 hover:text-white transition-colors"
@@ -835,7 +835,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
 
       {showDeleteModal && (
         <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
-          <DialogContent className="bg-zinc-900 border border-yellow-500/20 text-white">
+          <DialogContent className="bg-zinc-900 text-white">
             <DialogHeader>
               <DialogTitle>Confirm Delete</DialogTitle>
               <DialogDescription className="text-zinc-400">
@@ -846,7 +846,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
               <Button
                 variant="outline"
                 onClick={() => setShowDeleteModal(false)}
-                className="bg-zinc-800 text-white hover:bg-zinc-700"
+                className="bg-zinc-800 text-whit hover:text-white border-0  hover:bg-zinc-700"
               >
                 Cancel
               </Button>
@@ -860,7 +860,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
 
       {showEditModal && (
         <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
-          <DialogContent className="bg-zinc-900 border border-yellow-500/20 text-white">
+          <DialogContent className="bg-zinc-900 text-white">
             <DialogHeader>
               <DialogTitle>Edit Message</DialogTitle>
             </DialogHeader>
@@ -887,19 +887,19 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
                   className="bg-zinc-800 text-white border-zinc-700"
                   rows={3}
                 />
+                <EnhancedEmojiPicker
+                  onEmojiSelect={(emojiTitle) =>
+                    setEditContent((prev) => `${prev} ${emojiTitle}`.slice(0, MAX_MESSAGE_LENGTH))
+                  }
+                  isDarkTheme={isDarkTheme}
+                />
               </div>
-              <EnhancedEmojiPicker
-                onEmojiSelect={(emojiTitle) =>
-                  setEditContent((prev) => `${prev} ${emojiTitle}`.slice(0, MAX_MESSAGE_LENGTH))
-                }
-                isDarkTheme={isDarkTheme}
-              />
             </div>
             <DialogFooter>
               <Button
                 variant="outline"
                 onClick={() => setShowEditModal(false)}
-                className="bg-zinc-800 text-white hover:bg-zinc-700"
+                className="bg-zinc-800 text-whit hover:text-white border-0  hover:bg-zinc-700"
               >
                 Cancel
               </Button>
@@ -913,7 +913,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
 
       {isSettingsDialogOpen && (
         <Dialog open={isSettingsDialogOpen} onOpenChange={setIsSettingsDialogOpen}>
-          <DialogContent className="bg-zinc-900 border border-yellow-500/20 text-white">
+          <DialogContent className="bg-zinc-900 text-white">
             <DialogHeader>
               <DialogTitle>Shoutbox Settings</DialogTitle>
             </DialogHeader>
@@ -942,7 +942,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
               <Button
                 variant="outline"
                 onClick={() => setIsSettingsDialogOpen(false)}
-                className="bg-zinc-800 text-white hover:bg-zinc-700"
+                className="bg-zinc-800 text-whit hover:text-white border-0  hover:bg-zinc-700"
               >
                 Cancel
               </Button>
