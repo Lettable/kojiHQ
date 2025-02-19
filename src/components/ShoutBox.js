@@ -446,6 +446,36 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     }
   }, []);
 
+  const VB88_COMMAND_REGEX = /^\/vb88\s+(https?:\/\/.+\.mp3)$/i
+
+  const handleVB88Command = (messageContent) => {
+    const match = messageContent.match(VB88_COMMAND_REGEX)
+    if (match) {
+      const audioUrl = match[1]
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.send(
+          JSON.stringify({
+            type: "vb88_command",
+            audioUrl: audioUrl,
+          }),
+        )
+      }
+      setMessages((prev) => [
+        ...prev,
+        {
+          _id: `vb88-${Date.now()}`,
+          content: messageContent,
+          username: user.username,
+          userId: user.userId,
+          createdAt: new Date().toISOString(),
+          isVB88Command: true,
+        },
+      ])
+      return true
+    }
+    return false
+  }
+
   const scrollToBottom = useCallback(() => {
     setTimeout(() => {
       if (scrollAreaRef.current) {
@@ -473,13 +503,17 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
         const newMsg = parsedData.message;
         if (!newMsg || !newMsg.content) return;
 
-        // Check for mentions
+        if (parsedData.type === "vb88_command") {
+          const audio = new Audio(parsedData.audioUrl)
+          audio.play().catch(console.error)
+          return
+        }
+
         const mentionRegex = /@(\w+)/g;
         let match;
         while ((match = mentionRegex.exec(newMsg.content)) !== null) {
           if (match[1].toLowerCase() === usernameRef.current.toLowerCase()) {
             console.log('Mention detected:', newMsg.content);
-            // Only play audio if not muted (msb is false)
             if (!msb && audioRef.current) {
               audioRef.current.currentTime = 0;
               audioRef.current.play().catch((error) => {
@@ -619,6 +653,12 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
 
   const sendMessage = () => {
     if (!user || !newMessage.trim() || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+
+    if (handleVB88Command(newMessage.trim())) {
+      setNewMessage("")
+      scrollToBottom();
+      return
+    }
 
     const messageData = {
       username: user.username,
@@ -876,8 +916,8 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
                 />
               </div>
               <Label htmlFor="new-message" className="text-zinc-400 mt-2">
-                  New Message
-                </Label>
+                New Message
+              </Label>
               <div className='flex'>
                 <Textarea
                   id="new-message"
