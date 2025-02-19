@@ -98,6 +98,7 @@ export default function AuthPage() {
   //   }
   // };
   const handleMetaMaskAuth = async () => {
+    return setMessage({ type: 'error', text: 'Please wait for the official launch before logging in!' });
     try {
       if (!window.ethereum) {
         return toast({
@@ -152,40 +153,8 @@ export default function AuthPage() {
     }
   };
 
-  // const handleLogin = async (event) => {
-  //   event.preventDefault()
-  //   setIsLoginLoading(true)
-  //   setMessage(null)
-
-  //   const deviceDetails = getDeviceDetails();
-  //   const userIP = await getUserIP();
-
-  //   const email = event.target.loginEmail.value
-  //   const password = event.target.loginPassword.value
-
-  //   try {
-  //     const response = await fetch('/api/auth/signin', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ email, password, deviceDetails, userIP })
-  //     })
-  //     const data = await response.json()
-
-  //     if (response.ok) {
-  //       localStorage.setItem('accessToken', data.accessToken)
-  //       localStorage.setItem('theme', 'dark')
-  //       setMessage({ type: 'success', text: 'Logged in successfully!' })
-  //       router.push('/')
-  //     } else {
-  //       setMessage({ type: 'error', text: data.message || 'Login failed!' })
-  //     }
-  //   } catch (error) {
-  //     setMessage({ type: 'error', text: 'An error occurred during login.' })
-  //   } finally {
-  //     setIsLoginLoading(false)
-  //   }
-  // }
   const handleLogin = async (event) => {
+    return setMessage({ type: 'error', text: 'Please wait for the official launch before logging in!' });
     event.preventDefault();
     setIsLoginLoading(true);
     setMessage(null);
@@ -233,6 +202,7 @@ export default function AuthPage() {
   };
 
   const handleSendOtp = async (event) => {
+    return setMessage({ type: 'error', text: 'Please wait for the official launch before sign up!' });
     event.preventDefault()
     setIsSignupLoading(true)
     setMessage(null)
@@ -302,38 +272,6 @@ export default function AuthPage() {
   //   localStorage.setItem('accessToken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzMyMWMyNjIxMGUzZjdjZjBiNGExMjQiLCJ1c2VybmFtZSI6Ikd1ZXN0IiwiZW1haWwiOiJndWVzdEBzaWRlcHJvamVjdG9yLnZlcmNlbC5hcHAiLCJwcm9maWxlUGljIjoiaHR0cHM6Ly9lbmNyeXB0ZWQtdGJuMC5nc3RhdGljLmNvbS9pbWFnZXM_cT10Ym46QU5kOUdjUzItZmxLUU9JRThyaWJJbnVkSldwSXN5OTR2MUI3TE1DZW11QmY4UmNqcElZMVB0M2hMSFpSNXI3OHJYQkZXMGNJaFZnJnVzcXA9Q0FVIiwiaWF0Ijo5OTMxMzM3MjU4LCJleHAiOjk5MzE5NDIwNTh9.HlX4eyQhdaP_HwKEEf-aZOxyJ57jncvMxHfsBqm8s7o')
   //   router.push('/')
   // }
-
-  const continueAsGuest = async (event) => {
-    event.preventDefault()
-    setMessage(null)
-
-    const deviceDetails = getDeviceDetails();
-    const userIP = await getUserIP();
-
-    const email = 'guest@sideprojector.vercel.app'
-    const password = '12345678'
-
-    try {
-      const response = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, deviceDetails, userIP })
-      })
-      const data = await response.json()
-
-      if (response.ok) {
-        localStorage.setItem('accessToken', data.accessToken)
-        setMessage({ type: 'success', text: 'Logged in successfully!' })
-        router.push('/')
-      } else {
-        setMessage({ type: 'error', text: data.message || 'Login failed!' })
-      }
-    } catch (error) {
-      setMessage({ type: 'error', text: 'An error occurred during login.' })
-    } finally {
-      setIsLoginLoading(false)
-    }
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-900 p-4">
