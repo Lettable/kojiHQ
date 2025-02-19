@@ -504,7 +504,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
         console.log('Audio URL', parsedData.message.audioUrl)
         console.log('Type', parsedData.message.type)
 
-        if (parsedData.type === "vb88_command") {
+        if (parsedData.message.type === "vb88_command") {
           console.log('identified command type')
           if (audioRef.current) {
             console.log('Current Audio Ref Identified')
