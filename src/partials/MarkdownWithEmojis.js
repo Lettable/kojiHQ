@@ -120,7 +120,7 @@ const renderTextWithEmojis = (content, emojis, users) => {
   let processed = content.replace(emojiRegex, (match, emojiName) => {
     const emoji = emojis.find((e) => e.emojiTitle === `:${emojiName}:`);
     if (emoji) {
-      return `![${emoji.emojiTitle}](${emoji.emojiUrl} ${emoji.emojiTitle})`;
+      return `![${emoji.emojiTitle}](${emoji.emojiUrl} "Emoji")`;
     }
     return match;
   });

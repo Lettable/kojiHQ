@@ -20,6 +20,7 @@ import { ForumSection } from '@/components/ForumSection'
 import { useRouter } from 'next/navigation'
 import Image from "next/image"
 import ActivityFeed from '@/components/ActivityFeed'
+import { FiSettings } from 'react-icons/fi'
 
 export default function HomePage() {
   const [currentUser, setCurrentUser] = useState(null)
@@ -38,6 +39,7 @@ export default function HomePage() {
   const [currencies, setCurrencies] = useState()
   const [userStats, setUserStats] = useState({ reputation: 0, totalPosts: 0, totalThreads: 0, credits: 0 })
   const [error, setError] = useState(null);
+  const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
   const router = useRouter()
   const [scrollY, setScrollY] = useState(0)
 
@@ -167,8 +169,6 @@ export default function HomePage() {
       throw error;
     }
   }
-
-
 
   const fetchAnnouncements = async () => {
     try {
@@ -530,18 +530,23 @@ export default function HomePage() {
 
 
 
-
-
-
       <div className="container text-white mx-auto px-4 py-8">
         <div className="flex flex-col text-white lg:flex-row gap-8">
           <div className="lg:w-3/4 text-white space-y-8">
             <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
               <CardHeader className="pt-5 pl-10 pr-10 pb-5">
-                <CardTitle className="text-xl">Shoutbox</CardTitle>
+                <div className="flex items-center">
+                  <CardTitle className="text-lg">Shoutbox</CardTitle>
+                  <button
+                      onClick={() => setIsSettingsDialogOpen(true)}
+                      className="bg-transparent ml-2 h-6 w-6 text-white"
+                    >
+                    <FiSettings className="mr-2" />
+                  </button>
+                </div>
               </CardHeader>
               <CardContent className="h-[480px] p-1">
-                <Shoutbox />
+                <Shoutbox isSettingsDialogOpen={isSettingsDialogOpen} setIsSettingsDialogOpen={setIsSettingsDialogOpen}/>
               </CardContent>
             </Card>
 

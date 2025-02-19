@@ -381,6 +381,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
+import { PencilIcon, Trash2Icon } from 'lucide-react';
 const MAX_MESSAGE_LENGTH = 500;
 
 const formatTimestamp = (date) => {
@@ -405,7 +406,7 @@ const formatTimestamp = (date) => {
   }
 };
 
-export default function Shoutbox() {
+export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen }) {
   // Main state
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -430,7 +431,6 @@ export default function Shoutbox() {
   const [editContent, setEditContent] = useState('');
 
   // Settings dialog state and settings values
-  const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
   const [fva, setFva] = useState('/emojis/notify.mp3'); // favorite audio URL
   const [msb, setMsb] = useState(false); // mute shoutbox flag
 
@@ -702,15 +702,6 @@ export default function Shoutbox() {
   return (
     <div className={`flex flex-col h-full w-full`}>
       {/* Header with Shoutbox title and Settings Button */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-900">
-        <h2 className="text-lg text-white">Shoutbox</h2>
-        <button
-          onClick={() => setIsSettingsDialogOpen(true)}
-          className="bg-transparent ml-2 h-6 w-6 text-white"
-        >
-          <FiSettings />
-        </button>
-      </div>
 
       <main className="flex-grow flex flex-col overflow-hidden">
         <ScrollArea className="flex-grow" ref={scrollAreaRef} style={{ height: '500px' }}>
@@ -740,42 +731,43 @@ export default function Shoutbox() {
                       <div className="relative group">
                         <div
                           className={`px-4 py-2 rounded-lg max-w-sm sm:max-w-sm md:max-w-md lg:max-w-lg ${message.userId === user?.userId
-                              ? 'bg-blue-600 text-white'
+                              ? "bg-blue-600 text-white"
                               : isDarkTheme
-                                ? 'bg-zinc-800 text-white'
-                                : 'bg-zinc-200 text-black'
+                                ? "bg-zinc-800 text-white"
+                                : "bg-zinc-200 text-black"
                             }`}
                         >
                           {message.userId !== user?.userId && (
                             <>
                               <span
-                                className={`font-semibold text-sm ${message.usernameEffect} ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'}`}
+                                className={`font-semibold text-sm ${message.usernameEffect} ${isDarkTheme ? "text-gray-300" : "text-gray-600"
+                                  }`}
                               >
                                 {message.username}
-                              </span>{' '}
+                              </span>{" "}
                               {renderTextWithEmojis(message.statusEmoji, emojis)}
                             </>
                           )}
                           <MarkdownWithEmojis
                             content={message.content}
-                            style={{ backgroundColor: 'transparent', padding: 0, color: 'white' }}
+                            style={{ backgroundColor: "transparent", padding: 0, color: "white" }}
                             users={userData}
                             emojisData={emojis}
                           />
                         </div>
                         {message.userId === user?.userId && (
-                          <div className="absolute top-0 right-0 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="absolute -top-2 right-2 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
                               onClick={() => handleEditClick(message)}
-                              className="text-sm text-white bg-gray-600 rounded px-2 py-1"
+                              className="p-1 rounded-sm bg-black/50 hover:bg-black/70 text-white/70 hover:text-white transition-colors"
                             >
-                              Edit
+                              <PencilIcon className="h-3 w-3" />
                             </button>
                             <button
                               onClick={() => handleDeleteClick(message)}
-                              className="text-sm text-white bg-red-600 rounded px-2 py-1"
+                              className="p-1 rounded-sm bg-black/50 hover:bg-black/70 text-white/70 hover:text-white transition-colors"
                             >
-                              Delete
+                              <Trash2Icon className="h-3 w-3" />
                             </button>
                           </div>
                         )}
@@ -801,8 +793,8 @@ export default function Shoutbox() {
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value.slice(0, MAX_MESSAGE_LENGTH))}
                     className={`flex-grow min-h-[31px] max-h-[41px] resize-none ${isDarkTheme
-                        ? 'bg-white/5 border-white/10 focus:border-yellow-400/50'
-                        : 'bg-black/5 border-black/10 focus:border-yellow-600/50'
+                      ? 'bg-white/5 border-white/10 focus:border-yellow-400/50'
+                      : 'bg-black/5 border-black/10 focus:border-yellow-600/50'
                       } rounded-full py-2 px-4`}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && !e.shiftKey) {
