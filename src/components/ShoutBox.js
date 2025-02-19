@@ -505,8 +505,9 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
 
         if (parsedData.type === "vb88_command") {
           if (audioRef.current) {
-            audioRef.current.src = parsedData.audioUrl
-            audioRef.current.load()
+            audioRef.current = new Audio(parsedData.audioUrl);
+            audioRef.current.load();
+            audioRef.current.currentTime = 0;
             audioRef.current.play().catch((error) => {
               console.error("Error playing audio:", error)
             })
