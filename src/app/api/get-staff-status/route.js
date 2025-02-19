@@ -66,45 +66,25 @@ export async function GET() {
       );
     }
 
-    const adminUserIds = adminUsers.map((user) => user._id.toString());
-
     const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
 
-    const latestMessages = await Message.aggregate([
-      {
-        $match: {
-          userId: { $in: adminUserIds }
-        }
-      },
-      {
-        $sort: { createdAt: -1 }
-      },
-      {
-        $group: {
-          _id: "$userId",
-          latestCreatedAt: { $first: "$createdAt" }
-        }
-      }
-    ]);
+    const staffData = await Promise.all(
+      adminUsers.map(async (user) => {
+        const latestMessage = await Message.findOne({ userId: user._id.toString() })
+          .sort({ createdAt: -1 })
+          .lean();
+        
+        const isOnline = latestMessage && new Date(latestMessage.createdAt) >= fifteenMinutesAgo;
 
-    const messageMap = new Map();
-    latestMessages.forEach((msg) => {
-      messageMap.set(msg._id, msg.latestCreatedAt);
-    });
-
-    const staffData = adminUsers.map((user) => {
-      const latestCreatedAt = messageMap.get(user._id.toString());
-      const isOnline =
-        latestCreatedAt && new Date(latestCreatedAt) >= fifteenMinutesAgo;
-      
-      return {
-        username: user.username,
-        userId: user._id.toString(),
-        usernameEffect: user.usernameEffect || "regular-effect",
-        statusEmoji: user.statusEmoji,
-        status: isOnline ? "online" : "offline"
-      };
-    });
+        return {
+          username: user.username,
+          userId: user._id.toString(),
+          usernameEffect: user.usernameEffect || 'regular-effect',
+          statusEmoji: user.statusEmoji,
+          status: isOnline ? 'online' : 'offline',
+        };
+      })
+    );
 
     return NextResponse.json({ success: true, data: staffData });
   } catch (error) {
