@@ -519,7 +519,7 @@ export async function GET(req) {
   
       const reputationGivers = await User.find(
         { _id: { $in: user.reputationTaken } },
-        { username: 1, profilePic: 1, _id: 1 }
+        { username: 1, profilePic: 1, _id: 1, statusEmoji: 1, usernameEffect: 1 }
       );
   
       const totalLikes = threads.reduce((acc, thread) => acc + thread.likes, 0) +
@@ -569,7 +569,9 @@ export async function GET(req) {
         reputationGivers: reputationGivers.map(giver => ({
           userId: giver._id,
           username: giver.username,
-          profilePic: giver.profilePic
+          profilePic: giver.profilePic,
+          usernameEffect: giver.usernameEffect || "regular-effect",
+          statusEmoji: giver.statusEmoji,
         })),
         stats: {
           threads: threads.length,

@@ -76,7 +76,7 @@ export default function ForumUserProfile() {
         }
         fetchEmojis()
         fetchUserData()
-    }, [router, toast])
+    }, [router, toast, pathname])
 
     function extractSpotifyTrackId(url) {
         try {
@@ -269,8 +269,8 @@ export default function ForumUserProfile() {
                                                 <AvatarImage src={giver.profilePic} alt={giver.username} />
                                                 <AvatarFallback>{giver.username[0]}</AvatarFallback>
                                             </Avatar>
-                                            <a href={`/user/${giver.userId}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
-                                                <span className="font-medium">{giver.username}</span>
+                                            <a href={`/user/${giver.username}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
+                                                <span className={`font-medium ${giver.usernameEffect}`}>{giver.username}</span> {renderTextWithEmojis(giver.statusEmoji, emojis)}
                                             </a>
                                             <hr className='my-2 border-zinc-700' />
                                         </div>

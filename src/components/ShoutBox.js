@@ -255,7 +255,7 @@ export default function Shoutbox() {
                     className={`flex items-start space-x-3 ${message.userId === user?.userId ? 'justify-end' : 'justify-start'}`}
                   >
                     {message.userId !== user?.userId && (
-                      <Link href={`/user/${message.userId}`}>
+                      <Link href={`/user/${message.username}`}>
                         <img
                           src={message.profilePic || '/placeholder.svg?height=32&width=32'}
                           alt={message.username}
