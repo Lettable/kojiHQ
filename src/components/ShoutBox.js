@@ -500,14 +500,11 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     wsRef.current.onmessage = (event) => {
       try {
         const parsedData = JSON.parse(event.data);
-        const newMsg = parsedData.message;
-        if (!newMsg || !newMsg.content) return;
-
         if (parsedData.type === "vb88_command") {
           if (audioRef.current) {
-            audioRef.current = new Audio(parsedData.audioUrl);
-            audioRef.current.load();
-            audioRef.current.currentTime = 0;
+            audioRef.current = new Audio(parsedData.audioUrl)
+            audioRef.current.load()
+            audioRef.current.currentTime = 0
             audioRef.current.play().catch((error) => {
               console.error("Error playing audio:", error)
             })
@@ -516,6 +513,9 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
           }
           return
         }
+        
+        const newMsg = parsedData.message;
+        if (!newMsg || !newMsg.content) return;
 
         const mentionRegex = /@(\w+)/g;
         let match;
