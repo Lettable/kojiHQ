@@ -98,7 +98,7 @@ export default function AuthPage() {
   //   }
   // };
   const handleMetaMaskAuth = async () => {
-    return setMessage({ type: 'error', text: 'Please wait for the official launch before logging in!' });
+    // return setMessage({ type: 'error', text: 'Please wait for the official launch before logging in!' });
     try {
       if (!window.ethereum) {
         return toast({
@@ -154,7 +154,7 @@ export default function AuthPage() {
   };
 
   const handleLogin = async (event) => {
-    return setMessage({ type: 'error', text: 'Please wait for the official launch before logging in!' });
+    // return setMessage({ type: 'error', text: 'Please wait for the official launch before logging in!' });
     event.preventDefault();
     setIsLoginLoading(true);
     setMessage(null);
@@ -202,7 +202,7 @@ export default function AuthPage() {
   };
 
   const handleSendOtp = async (event) => {
-    return setMessage({ type: 'error', text: 'Please wait for the official launch before sign up!' });
+    // return setMessage({ type: 'error', text: 'Please wait for the official launch before sign up!' });
     event.preventDefault()
     setIsSignupLoading(true)
     setMessage(null)
@@ -267,11 +267,6 @@ export default function AuthPage() {
       setIsSignupLoading(false)
     }
   }
-
-  // const continueAsGuest = () => {
-  //   localStorage.setItem('accessToken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzMyMWMyNjIxMGUzZjdjZjBiNGExMjQiLCJ1c2VybmFtZSI6Ikd1ZXN0IiwiZW1haWwiOiJndWVzdEBzaWRlcHJvamVjdG9yLnZlcmNlbC5hcHAiLCJwcm9maWxlUGljIjoiaHR0cHM6Ly9lbmNyeXB0ZWQtdGJuMC5nc3RhdGljLmNvbS9pbWFnZXM_cT10Ym46QU5kOUdjUzItZmxLUU9JRThyaWJJbnVkSldwSXN5OTR2MUI3TE1DZW11QmY4UmNqcElZMVB0M2hMSFpSNXI3OHJYQkZXMGNJaFZnJnVzcXA9Q0FVIiwiaWF0Ijo5OTMxMzM3MjU4LCJleHAiOjk5MzE5NDIwNTh9.HlX4eyQhdaP_HwKEEf-aZOxyJ57jncvMxHfsBqm8s7o')
-  //   router.push('/')
-  // }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-900 p-4">
@@ -363,9 +358,9 @@ export default function AuthPage() {
                 >
                   <Button
                     className="bg-[#F6851B] hover:bg-[#D76D1A] w-full text-white flex items-center justify-center"
-                    onClick={handleMetaMaskAuth} // Use onClick instead of asChild
+                    onClick={handleMetaMaskAuth} 
                   >
-                    <FaEthereum className="h-5 w-5" /> {/* Add margin to the right for spacing */}
+                    <FaEthereum className="h-5 w-5" />
                     Go with MetaMask
                   </Button>
                 </motion.div>
