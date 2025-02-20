@@ -371,6 +371,7 @@ import { useRouter } from 'next/navigation';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import MarkdownWithEmojis from '@/partials/MarkdownWithEmojis';
 import GifPicker from './gifPicker';
+import ImageUploader from './imgUpload';
 import {
   Dialog,
   DialogContent,
@@ -690,6 +691,13 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     })
   }
 
+  const handleImageUpload = (imageMarkdown) => {
+    setNewMessage((prev) => {
+      const messageWithoutImage = prev.replace(/!\[.*?\]$$.*?$$/g, "").trim()
+      return `${messageWithoutImage} ${imageMarkdown}`.trim().slice(0, MAX_MESSAGE_LENGTH)
+    })
+  }
+
   const sendMessage = () => {
     if (!user || !newMessage.trim() || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
     const correctedTime = new Date(Date.now() + timeOffset).toISOString();
@@ -780,8 +788,6 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
 
   return (
     <div className={`flex flex-col h-full w-full`}>
-      {/* Header with Shoutbox title and Settings Button */}
-
       <main className="flex-grow flex flex-col overflow-hidden">
         <ScrollArea className="flex-grow" ref={scrollAreaRef} style={{ height: '500px' }}>
           <div className="p-4 space-y-4">
@@ -867,6 +873,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
             user ? (
               user.isAuthorized ? (
                 <div className="flex items-center space-x-2 min-h-[31px] max-h-[41px]">
+                  <ImageUploader onImageUpload={handleImageUpload} isDarkTheme={isDarkTheme} />
                   <Textarea
                     placeholder="Type your message..."
                     value={newMessage}
