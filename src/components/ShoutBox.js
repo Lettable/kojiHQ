@@ -440,7 +440,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
   useEffect(() => {
     // Fetch server time and compute offset (in milliseconds)
     const fetchServerTime = async () => {
-      const res = await fetch('/api/server-time');
+      const res = await fetch('/api/mics/s-t');
       const data = await res.json();
       const serverTime = new Date(data.serverTime).getTime();
       const clientTime = Date.now();
