@@ -3,16 +3,26 @@
 import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Progress } from "@/components/ui/progress"
 import { ImageIcon, Upload } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
+import { Toaster } from "./ui/toaster"
 
-export default function ImageUploader({ onImageUpload, isDarkTheme }) {
+const CustomProgressLoader = ({ progress }) => (
+  <div className="w-full h-2 bg-zinc-700 rounded-full overflow-hidden">
+    <div
+      className="h-full bg-gradient-to-r from-yellow-500 to-yellow-300 transition-all duration-300 ease-out"
+      style={{ width: `${progress}%` }}
+    />
+  </div>
+)
+
+export default function ImageUploader({onImageUpload, isDarkTheme}) {
   const [isOpen, setIsOpen] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef(null)
+  const toast = useToast()
 
   async function uploadImage(base64Image) {
     const API_KEY = "dcf61c7abd01f1d764140f9cdb3d36cc"
@@ -134,7 +144,7 @@ export default function ImageUploader({ onImageUpload, isDarkTheme }) {
             <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />
             {isUploading ? (
               <div className="w-full space-y-4">
-                <Progress value={uploadProgress} className="w-full" />
+                <CustomProgressLoader progress={uploadProgress} />
                 <p className="text-center text-sm">Uploading... {uploadProgress}%</p>
               </div>
             ) : (
@@ -151,6 +161,7 @@ export default function ImageUploader({ onImageUpload, isDarkTheme }) {
           </div>
         </DialogContent>
       </Dialog>
+      <Toaster />
     </>
   )
 }
