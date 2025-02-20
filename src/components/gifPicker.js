@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { FileImage, Search } from "lucide-react"
+import { FaFileImage } from "react-icons/fa"
 import { debounce } from "lodash"
 
 const TENOR_KEY = "LIVDSRZULELA"
@@ -119,7 +120,7 @@ export default function GifPicker({ onGifSelect, isDarkTheme}) {
                         : "bg-white text-black border-zinc-500 hover:text-black hover:bg-zinc-200"
                     }`}
             >
-                <FileImage className="h-5 w-5" />
+                <FaFileImage className="h-5 w-5" />
             </Button>
 
             <AnimatePresence>
