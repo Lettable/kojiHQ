@@ -461,7 +461,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
           }),
         )
       }
-      const comSigma = `${user.username} started a new brainrot :peepo-okq: :peeposad:`;
+      const comSigma = `**@${user.username} started a new song [link](${audioUrl}) :thumbs-up-glasses:**`;
       const messageData = {
         username: user.username,
         usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
