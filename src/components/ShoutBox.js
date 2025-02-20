@@ -435,6 +435,21 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
   const [fva, setFva] = useState('/emojis/notify.mp3'); // favorite audio URL
   const [msb, setMsb] = useState(false); // mute shoutbox flag
 
+  // Store this offset in state or a ref
+  const [timeOffset, setTimeOffset] = useState(0);
+  useEffect(() => {
+    // Fetch server time and compute offset (in milliseconds)
+    const fetchServerTime = async () => {
+      const res = await fetch('/api/server-time');
+      const data = await res.json();
+      const serverTime = new Date(data.serverTime).getTime();
+      const clientTime = Date.now();
+      return serverTime - clientTime; // positive if server is ahead
+    };
+
+    fetchServerTime().then(offset => setTimeOffset(offset));
+  }, []);
+
   // Load settings from localStorage and initialize audio
   useEffect(() => {
     const storedFva = localStorage.getItem('fva') || '/emojis/notify.mp3';
@@ -454,6 +469,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     if (match) {
       const audioUrl = match[1]
       const comSigma = `**@${user.username} started a new song [link](${audioUrl}) :thumbs-up-glasses:**`;
+      const correctedTime = new Date(Date.now() + timeOffset).toISOString();
       const messageData = {
         username: user.username,
         type: "vb88_command",
@@ -463,7 +479,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
         userId: user.userId,
         statusEmoji: statusEmoji,
         profilePic: user.profilePic,
-        createdAt: new Date().toISOString(),
+        createdAt: correctedTime,
       };
 
       if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -676,7 +692,8 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
 
   const sendMessage = () => {
     if (!user || !newMessage.trim() || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
-
+    const correctedTime = new Date(Date.now() + timeOffset).toISOString();
+    
     if (handleVB88Command(newMessage.trim())) {
       setNewMessage("")
       scrollToBottom();
@@ -690,7 +707,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       userId: user.userId,
       statusEmoji: statusEmoji,
       profilePic: user.profilePic,
-      createdAt: new Date().toISOString(),
+      createdAt: correctedTime,
     };
 
     wsRef.current.send(JSON.stringify(messageData));
@@ -865,7 +882,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
                       }
                     }}
                   />
-                  <GifPicker onGifSelect={handleGifSelect} isDarkTheme={isDarkTheme}/>
+                  <GifPicker onGifSelect={handleGifSelect} isDarkTheme={isDarkTheme} />
                   <EnhancedEmojiPicker onEmojiSelect={handleEmojiSelect} isDarkTheme={isDarkTheme} />
                   <Button
                     onClick={sendMessage}
