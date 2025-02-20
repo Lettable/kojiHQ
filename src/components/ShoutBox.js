@@ -370,6 +370,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import MarkdownWithEmojis from '@/partials/MarkdownWithEmojis';
+import GifPicker from './gifPicker';
 import {
   Dialog,
   DialogContent,
@@ -460,17 +461,22 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
           }),
         )
       }
+      const comSigma = new RegExp(`^User ${user.username} started a new brainrot :peepo-okq: :peeposad:$`);
+      const messageData = {
+        username: user.username,
+        usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
+        content: comSigma,
+        userId: user.userId,
+        statusEmoji: statusEmoji,
+        profilePic: user.profilePic,
+        createdAt: new Date().toISOString(),
+      };
+      wsRef.current.send(JSON.stringify(messageData));
       setMessages((prev) => [
         ...prev,
-        {
-          _id: `vb88-${Date.now()}`,
-          content: messageContent,
-          username: user.username,
-          userId: user.userId,
-          createdAt: new Date().toISOString(),
-          isVB88Command: true,
-        },
+        messageData,
       ])
+      setNewMessage('');
       return true
     }
     return false
@@ -518,7 +524,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
           }
           return
         }
-        
+
         const newMsg = parsedData.message;
         if (!newMsg || !newMsg.content) return;
 
@@ -663,6 +669,13 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
   const handleEmojiSelect = (emojiTitle) => {
     setNewMessage(prev => `${prev} ${emojiTitle}`.slice(0, MAX_MESSAGE_LENGTH));
   };
+
+  const handleGifSelect = (gifMarkdown) => {
+    setNewMessage((prev) => {
+      const messageWithoutGif = prev.replace(/!\[.*?\]$$.*?$$/g, "").trim()
+      return `${messageWithoutGif} ${gifMarkdown}`.trim().slice(0, MAX_MESSAGE_LENGTH)
+    })
+  }
 
   const sendMessage = () => {
     if (!user || !newMessage.trim() || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
@@ -855,6 +868,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
                       }
                     }}
                   />
+                  <GifPicker onGifSelect={handleGifSelect} isDarkTheme={isDarkTheme}/>
                   <EnhancedEmojiPicker onEmojiSelect={handleEmojiSelect} isDarkTheme={isDarkTheme} />
                   <Button
                     onClick={sendMessage}
