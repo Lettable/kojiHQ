@@ -545,7 +545,7 @@ export default function HomePage() {
                   </button>
                 </div>
               </CardHeader>
-              <CardContent className="h-[480px] p-1">
+              <CardContent className="h-[550px] p-1">
                 <Shoutbox isSettingsDialogOpen={isSettingsDialogOpen} setIsSettingsDialogOpen={setIsSettingsDialogOpen}/>
               </CardContent>
             </Card>
