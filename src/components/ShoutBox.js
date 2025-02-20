@@ -841,7 +841,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
                           />
                         </div>
                         {message.userId === user?.userId && (
-                          <div className="absolute -top-3 right-7 mr-10 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="absolute -top-3 right-2 mr-10 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
                               onClick={() => handleEditClick(message)}
                               className="p-1 rounded-sm bg-black/50 hover:bg-black/70 text-white/70 hover:text-white transition-colors"

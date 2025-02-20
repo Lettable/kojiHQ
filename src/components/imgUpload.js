@@ -128,7 +128,7 @@ export default function ImageUploader({onImageUpload, isDarkTheme}) {
             <DialogTitle>Upload Image</DialogTitle>
           </DialogHeader>
           <div
-            className={`mt-4 flex flex-col items-center justify-center border-4 border-dashed rounded-lg p-6 transition-colors ${isDragging ? "border-yellow-500 bg-yellow-500/10" : isDarkTheme ? "border-zinc-700 hover:border-yellow-500/50" : "border-zinc-300 hover:border-yellow-500/50"}`}
+            className={`mt-4 flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 transition-colors ${isDragging ? "border-yellow-500 bg-yellow-500/10" : isDarkTheme ? "border-zinc-700 hover:border-yellow-500/50" : "border-zinc-300 hover:border-yellow-500/50"}`}
             onDragOver={(e) => {
               e.preventDefault()
               setIsDragging(true)
