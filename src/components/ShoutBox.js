@@ -453,17 +453,11 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     const match = messageContent.match(VB88_COMMAND_REGEX)
     if (match) {
       const audioUrl = match[1]
-      if (wsRef.current?.readyState === WebSocket.OPEN) {
-        wsRef.current.send(
-          JSON.stringify({
-            type: "vb88_command",
-            audioUrl: audioUrl,
-          }),
-        )
-      }
       const comSigma = `**@${user.username} started a new song [link](${audioUrl}) :thumbs-up-glasses:**`;
       const messageData = {
         username: user.username,
+        type: "vb88_command",
+        audioUrl: audioUrl,
         usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
         content: comSigma,
         userId: user.userId,
@@ -471,7 +465,10 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
         profilePic: user.profilePic,
         createdAt: new Date().toISOString(),
       };
-      wsRef.current.send(JSON.stringify(messageData));
+
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.send(JSON.stringify(messageData))
+      }
       setMessages((prev) => [
         ...prev,
         messageData,
