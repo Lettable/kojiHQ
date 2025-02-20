@@ -3,8 +3,7 @@
 import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Upload } from "lucide-react"
-import { FaImage } from "react-icons/fa"
+import { ImageIcon, Upload } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Toaster } from "./ui/toaster"
 
@@ -119,7 +118,7 @@ export default function ImageUploader({onImageUpload, isDarkTheme}) {
           isDarkTheme ? "bg-white/0" : "bg-white text-black border-zinc-500 hover:text-black hover:bg-zinc-200"
         }`}
       >
-        <FaImage className="h-5 w-5" />
+        <ImageIcon className="h-5 w-5" />
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen} className="border-0">
