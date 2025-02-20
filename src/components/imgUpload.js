@@ -3,7 +3,8 @@
 import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { ImageIcon, Upload } from "lucide-react"
+import { Upload } from "lucide-react"
+import { FaImage } from "react-icons/fa"
 import { useToast } from "@/hooks/use-toast"
 import { Toaster } from "./ui/toaster"
 
@@ -114,26 +115,20 @@ export default function ImageUploader({onImageUpload, isDarkTheme}) {
         onClick={() => setIsOpen(true)}
         variant="ghost"
         size="icon"
-        className={`text-white hover:text-white hover:bg-white/10 ${
+        className={`text-white p-2 hover:text-white hover:bg-white/10 ${
           isDarkTheme ? "bg-white/0" : "bg-white text-black border-zinc-500 hover:text-black hover:bg-zinc-200"
         }`}
       >
-        <ImageIcon className="h-5 w-5" />
+        <FaImage className="h-5 w-5" />
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className={`sm:max-w-md ${isDarkTheme ? "bg-zinc-900 text-white" : "bg-white text-black"}`}>
+        <DialogContent className={`sm:max-w-md ${isDarkTheme ? "bg-black/90 text-white" : "bg-black/90 text-white"}`}>
           <DialogHeader>
             <DialogTitle>Upload Image</DialogTitle>
           </DialogHeader>
           <div
-            className={`mt-4 flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 transition-colors ${
-              isDragging
-                ? "border-yellow-500 bg-yellow-500/10"
-                : isDarkTheme
-                  ? "border-zinc-700 hover:border-yellow-500/50"
-                  : "border-zinc-300 hover:border-yellow-500/50"
-            }`}
+            className={`mt-4 flex flex-col items-center justify-center border-0 border-dashed rounded-lg p-6 transition-colors ${isDragging ? "border-yellow-500 bg-yellow-500/10" : isDarkTheme ? "border-zinc-700 hover:border-yellow-500/50" : "border-zinc-300 hover:border-yellow-500/50"}`}
             onDragOver={(e) => {
               e.preventDefault()
               setIsDragging(true)
