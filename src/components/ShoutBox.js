@@ -461,7 +461,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
           }),
         )
       }
-      const comSigma = new RegExp(`^User ${user.username} started a new brainrot :peepo-okq: :peeposad:$`);
+      const comSigma = `User /``${user.username}``/ started a new brainrot :peepo-okq: :peeposad:`;
       const messageData = {
         username: user.username,
         usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",

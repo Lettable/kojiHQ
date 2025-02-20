@@ -71,7 +71,7 @@ export default function GifPicker({ onGifSelect, isDarkTheme}) {
     }, [isOpen])
 
     const searchGifs = async (query) => {
-        setIsLoading(true)
+        setIsLoading(false)
         try {
             const response = await fetch(`${SEARCH_URL}&q=${encodeURIComponent(query)}`)
             const data = await response.json()
@@ -130,7 +130,7 @@ export default function GifPicker({ onGifSelect, isDarkTheme}) {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: position === "top" ? 20 : -20 }}
                         transition={{ duration: 0.2 }}
-                        className={`absolute ${position === "top" ? "bottom-full mb-2" : "top-full mt-2"} right-0 w-96 ${isDarkTheme ? "bg-black/90 text-white" : "bg-white text-black"
+                        className={`absolute ${position === "top" ? "bottom-full mb-2" : "h-[350px] mt-2"} right-0 w-96 ${isDarkTheme ? "bg-black/90 text-white" : "bg-white text-black"
                             } backdrop-blur-xl border border-white/10 rounded-lg shadow-lg overflow-hidden z-50`}
                     >
                         <div className="p-4">
