@@ -519,7 +519,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
 
         if (parsedData.message.type === "vb88_command") {
           console.log('Identified Rizz')
-          if (audioRef.current) {
+          if (!msb && audioRef.current) {
             console.log('Current Audio Ref Identified Sigma')
             audioRef.current = new Audio(parsedData.message.audioUrl)
             audioRef.current.load()
@@ -1014,7 +1014,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
               <div className="flex items-center space-x-2">
                 <Checkbox id="mute-sb" checked={msb} onCheckedChange={(checked) => setMsb(checked)} />
                 <Label htmlFor="mute-sb" className="text-zinc-400">
-                  Mute Shoutbox (no notifications)
+                  Mute Shoutbox (no notifications or songs)
                 </Label>
               </div>
             </div>
