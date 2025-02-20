@@ -468,7 +468,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     const match = messageContent.match(VB88_COMMAND_REGEX)
     if (match) {
       const audioUrl = match[1]
-      const comSigma = `**@${user.username} started a new song [link](${audioUrl}) :thumbs-up-glasses:**`;
+      const comSigma = `**@${user.username} started a new [song](${audioUrl}) :thumbs-up-glasses:**`;
       const correctedTime = new Date(Date.now() + timeOffset).toISOString();
       const messageData = {
         username: user.username,
@@ -485,10 +485,6 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       if (wsRef.current?.readyState === WebSocket.OPEN) {
         wsRef.current.send(JSON.stringify(messageData))
       }
-      setMessages((prev) => [
-        ...prev,
-        messageData,
-      ])
       setNewMessage('');
       return true
     }
