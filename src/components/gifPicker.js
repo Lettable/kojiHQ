@@ -165,7 +165,7 @@ export default function GifPicker({ onGifSelect, isDarkTheme}) {
                                             className="relative aspect-video rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-yellow-500/50 transition-all"
                                         >
                                             <img
-                                                src={gif.media[0].tinygif.preview || "/placeholder.svg"}
+                                                src={gif.media[0].tinygif.url || "/placeholder.svg"}
                                                 alt=""
                                                 className="w-full h-full object-cover"
                                                 loading="lazy"
