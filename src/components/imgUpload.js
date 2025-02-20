@@ -122,13 +122,13 @@ export default function ImageUploader({onImageUpload, isDarkTheme}) {
         <FaImage className="h-5 w-5" />
       </Button>
 
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className={`sm:max-w-md ${isDarkTheme ? "bg-black/90 text-white" : "bg-black/90 text-white"}`}>
+      <Dialog open={isOpen} onOpenChange={setIsOpen} className="border-0">
+        <DialogContent className={`sm:max-w-md border-0 ${isDarkTheme ? "bg-zinc-900 text-white" : "bg-white text-black"}`}>
           <DialogHeader>
             <DialogTitle>Upload Image</DialogTitle>
           </DialogHeader>
           <div
-            className={`mt-4 flex flex-col items-center justify-center border-0 border-dashed rounded-lg p-6 transition-colors ${isDragging ? "border-yellow-500 bg-yellow-500/10" : isDarkTheme ? "border-zinc-700 hover:border-yellow-500/50" : "border-zinc-300 hover:border-yellow-500/50"}`}
+            className={`mt-4 flex flex-col items-center justify-center border-4 border-dashed rounded-lg p-6 transition-colors ${isDragging ? "border-yellow-500 bg-yellow-500/10" : isDarkTheme ? "border-zinc-700 hover:border-yellow-500/50" : "border-zinc-300 hover:border-yellow-500/50"}`}
             onDragOver={(e) => {
               e.preventDefault()
               setIsDragging(true)
@@ -148,7 +148,7 @@ export default function ImageUploader({onImageUpload, isDarkTheme}) {
                 <p className={`mt-2 text-sm ${isDarkTheme ? "text-zinc-400" : "text-zinc-600"}`}>
                   Drag and drop an image, or click to select
                 </p>
-                <Button onClick={() => fileInputRef.current?.click()} variant="outline" className="mt-4">
+                <Button onClick={() => fileInputRef.current?.click()} variant="outline" className="mt-4 text-black hover:text-black hover:bg-zinc-200">
                   Select Image
                 </Button>
               </>
