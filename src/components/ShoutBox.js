@@ -532,6 +532,10 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
             audioRef.current.play().catch((error) => {
               console.error("Error playing audio:", error)
             })
+            setMessages((prev) => [
+              ...prev,
+              { ...parsedData.message, _id: parsedData.message._id || `temp-${Date.now()}` },
+            ]);
           } else {
             console.error("Audio reference is not available")
           }
@@ -693,7 +697,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
   const sendMessage = () => {
     if (!user || !newMessage.trim() || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
     const correctedTime = new Date(Date.now() + timeOffset).toISOString();
-    
+
     if (handleVB88Command(newMessage.trim())) {
       setNewMessage("")
       scrollToBottom();
