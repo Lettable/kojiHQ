@@ -1437,14 +1437,14 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       setIsDarkTheme(storedTheme ? storedTheme === "dark" : true)
     }
 
-    return () => {
-      if (wsRef.current) {
-        wsRef.current.close()
-      }
-      if (reconnectTimeoutRef.current) {
-        clearTimeout(reconnectTimeoutRef.current)
-      }
-    }
+    // return () => {
+    //   if (wsRef.current) {
+    //     wsRef.current.close()
+    //   }
+    //   if (reconnectTimeoutRef.current) {
+    //     clearTimeout(reconnectTimeoutRef.current)
+    //   }
+    // }
   }, [connectWebSocket, scrollToBottom])
 
   const sendMessage = async () => {
