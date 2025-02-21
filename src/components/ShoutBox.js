@@ -460,7 +460,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       audioRef.current.load();
     }
   }, []);
-  
+
   const boss = {
     username: "Suized",
     userId: "67a5f8eb3707affe11e788a8",
@@ -496,66 +496,89 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     return false
   }
 
-  const GIFT_COMMAND_REGEX = /^\/gift\s+(\d+)\s+@(\w+)$/i;
+  const GIFT_COMMAND_REGEX = /^\/gift\s+(\d+)\s+@(\w+)\s*$/i;
   const handleGiftCommand = async (messageContent) => {
-    const match = messageContent.match(GIFT_COMMAND_REGEX);
-    if (match) {
-      const amount = Number(match[1]);
-      const targetUsername = match[2];
-
-      const token = localStorage.getItem('accessToken');
-      const requestBody = {
-        uid: currentUser.userId,
-        am: amount,
-        to: targetUsername,
-        tk: token,
-      };
-
-      try {
-        const res = await fetch('/api/mics/gf-cmd', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(requestBody),
-        });
-        const result = await res.json();
-
-        let bossMessage = '';
-        if (!result.success) {
-          if (result.message.toLowerCase().includes("not enough credits")) {
-            bossMessage = `You gotta top up before gifting @${targetUsername}!`;
-          } else {
-            bossMessage = result.message;
-          }
-        } else {
-          bossMessage = `The gift of ${amount} credits has been transferred to @${targetUsername}!`;
-        }
-
+    if (messageContent.startsWith('/gift')) {
+      if (!GIFT_COMMAND_REGEX.test(messageContent)) {
+        const errorMessage = `Incorrect command format asshole. Correct usage: /gift 10 @Suized`;
         const correctedTime = new Date(Date.now() + timeOffset).toISOString();
-
         const bossData = {
           username: boss.username,
           userId: boss.userId,
           profilePic: boss.profilePic,
           usernameEffect: boss.usernameEffect,
           statusEmoji: boss.statusEmoji,
-          content: bossMessage,
+          content: errorMessage,
           createdAt: correctedTime,
-          type: 'gift_command',
+          type: 'gift_command_error'
         };
-
         if (wsRef.current?.readyState === WebSocket.OPEN) {
           wsRef.current.send(JSON.stringify(bossData));
         }
-        setNewMessage('');
         return true;
-      } catch (error) {
-        console.error("Gift command error:", error);
-        return false;
+      }
+
+      const match = messageContent.match(GIFT_COMMAND_REGEX);
+      if (match) {
+        const amount = Number(match[1]);
+        const targetUsername = match[2];
+        const token = localStorage.getItem('accessToken');
+        const requestBody = {
+          uid: currentUser.userId,
+          am: amount,
+          to: targetUsername,
+          tk: token,
+        };
+
+        try {
+          const res = await fetch('/api/gift', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody),
+          });
+          const result = await res.json();
+
+          let bossMessage = '';
+          if (!result.success) {
+            if (result.message.toLowerCase().includes("not enough credits")) {
+              bossMessage = `You gotta top up before gifting @${targetUsername}!`;
+            } else if (result.message.toLowerCase().includes("target user not found")) {
+              bossMessage = `@${targetUsername} doesn't exist. Check the username and try again!`;
+            } else if (result.message.toLowerCase().includes("unauthorized")) {
+              bossMessage = `Unauthorized action Nigga, @${currentUser.username}!`;
+            } else if (result.message.toLowerCase().includes("invalid token")) {
+              bossMessage = `Your session is invalid. Please log in again, @${currentUser.username}.`;
+            } else {
+              bossMessage = result.message;
+            }
+          } else {
+            bossMessage = `The gift of ${amount} credits has been transferred to @${targetUsername}!`;
+          }
+
+          const correctedTime = new Date(Date.now() + timeOffset).toISOString();
+          const bossData = {
+            username: boss.username,
+            userId: boss.userId,
+            profilePic: boss.profilePic,
+            usernameEffect: boss.usernameEffect,
+            statusEmoji: boss.statusEmoji,
+            content: bossMessage,
+            createdAt: correctedTime,
+            type: 'gift_command'
+          };
+
+          if (wsRef.current?.readyState === WebSocket.OPEN) {
+            wsRef.current.send(JSON.stringify(bossData));
+          }
+          return true;
+        } catch (error) {
+          console.error("Gift command error:", error);
+          return false;
+        }
       }
     }
     return false;
   };
-
 
   const scrollToBottom = useCallback(() => {
     setTimeout(() => {
@@ -760,7 +783,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     })
   }
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!user || !newMessage.trim() || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
     const correctedTime = new Date(Date.now() + timeOffset).toISOString();
 
@@ -768,6 +791,12 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       setNewMessage("")
       scrollToBottom();
       return
+    }
+
+    if (await handleGiftCommand(newMessage.trim())) {
+      setNewMessage('');
+      scrollToBottom();
+      return;
     }
 
     const messageData = {
