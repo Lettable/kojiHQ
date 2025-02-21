@@ -502,6 +502,18 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       if (!GIFT_COMMAND_REGEX.test(messageContent)) {
         const errorMessage = `Incorrect command format asshole. Correct usage: /gift 10 @Suized`;
         const correctedTime = new Date(Date.now() + timeOffset).toISOString();
+        const userShit = {
+          username: user.username,
+          usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
+          content: newMessage.slice(0, MAX_MESSAGE_LENGTH),
+          userId: user.userId,
+          statusEmoji: statusEmoji,
+          profilePic: user.profilePic,
+          createdAt: correctedTime,
+        };
+        if (wsRef.current?.readyState === WebSocket.OPEN) {
+          wsRef.current.send(JSON.stringify(userShit));
+        }
         const bossData = {
           username: boss.username,
           userId: boss.userId,
@@ -524,7 +536,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
         const targetUsername = match[2];
         const token = localStorage.getItem('accessToken');
         const requestBody = {
-          uid: currentUser.userId,
+          uid: user.userId,
           am: amount,
           to: targetUsername,
           tk: token,
@@ -545,9 +557,9 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
             } else if (result.message.toLowerCase().includes("target user not found")) {
               bossMessage = `@${targetUsername} doesn't exist. Check the username and try again!`;
             } else if (result.message.toLowerCase().includes("unauthorized")) {
-              bossMessage = `Unauthorized action Nigga, @${currentUser.username}!`;
+              bossMessage = `Unauthorized action Nigga, @${user.username}!`;
             } else if (result.message.toLowerCase().includes("invalid token")) {
-              bossMessage = `Your session is invalid. Please log in again, @${currentUser.username}.`;
+              bossMessage = `Your session is invalid. Please log in again, @${user.username}.`;
             } else {
               bossMessage = result.message;
             }
@@ -556,6 +568,18 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
           }
 
           const correctedTime = new Date(Date.now() + timeOffset).toISOString();
+          const userShit = {
+            username: user.username,
+            usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
+            content: newMessage.slice(0, MAX_MESSAGE_LENGTH),
+            userId: user.userId,
+            statusEmoji: statusEmoji,
+            profilePic: user.profilePic,
+            createdAt: correctedTime,
+          };
+          if (wsRef.current?.readyState === WebSocket.OPEN) {
+            wsRef.current.send(JSON.stringify(userShit));
+          }
           const bossData = {
             username: boss.username,
             userId: boss.userId,
