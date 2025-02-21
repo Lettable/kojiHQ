@@ -383,41 +383,51 @@ export default function ForumView() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
-      <div className="mx-auto max-w-7xl px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <Link
-            href="/"
-            className="mb-6 inline-flex items-center text-sm text-yellow-500 transition-colors hover:text-yellow-400"
-          >
-            <ChevronLeft className="mr-1 h-4 w-4" />
-            Back to Forums
-          </Link>
-          <div className="mb-6">
-            <h1 className="mb-2 text-3xl font-bold text-white">{forumData.name}</h1>
-            <p className="text-lg text-zinc-400">{forumData.description}</p>
-          </div>
-          <div className="flex items-center space-x-6 text-sm text-zinc-400">
-            <span className="flex items-center">
-              <MessageSquare className="mr-2 h-4 w-4" />
-              {forumData.totalThreads} threads
-            </span>
-            <span className="flex items-center">
-              <Users className="mr-2 h-4 w-4" />
-              {forumData.totalPosts} posts
-            </span>
-            <span className="flex items-center">
-              <Clock className="mr-2 h-4 w-4" />
-              Last active {forumData.lastActive}
-            </span>
+    <div className={`min-h-screen ${isDarkTheme ? "bg-black text-white" : "bg-white text-black"}`}>
+      <style jsx global>{`
+        :root {
+          font-size: 85%;
+        }
+      `}</style>
+      {/* Hero Section */}
+      <section className={`py-12 text-white ${isDarkTheme ? "bg-zinc-900/50" : "bg-gray-100"}`}>
+        <div className="container mx-auto px-3 max-w-[85%]">
+          {/* Header */}
+          <div className="mb-8">
+            <Link
+              href="/"
+              className="mb-6 inline-flex items-center text-sm text-yellow-500 transition-colors hover:text-yellow-400"
+            >
+              <ChevronLeft className="mr-1 h-4 w-4" />
+              Back to Forums
+            </Link>
+            <div className="mb-6">
+              <h1 className="mb-2 text-3xl font-bold text-white">{forumData.name}</h1>
+              <p className="text-lg text-zinc-400">{forumData.description}</p>
+            </div>
+            <div className="flex items-center space-x-6 text-sm text-zinc-400">
+              <span className="flex items-center">
+                <MessageSquare className="mr-2 h-4 w-4" />
+                {forumData.totalThreads} threads
+              </span>
+              <span className="flex items-center">
+                <Users className="mr-2 h-4 w-4" />
+                {forumData.totalPosts} posts
+              </span>
+              <span className="flex items-center">
+                <Clock className="mr-2 h-4 w-4" />
+                Last active {forumData.lastActive}
+              </span>
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Main Content */}
+      {/* Main Content */}
+      <main className="container px-3 py-6 max-w-[85%]">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
-          {/* Thread List */}
-          <div className="lg:col-span-3">
+          {/* Left side - Threads */}
+          <div className="lg:w-[70%]">
             <div className="mb-6 flex items-center justify-between">
               <Button
                 onClick={() => router.push(`/create-thread/${forumId}`)}
@@ -512,8 +522,8 @@ export default function ForumView() {
             )}
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
+          {/* Right side - Sidebar */}
+          <div className="lg:w-[28%] text-white space-y-5">
             <Card className="border-0 bg-zinc-900/50">
               <CardHeader>
                 <CardTitle className="text-lg text-white">Forum Rules</CardTitle>
@@ -530,7 +540,7 @@ export default function ForumView() {
             </Card>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   )
 }
