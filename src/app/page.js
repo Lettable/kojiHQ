@@ -606,7 +606,7 @@ export default function HomePage() {
                 <p className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
                   What&apos;s new today? Stay updated with the latest news and announcements.
                 </p>
-                <p className={`text-sm mt-3 ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}><b>Friendly Reminder: </b>Make sure you use English in the shoutbox.</p>
+                <p className={`text-sm mt-3 ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}><b>Friendly Reminder: </b>Make sure you use English in the shoutbox. Remember to run downloaded files in a Virtual Machine or Sandboxie. Don&apos;t trust anyone.</p>
               </CardContent>
             </Card>
 
