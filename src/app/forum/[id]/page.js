@@ -309,6 +309,7 @@ export default function ForumView() {
   const [error, setError] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const router = useRouter()
   const pathname = usePathname()
@@ -320,6 +321,9 @@ export default function ForumView() {
       if (token) {
         const decodedToken = jwtDecode(token)
         setCurrentUser(decodedToken)
+        if (decodedToken.userId) {
+          setIsLoggedIn(true)
+        }
       }
     }
 
@@ -364,6 +368,12 @@ export default function ForumView() {
     return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
   }
 
+  const toggleTheme = () => {
+    const newTheme = !isDarkTheme;
+    setIsDarkTheme(newTheme);
+    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+  }
+
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center bg-black">
@@ -385,15 +395,15 @@ export default function ForumView() {
 
   return (
     <div className={`min-h-screen ${isDarkTheme ? "bg-black text-white" : "bg-white text-black"}`}>
-       <Header
-         avatar={currentUser?.profilePic}
-         userId={currentUser?.userId}
-         currentPage='/forum'
-         isDarkTheme={isDarkTheme}
-         toggleTheme={toggleTheme}
-         isLoggedIn={isLoggedIn}
-         isPremium={currentUser?.isPremium}
-       />
+      <Header
+        avatar={currentUser?.profilePic}
+        userId={currentUser?.userId}
+        currentPage='/forum'
+        isDarkTheme={isDarkTheme}
+        toggleTheme={toggleTheme}
+        isLoggedIn={isLoggedIn}
+        isPremium={currentUser?.isPremium}
+      />
       <style jsx global>{`
         :root {
           font-size: 85%;
