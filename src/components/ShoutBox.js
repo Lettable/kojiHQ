@@ -433,25 +433,23 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
   const [editContent, setEditContent] = useState('');
 
   // Settings dialog state and settings values
-  const [fva, setFva] = useState('/emojis/notify.mp3'); // favorite audio URL
-  const [msb, setMsb] = useState(false); // mute shoutbox flag
+  const [fva, setFva] = useState('/emojis/notify.mp3');
+  const [msb, setMsb] = useState(false);
 
   // Store this offset in state or a ref
   const [timeOffset, setTimeOffset] = useState(0);
   useEffect(() => {
-    // Fetch server time and compute offset (in milliseconds)
     const fetchServerTime = async () => {
       const res = await fetch('/api/mics/s-t');
       const data = await res.json();
       const serverTime = new Date(data.serverTime).getTime();
       const clientTime = Date.now();
-      return serverTime - clientTime; // positive if server is ahead
+      return serverTime - clientTime;
     };
 
     fetchServerTime().then(offset => setTimeOffset(offset));
   }, []);
 
-  // Load settings from localStorage and initialize audio
   useEffect(() => {
     const storedFva = localStorage.getItem('fva') || '/emojis/notify.mp3';
     const storedMsb = localStorage.getItem('msb') === 'true';
@@ -462,9 +460,15 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       audioRef.current.load();
     }
   }, []);
+  const boss = {
+    username: "Suized",
+    userId: "67a5f8eb3707affe11e788a8",
+    profilePic: "https://i.ibb.co/mrXm4rxg/0730b41d8ab7.png",
+    usernameEffect: "olympus-effect",
+    statusEmoji: ":suized:"
+  }
 
   const VB88_COMMAND_REGEX = /^\/vb88\s+(https?:\/\/.+\.mp3)$/i
-
   const handleVB88Command = (messageContent) => {
     const match = messageContent.match(VB88_COMMAND_REGEX)
     if (match) {
@@ -472,17 +476,16 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       const comSigma = `**A new [song](${audioUrl}) started by @${user.username}**`;
       const correctedTime = new Date(Date.now() + timeOffset).toISOString();
       const messageData = {
-        username: user.username,
+        username: boss.username,
         type: "vb88_command",
         audioUrl: audioUrl,
-        usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
+        usernameEffect: boss.usernameEffect,
         content: comSigma,
-        userId: user.userId,
-        statusEmoji: statusEmoji,
-        profilePic: user.profilePic,
+        userId: boss.userId,
+        statusEmoji: boss.statusEmoji,
+        profilePic: boss.profilePic,
         createdAt: correctedTime,
       };
-
       if (wsRef.current?.readyState === WebSocket.OPEN) {
         wsRef.current.send(JSON.stringify(messageData))
       }
@@ -491,6 +494,72 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     }
     return false
   }
+
+  const GIFT_COMMAND_REGEX = /^\/gift\s+(\d+)\s+@(\w+)$/i;
+  const handleGiftCommand = async (messageContent) => {
+    const match = messageContent.match(GIFT_COMMAND_REGEX);
+    if (match) {
+      const amount = Number(match[1]);
+      const targetUsername = match[2];
+
+      const token = localStorage.getItem('accessToken');
+      const requestBody = {
+        uid: currentUser.userId,
+        am: amount,
+        to: targetUsername,
+        tk: token,
+      };
+
+      try {
+        const res = await fetch('/api/mics/gf-cmd', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody),
+        });
+        const result = await res.json();
+
+        let bossMessage = '';
+        if (!result.success) {
+          if (result.message.toLowerCase().includes("not enough credits")) {
+            bossMessage = `You gotta top up before gifting @${targetUsername}!`;
+          } else if (result.message.toLowerCase().includes("target user not found")) {
+            bossMessage = `@${targetUsername} doesn't exist. Check the username and try again!`;
+          } else if (result.message.toLowerCase().includes("unauthorized")) {
+            bossMessage = `Unauthorized action, @${currentUser.username}!`;
+          } else if (result.message.toLowerCase().includes("invalid token")) {
+            bossMessage = `Your session is invalid. Please log in again, @${currentUser.username}.`;
+          } else {
+            bossMessage = result.message;
+          }
+        } else {
+          bossMessage = `The gift of ${amount} credits has been transferred to @${targetUsername}!`;
+        }
+
+        const correctedTime = new Date(Date.now() + timeOffset).toISOString();
+
+        const bossData = {
+          username: boss.username,
+          userId: boss.userId,
+          profilePic: boss.profilePic,
+          usernameEffect: boss.usernameEffect,
+          statusEmoji: boss.statusEmoji,
+          content: bossMessage,
+          createdAt: correctedTime,
+          type: 'gift_command',
+        };
+
+        if (wsRef.current?.readyState === WebSocket.OPEN) {
+          wsRef.current.send(JSON.stringify(bossData));
+        }
+        setNewMessage('');
+        return true;
+      } catch (error) {
+        console.error("Gift command error:", error);
+        return false;
+      }
+    }
+    return false;
+  };
 
   const scrollToBottom = useCallback(() => {
     setTimeout(() => {
@@ -516,15 +585,10 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     wsRef.current.onmessage = (event) => {
       try {
         const parsedData = JSON.parse(event.data);
-        console.log('Be ready for brainrot', parsedData.message.audioUrl)
-
         if (parsedData.message.type === "vb88_command") {
-          console.log('Identified Rizz')
           if (!msb && audioRef.current) {
-            console.log('Current Audio Ref Identified Sigma')
             audioRef.current = new Audio(parsedData.message.audioUrl)
             audioRef.current.load()
-            console.log('Audio Loaded Zigma')
             audioRef.current.currentTime = 0
             audioRef.current.play().catch((error) => {
               console.error("Error playing audio:", error)
@@ -548,6 +612,8 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
           if (match[1].toLowerCase() === usernameRef.current.toLowerCase()) {
             console.log('Mention detected:', newMsg.content);
             if (!msb && audioRef.current) {
+              audioRef.current = new Audio(storedFva);
+              audioRef.current.load();
               audioRef.current.currentTime = 0;
               audioRef.current.play().catch((error) => {
                 console.warn('Audio playback error:', error);
@@ -703,6 +769,12 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     const correctedTime = new Date(Date.now() + timeOffset).toISOString();
 
     if (handleVB88Command(newMessage.trim())) {
+      setNewMessage("")
+      scrollToBottom();
+      return
+    }
+
+    if (handleGiftCommand(newMessage.trim())) {
       setNewMessage("")
       scrollToBottom();
       return
