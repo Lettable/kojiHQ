@@ -1313,6 +1313,150 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     }
   }, [])
 
+  const VB88_COMMAND_REGEX = /^\/vb88\s+(https?:\/\/.+\.mp3)$/i;
+  const GIFT_COMMAND_REGEX = /^\/gift\s+(\d+)\s+@(\w+)\s*$/i;
+
+  const boss = {
+    username: "Suized",
+    userId: "67a5f8eb3707affe11e788a8",
+    profilePic: "https://i.ibb.co/mrXm4rxg/0730b41d8ab7.png",
+    usernameEffect: "olympus-effect",
+    statusEmoji: ":suized:"
+  }
+
+  const handleVB88Command = (messageContent) => {
+    const match = messageContent.match(VB88_COMMAND_REGEX)
+    if (match) {
+      const audioUrl = match[1]
+      const comSigma = `**A new [song](${audioUrl}) started by @${user.username}**`;
+      const correctedTime = new Date(Date.now() + timeOffset).toISOString();
+      const messageData = {
+        username: boss.username,
+        type: "vb88_command",
+        audioUrl: audioUrl,
+        usernameEffect: boss.usernameEffect,
+        content: comSigma,
+        userId: boss.userId,
+        statusEmoji: boss.statusEmoji,
+        profilePic: boss.profilePic,
+        createdAt: correctedTime,
+      };
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.send(JSON.stringify(messageData))
+      }
+      setNewMessage('');
+      return true
+    }
+    return false
+  }
+
+  const handleGiftCommand = async (messageContent) => {
+    if (messageContent.startsWith('/gift')) {
+      if (!GIFT_COMMAND_REGEX.test(messageContent)) {
+        const errorMessage = `Incorrect command format asshole. Correct usage: /gift 10 @Suized`;
+        const correctedTime = new Date(Date.now() + timeOffset).toISOString();
+        const userShit = {
+          username: user.username,
+          usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
+          content: newMessage.slice(0, MAX_MESSAGE_LENGTH),
+          userId: user.userId,
+          statusEmoji: statusEmoji,
+          profilePic: user.profilePic,
+          createdAt: correctedTime,
+        };
+        if (wsRef.current?.readyState === WebSocket.OPEN) {
+          wsRef.current.send(JSON.stringify(userShit));
+        }
+        const bossData = {
+          username: boss.username,
+          userId: boss.userId,
+          profilePic: boss.profilePic,
+          usernameEffect: boss.usernameEffect,
+          statusEmoji: boss.statusEmoji,
+          content: errorMessage,
+          createdAt: correctedTime,
+          type: 'gift_command_error'
+        };
+        if (wsRef.current?.readyState === WebSocket.OPEN) {
+          wsRef.current.send(JSON.stringify(bossData));
+        }
+        return true;
+      }
+
+      const match = messageContent.match(GIFT_COMMAND_REGEX);
+      if (match) {
+        const amount = Number(match[1]);
+        const targetUsername = match[2];
+        const token = localStorage.getItem('accessToken');
+        const requestBody = {
+          uid: user.userId,
+          am: amount,
+          to: targetUsername,
+          tk: token,
+        };
+
+        try {
+          const res = await fetch('/api/mics/gf-cmd', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody),
+          });
+          const result = await res.json();
+
+          let bossMessage = '';
+          if (!result.success) {
+            if (result.message.toLowerCase().includes("not enough credits")) {
+              bossMessage = `You gotta top up before gifting @${targetUsername}!`;
+            } else if (result.message.toLowerCase().includes("target user not found")) {
+              bossMessage = `@${targetUsername} doesn't exist. Check the username and try again!`;
+            } else if (result.message.toLowerCase().includes("unauthorized")) {
+              bossMessage = `Unauthorized action Nigga, @${user.username}!`;
+            } else if (result.message.toLowerCase().includes("invalid token")) {
+              bossMessage = `Your session is invalid. Please log in again, @${user.username}.`;
+            } else {
+              bossMessage = result.message;
+            }
+          } else {
+            bossMessage = `The gift of ${amount} credits has been transferred to @${targetUsername}!`;
+          }
+
+          const correctedTime = new Date(Date.now() + timeOffset).toISOString();
+          const userShit = {
+            username: user.username,
+            usernameEffect: user.usernameEffect ? user.usernameEffect : "regular-effect",
+            content: newMessage.slice(0, MAX_MESSAGE_LENGTH),
+            userId: user.userId,
+            statusEmoji: statusEmoji,
+            profilePic: user.profilePic,
+            createdAt: correctedTime,
+          };
+          if (wsRef.current?.readyState === WebSocket.OPEN) {
+            wsRef.current.send(JSON.stringify(userShit));
+          }
+          const bossData = {
+            username: boss.username,
+            userId: boss.userId,
+            profilePic: boss.profilePic,
+            usernameEffect: boss.usernameEffect,
+            statusEmoji: boss.statusEmoji,
+            content: bossMessage,
+            createdAt: correctedTime,
+            type: 'gift_command'
+          };
+
+          if (wsRef.current?.readyState === WebSocket.OPEN) {
+            wsRef.current.send(JSON.stringify(bossData));
+          }
+          return true;
+        } catch (error) {
+          console.error("Gift command error:", error);
+          return false;
+        }
+      }
+    }
+    return false;
+  };
+
   const connectWebSocket = useCallback(() => {
     if (typeof window === "undefined") return
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return
@@ -1437,19 +1581,29 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       setIsDarkTheme(storedTheme ? storedTheme === "dark" : true)
     }
 
-    // return () => {
-    //   if (wsRef.current) {
-    //     wsRef.current.close()
-    //   }
-    //   if (reconnectTimeoutRef.current) {
-    //     clearTimeout(reconnectTimeoutRef.current)
-    //   }
-    // }
+     return () => {
+       if (wsRef.current) {
+         wsRef.current.close();
+       }
+     };
   }, [connectWebSocket, scrollToBottom])
 
   const sendMessage = async () => {
     if (!user || !newMessage.trim() || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return
     const correctedTime = new Date(Date.now() + timeOffset).toISOString()
+
+    
+    if (handleVB88Command(newMessage.trim())) {
+      setNewMessage("")
+      scrollToBottom();
+      return
+    }
+
+    if (await handleGiftCommand(newMessage.trim())) {
+      setNewMessage('');
+      scrollToBottom();
+      return;
+    }
 
     const messageData = {
       username: user.username,
