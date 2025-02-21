@@ -23,7 +23,6 @@ import PreferredCurrencies from '@/components/PreferedCurrencies'
 
 export default function ThreadView() {
     const [currentUser, setCurrentUser] = useState(null)
-    const [nigger, setNigger] = useState("")
     const [isDarkTheme, setIsDarkTheme] = useState(true)
     const [sortBy, setSortBy] = useState('latest')
     const [replyTo, setReplyTo] = useState(null)
@@ -34,7 +33,11 @@ export default function ThreadView() {
     const [posts, setPosts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
-    const [isPermitted, setIsPermitted] = useState(false)
+    const [cryptoPrices, setCryptoPrices] = useState({
+        BTC: "0",
+        ETH: "0",
+        LTC: "0"
+    })
     const pathname = usePathname()
     const router = useRouter()
     const [currencies, setCurrencies] = useState()
@@ -51,7 +54,6 @@ export default function ThreadView() {
             if (token) {
                 const decodedToken = jwtDecode(token)
                 setCurrentUser(decodedToken)
-                setNigger(decodedToken.userId)
                 setIsLoggedIn(true)
             } else {
                 setCurrentUser(null)
@@ -108,12 +110,6 @@ export default function ThreadView() {
                 throw new Error('Failed to fetch posts')
             }
             const postsData = await response.json()
-            const mappedPosts = postsData.map(post => {
-                return post;
-            });
-            if (mappedPosts.some(post => post.author._id === nigger)) {
-                setIsPermitted(true);
-            }
             setPosts(postsData)
         } catch (error) {
             console.error('Error fetching posts:', error)
@@ -150,7 +146,6 @@ export default function ThreadView() {
             setPosts(prev => [...prev, newPost])
             setIsDialogOpen(false)
             setReplyContent('')
-            setIsPermitted(true)
             setReplyTo(null)
         } catch (error) {
             console.error('Error submitting reply:', error)
@@ -250,43 +245,20 @@ export default function ThreadView() {
                                 <h1 className="text-3xl text-white text-center justify-center mt-2 items-center font-bold mb-6">{thread.title}</h1>
 
                                 {currentUser ? (
-                                    isPermitted ? (
-                                        <div className={`prose ${isDarkTheme ? 'prose-invert' : ''} max-w-none mb-6`}>
-                                            <MarkdownWithEmojis content={thread.content} />
-                                        </div>
-                                    ) : (
-                                        <div className="flex flex-col items-center justify-center p-6 bg-zinc-800/50 text-[#c9d1d9] rounded-md">
-                                            <p className="text-lg font-semibold">🔒 Content locked</p>
-                                            <p className="text-sm text-gray-400">Reply on this thread to view the content.</p>
-                                            <Button
-                                                onClick={() => handleReply()}
-                                                className={`${isDarkTheme
-                                                    ? 'bg-zinc-800/50 mt-4 px-4 py-2 hover:bg-zinc-800/20 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex'
-                                                    : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'
-                                                    }`}
-                                            >
-                                                <Plus className="w-4 h-4 mr-2" />
-                                                Create Post
-                                            </Button>
-                                        </div>
-                                    )
+                                    <div className={`prose ${isDarkTheme ? 'prose-invert' : ''} max-w-none mb-6`}>
+                                        <MarkdownWithEmojis content={thread.content} />
+                                    </div>
                                 ) : (
                                     <div className="flex flex-col items-center justify-center p-6 bg-zinc-800/50 text-[#c9d1d9] rounded-md">
                                         <p className="text-lg font-semibold">🔒 Please sign in to view this thread</p>
                                         <p className="text-sm text-gray-400">It only takes 30 seconds to create an account!</p>
-                                        <Button
-                                            onClick={() => {
-                                                window.location.href = '/auth';
-                                            }}
-                                            className={`${isDarkTheme
-                                                ? 'bg-zinc-800/50 mt-4 px-4 py-2 hover:bg-zinc-800/20 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex'
-                                                : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'
-                                                }`}
-                                        >
+
+                                        <Button onClick={() => { window.location.href = '/auth'; }} className={`${isDarkTheme ? 'bg-zinc-800/50 mt-4 px-4 py-2 hover:bg-zinc-800/20 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
                                             Login / Register
                                         </Button>
                                     </div>
                                 )}
+
 
                                 {currentUser && thread.attachments.length > 0 && (
                                     <div className="space-y-2">
@@ -402,7 +374,7 @@ export default function ThreadView() {
                                                                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
                                                             </div>
                                                             <div className="flex items-center mt-4 space-x-4">
-
+                                                                
                                                                 <Button
                                                                     variant="ghost"
                                                                     size="sm"
