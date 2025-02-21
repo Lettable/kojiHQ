@@ -110,7 +110,7 @@ export default function HomePage() {
         const data = await response.json();
         setForumCategories(data);
       } catch (error) {
-        setError(err.message)
+        setError(error.message)
         console.error('Error fetching forum data:', error);
       }
     };
