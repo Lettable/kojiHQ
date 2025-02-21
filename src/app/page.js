@@ -208,7 +208,7 @@ export default function HomePage() {
   }
 
   const renderTextWithEmojis = (text, emojis) => {
-    if (!text || typeof text !== 'string') return text || ''
+    if (!text || text !== 'string') return text || ''
     if (!emojis || !Array.isArray(emojis)) return text
 
     const emojiRegex = /:([\w-]+):/g

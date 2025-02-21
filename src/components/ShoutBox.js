@@ -1277,6 +1277,17 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
   const [fva, setFva] = useState("/emojis/notify.mp3")
   const [msb, setMsb] = useState(false)
   const [timeOffset, setTimeOffset] = useState(0)
+  useEffect(() => {
+    const fetchServerTime = async () => {
+      const res = await fetch('/api/mics/s-t');
+      const data = await res.json();
+      const serverTime = new Date(data.serverTime).getTime();
+      const clientTime = Date.now();
+      return serverTime - clientTime;
+    };
+
+    fetchServerTime().then(offset => setTimeOffset(offset));
+  }, []);
 
   const scrollAreaRef = useRef(null)
   const wsRef = useRef(null)
