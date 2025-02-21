@@ -543,7 +543,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
         };
 
         try {
-          const res = await fetch('/api/gift', {
+          const res = await fetch('/api/mics/gf-cmd', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(requestBody),
