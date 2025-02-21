@@ -1366,6 +1366,18 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     }
   }, [msb])
 
+  const scrollToBottom = useCallback(() => {
+    if (typeof window === "undefined") return
+    setTimeout(() => {
+      if (scrollAreaRef.current) {
+        const scrollContainer = scrollAreaRef.current.querySelector("[data-radix-scroll-area-viewport]")
+        if (scrollContainer) {
+          scrollContainer.scrollTop = scrollContainer.scrollHeight
+        }
+      }
+    }, 0)
+  }, [])
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
@@ -1434,18 +1446,6 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       }
     }
   }, [connectWebSocket, scrollToBottom])
-
-  const scrollToBottom = useCallback(() => {
-    if (typeof window === "undefined") return
-    setTimeout(() => {
-      if (scrollAreaRef.current) {
-        const scrollContainer = scrollAreaRef.current.querySelector("[data-radix-scroll-area-viewport]")
-        if (scrollContainer) {
-          scrollContainer.scrollTop = scrollContainer.scrollHeight
-        }
-      }
-    }, 0)
-  }, [])
 
   const sendMessage = async () => {
     if (!user || !newMessage.trim() || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return
