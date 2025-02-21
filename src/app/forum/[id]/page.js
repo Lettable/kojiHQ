@@ -147,7 +147,7 @@ export default function ForumView() {
       />
       <style jsx global>{`
         :root {
-          font-size: 85%;
+          font-size: 75%;
         }
       `}</style>
       {/* Hero Section */}
