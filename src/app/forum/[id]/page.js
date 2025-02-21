@@ -153,7 +153,7 @@ export default function ForumView() {
       {/* Hero Section */}
       <section className={`py-16 text-white ${isDarkTheme ? 'bg-zinc-900/50' : 'bg-gray-100'}`}>
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto ml-10">
             <Link href="/" className="inline-flex items-center text-yellow-500 hover:text-yellow-600 mb-4">
               <ChevronLeft className="w-4 h-4 mr-1" />
               Back to Forums
