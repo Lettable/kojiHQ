@@ -108,7 +108,9 @@ export default function ThreadView() {
                 throw new Error('Failed to fetch posts')
             }
             const postsData = await response.json()
-            const userHasPosted = postsData.some(post => post.author._id === nigger);
+            const userHasPosted = postsData.some(
+                post => post.author._id === currentUser.userId || post.author.username === currentUser.username
+            );
             if (userHasPosted) {
                 setIsPermitted(true);
             }
