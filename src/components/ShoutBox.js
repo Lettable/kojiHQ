@@ -460,6 +460,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       audioRef.current.load();
     }
   }, []);
+  
   const boss = {
     username: "Suized",
     userId: "67a5f8eb3707affe11e788a8",
@@ -522,12 +523,6 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
         if (!result.success) {
           if (result.message.toLowerCase().includes("not enough credits")) {
             bossMessage = `You gotta top up before gifting @${targetUsername}!`;
-          } else if (result.message.toLowerCase().includes("target user not found")) {
-            bossMessage = `@${targetUsername} doesn't exist. Check the username and try again!`;
-          } else if (result.message.toLowerCase().includes("unauthorized")) {
-            bossMessage = `Unauthorized action, @${currentUser.username}!`;
-          } else if (result.message.toLowerCase().includes("invalid token")) {
-            bossMessage = `Your session is invalid. Please log in again, @${currentUser.username}.`;
           } else {
             bossMessage = result.message;
           }
@@ -560,6 +555,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     }
     return false;
   };
+
 
   const scrollToBottom = useCallback(() => {
     setTimeout(() => {
@@ -769,12 +765,6 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     const correctedTime = new Date(Date.now() + timeOffset).toISOString();
 
     if (handleVB88Command(newMessage.trim())) {
-      setNewMessage("")
-      scrollToBottom();
-      return
-    }
-
-    if (handleGiftCommand(newMessage.trim())) {
       setNewMessage("")
       scrollToBottom();
       return
