@@ -23,6 +23,7 @@ import PreferredCurrencies from '@/components/PreferedCurrencies'
 
 export default function ThreadView() {
     const [currentUser, setCurrentUser] = useState(null)
+    const [nigger, setNigger] = useState("")
     const [isDarkTheme, setIsDarkTheme] = useState(true)
     const [sortBy, setSortBy] = useState('latest')
     const [replyTo, setReplyTo] = useState(null)
@@ -50,6 +51,7 @@ export default function ThreadView() {
             if (token) {
                 const decodedToken = jwtDecode(token)
                 setCurrentUser(decodedToken)
+                setNigger(decodedToken.userId)
                 setIsLoggedIn(true)
             } else {
                 setCurrentUser(null)
@@ -106,7 +108,7 @@ export default function ThreadView() {
                 throw new Error('Failed to fetch posts')
             }
             const postsData = await response.json()
-            const userPost = postsData.find(p => p._id === currentUser.userId);
+            const userPost = postsData.find(p => p.author._id === nigger);
             if (userPost) {
                 setIsPermitted(true);
             }
