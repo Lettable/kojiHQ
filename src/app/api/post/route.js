@@ -104,15 +104,15 @@ export async function POST(req) {
         replyPost: populatedPost.replyPostId || null
     };
 
-    const ws = new WebSocket('wss://kojihq-ws.onrender.com');
-    ws.onopen = () => {
-        ws.send(JSON.stringify({
-            type: 'post',
-            _id: populatedPost._id,
-            content: populatedPost.content
-        }));
-        ws.close();
-    };
+    // const ws = new WebSocket('wss://kojihq-ws.onrender.com');
+    // ws.onopen = () => {
+    //     ws.send(JSON.stringify({
+    //         type: 'post',
+    //         _id: populatedPost._id,
+    //         content: populatedPost.content
+    //     }));
+    //     ws.close();
+    // };
 
     return NextResponse.json(formattedPost, { status: 201 });
 }
