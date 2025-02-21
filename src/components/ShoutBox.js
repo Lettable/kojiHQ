@@ -1277,17 +1277,6 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
   const [fva, setFva] = useState("/emojis/notify.mp3")
   const [msb, setMsb] = useState(false)
   const [timeOffset, setTimeOffset] = useState(0)
-  useEffect(() => {
-    const fetchServerTime = async () => {
-      const res = await fetch('/api/mics/s-t');
-      const data = await res.json();
-      const serverTime = new Date(data.serverTime).getTime();
-      const clientTime = Date.now();
-      return serverTime - clientTime;
-    };
-
-    fetchServerTime().then(offset => setTimeOffset(offset));
-  }, []);
 
   const scrollAreaRef = useRef(null)
   const wsRef = useRef(null)
@@ -1296,17 +1285,36 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
   const reconnectTimeoutRef = useRef(null)
 
   useEffect(() => {
-    const storedFva = localStorage.getItem("fva") || "/emojis/notify.mp3"
-    const storedMsb = localStorage.getItem("msb") === "true"
-    setFva(storedFva)
-    setMsb(storedMsb)
-    if (!storedMsb) {
-      audioRef.current = new Audio(storedFva)
-      audioRef.current.load()
+    const fetchServerTime = async () => {
+      try {
+        const res = await fetch("/api/mics/s-t")
+        const data = await res.json()
+        const serverTime = new Date(data.serverTime).getTime()
+        const clientTime = Date.now()
+        setTimeOffset(serverTime - clientTime)
+      } catch (error) {
+        console.error("Error fetching server time:", error)
+      }
+    }
+
+    fetchServerTime()
+  }, [])
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedFva = localStorage.getItem("fva") || "/emojis/notify.mp3"
+      const storedMsb = localStorage.getItem("msb") === "true"
+      setFva(storedFva)
+      setMsb(storedMsb)
+      if (!storedMsb) {
+        audioRef.current = new Audio(storedFva)
+        audioRef.current.load()
+      }
     }
   }, [])
 
   const connectWebSocket = useCallback(() => {
+    if (typeof window === "undefined") return
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return
 
     wsRef.current = new WebSocket("wss://kojihq-ws.onrender.com")
@@ -1356,7 +1364,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       setIsWebSocketConnected(false)
       reconnectTimeoutRef.current = setTimeout(connectWebSocket, 5000)
     }
-  }, [msb, scrollToBottom])
+  }, [msb])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -1381,25 +1389,27 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
         setMessages(messagesData.messages.slice(-MAX_DISPLAYED_MESSAGES))
         scrollToBottom()
 
-        const token = localStorage.getItem("accessToken")
-        if (token) {
-          const decoded = jwtDecode(token)
-          usernameRef.current = decoded.username
-          setUser(decoded)
+        if (typeof window !== "undefined") {
+          const token = localStorage.getItem("accessToken")
+          if (token) {
+            const decoded = jwtDecode(token)
+            usernameRef.current = decoded.username
+            setUser(decoded)
 
-          const authResponse = await fetch(`/api/check-authorization?userId=${decoded.userId}`)
-          if (!authResponse.ok) {
-            throw new Error("Failed to check authorization")
-          }
-          const authData = await authResponse.json()
-          setUser((prev) => ({ ...prev, isAuthorized: authData.isAuthorized }))
+            const authResponse = await fetch(`/api/check-authorization?userId=${decoded.userId}`)
+            if (!authResponse.ok) {
+              throw new Error("Failed to check authorization")
+            }
+            const authData = await authResponse.json()
+            setUser((prev) => ({ ...prev, isAuthorized: authData.isAuthorized }))
 
-          const statusResponse = await fetch(`/api/mics/status?userId=${decoded.userId}`)
-          if (!statusResponse.ok) {
-            throw new Error("Failed to fetch user status")
+            const statusResponse = await fetch(`/api/mics/status?userId=${decoded.userId}`)
+            if (!statusResponse.ok) {
+              throw new Error("Failed to fetch user status")
+            }
+            const data = await statusResponse.json()
+            setStatusEmoji(data.statusEmoji)
           }
-          const data = await statusResponse.json()
-          setStatusEmoji(data.statusEmoji)
         }
       } catch (error) {
         console.error("Error fetching data:", error)
@@ -1409,10 +1419,11 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     }
 
     fetchData()
-    connectWebSocket()
-
-    const storedTheme = localStorage.getItem("theme")
-    setIsDarkTheme(storedTheme ? storedTheme === "dark" : true)
+    if (typeof window !== "undefined") {
+      connectWebSocket()
+      const storedTheme = localStorage.getItem("theme")
+      setIsDarkTheme(storedTheme ? storedTheme === "dark" : true)
+    }
 
     return () => {
       if (wsRef.current) {
@@ -1425,6 +1436,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
   }, [connectWebSocket, scrollToBottom])
 
   const scrollToBottom = useCallback(() => {
+    if (typeof window === "undefined") return
     setTimeout(() => {
       if (scrollAreaRef.current) {
         const scrollContainer = scrollAreaRef.current.querySelector("[data-radix-scroll-area-viewport]")
