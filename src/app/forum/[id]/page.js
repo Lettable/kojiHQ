@@ -300,7 +300,7 @@ import { useRouter, usePathname } from "next/navigation"
 import { jwtDecode } from "jwt-decode"
 
 export default function ForumView() {
-  const [currentUser, setCurrentUser] = useState<any>(null)
+  const [currentUser, setCurrentUser] = useState(null)
   const [isDarkTheme, setIsDarkTheme] = useState(true)
   const [forumData, setForumData] = useState(null)
   const [threads, setThreads] = useState([])
