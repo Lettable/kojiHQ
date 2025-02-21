@@ -4,6 +4,7 @@ import "../style/globals.css";
 import Head from 'next/head';
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react"
+import SiteStatusOverlay from "@/components/BoardStatus";
 
 const kanit = Kanit({
   subsets: ["latin"],
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
       <Head>
         <meta name="cryptomus" content="4884514a" />
       </Head>
+      <SiteStatusOverlay />
       <body
         className={`${kanit.className} antialiased`}
       >
