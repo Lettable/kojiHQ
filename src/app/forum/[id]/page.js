@@ -298,6 +298,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
 import { jwtDecode } from "jwt-decode"
+import Header from "@/partials/Header"
 
 export default function ForumView() {
   const [currentUser, setCurrentUser] = useState(null)
@@ -384,6 +385,15 @@ export default function ForumView() {
 
   return (
     <div className={`min-h-screen ${isDarkTheme ? "bg-black text-white" : "bg-white text-black"}`}>
+       <Header
+         avatar={currentUser?.profilePic}
+         userId={currentUser?.userId}
+         currentPage='/forum'
+         isDarkTheme={isDarkTheme}
+         toggleTheme={toggleTheme}
+         isLoggedIn={isLoggedIn}
+         isPremium={currentUser?.isPremium}
+       />
       <style jsx global>{`
         :root {
           font-size: 85%;
@@ -391,7 +401,7 @@ export default function ForumView() {
       `}</style>
       {/* Hero Section */}
       <section className={`py-12 text-white ${isDarkTheme ? "bg-zinc-900/50" : "bg-gray-100"}`}>
-        <div className="container mx-auto px-3 max-w-[85%]">
+        <div className="container px-3 max-w-[85%]">
           {/* Header */}
           <div className="mb-8">
             <Link
@@ -424,7 +434,7 @@ export default function ForumView() {
       </section>
 
       {/* Main Content */}
-      <main className="container px-3 py-6 max-w-[85%]">
+      <main className="container mx-auto px-3 py-6 max-w-[85%]">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
           {/* Left side - Threads */}
           <div className="lg:w-[70%]">
