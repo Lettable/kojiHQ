@@ -655,7 +655,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
           if (match[1].toLowerCase() === usernameRef.current.toLowerCase()) {
             console.log('Mention detected:', newMsg.content);
             if (!msb && audioRef.current) {
-              audioRef.current = new Audio(storedFva);
+              audioRef.current = new Audio(fva);
               audioRef.current.load();
               audioRef.current.currentTime = 0;
               audioRef.current.play().catch((error) => {
