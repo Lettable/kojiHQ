@@ -1236,26 +1236,30 @@ const formatTimestamp = (date) => {
 }
 
 const renderTextWithEmojis = (text, emojis) => {
-  if (!text) return null
+  if (!text || typeof text !== 'string') return text || ''
+  if (!emojis || !Array.isArray(emojis)) return text
 
-  const emojiMap = {}
-  emojis.forEach((emoji) => {
-    emojiMap[emoji.title] = emoji.url
-  })
+  const emojiRegex = /:([\w-]+):/g
+  const parts = text.split(emojiRegex)
 
-  const parts = text.split(/(:[a-zA-Z0-9_]+:)/)
   return parts.map((part, index) => {
-    if (part.startsWith(":") && part.endsWith(":") && emojiMap[part]) {
-      return (
-        <img
-          key={index}
-          src={emojiMap[part] || "/placeholder.svg"}
-          alt={part}
-          className="inline-block h-5 w-5 mx-0.5 align-baseline"
-        />
-      )
-    } else {
+    if (index % 2 === 0) {
       return part
+    } else {
+      const emoji = emojis.find(e => e.emojiTitle === `:${part}:`)
+      if (emoji) {
+        return (
+          <img
+            key={index}
+            src={emoji.emojiUrl}
+            alt={emoji.emojiTitle}
+            title={emoji.emojiTitle}
+            className="inline-block w-6 h-6"
+          />
+        )
+      } else {
+        return `:${part}:`
+      }
     }
   })
 }
