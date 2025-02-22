@@ -351,7 +351,7 @@ export default function AuthPage() {
                     </Button>
                   </motion.div>
                 </form>
-                <motion.div
+                {/* <motion.div
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="mt-3"
@@ -363,7 +363,7 @@ export default function AuthPage() {
                     <FaEthereum className="h-5 w-5" />
                     Go with MetaMask
                   </Button>
-                </motion.div>
+                </motion.div> */}
               </TabsContent>
 
               <TabsContent value="signup">
