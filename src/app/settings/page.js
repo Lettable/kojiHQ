@@ -227,20 +227,23 @@ export default function SettingsPage() {
       <div className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <div className="flex text-white flex-col lg:flex-row gap-8">
-            {/* Left Sidebar */}
-            <Card className="lg:w-[30%] h-[390px] bg-zinc-900 border-zinc-800">
-              <CardContent className="p-4">
-                <TabsList className="flex flex-col gap-4 mt-[160px] w-full bg-transparent">
+            <Card className="lg:w-[30%] h-[340px] bg-zinc-900/50 backdrop-blur-lg border-white/10">
+              <CardContent className="p-0">
+                <div 
+                  className="h-[150px] w-full rounded-t-lg"
+                />
+                <TabsList className="flex flex-col gap-2 px-3 py-4 w-full bg-transparent">
                   {tabs.map((tab) => (
                     <TabsTrigger
                       key={tab.id}
                       value={tab.id}
-                      className={`flex items-center gap-3 w-full p-3 justify-start text-left ${activeTab === tab.id
-                        ? 'bg-yellow-500 text-black'
-                        : 'text-gray-400 hover:text-white hover:bg-zinc-800'
-                        }`}
+                      className={`flex items-center gap-3 w-full p-3 justify-start text-left rounded-lg transition-all duration-200 ${
+                        activeTab === tab.id
+                          ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-medium shadow-lg shadow-yellow-500/20'
+                          : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      }`}
                     >
-                      <tab.icon className="h-5 w-5" />
+                      <tab.icon className={`h-5 w-5 ${activeTab === tab.id ? 'text-black' : ''}`} />
                       {tab.label}
                     </TabsTrigger>
                   ))}
@@ -248,39 +251,42 @@ export default function SettingsPage() {
               </CardContent>
             </Card>
 
-            {/* Right Content Area */}
-            <Card className="lg:w-[70%] text-white bg-zinc-900 border-zinc-800">
+            <Card className="lg:w-[70%] text-white bg-zinc-900/50 backdrop-blur-lg border-white/10">
               <CardContent className="p-6">
                 <ScrollArea className="h-[calc(100vh-200px)]">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeTab}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.2 }}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 10 }}
+                      transition={{ 
+                        duration: 0.15,
+                        ease: "easeInOut"
+                      }}
+                      className="bg-transparent"
                     >
-                      <TabsContent value="overview" className="border-0 mt-0">
+                      <TabsContent value="overview" className="border-0 mt-0 outline-none bg-transparent">
                         <OverviewTab token={token} userData={userData} bannerImg={bannerImg} emojis={emojis} bio={bio} username={username} statusEmoji={statusEmoji} profilePic={profilePic} setProfilePic={setProfilePic} usernameEffect={usernameEffect} />
                       </TabsContent>
 
-                      <TabsContent value="profile" className="mt-0">
+                      <TabsContent value="profile" className="mt-0 outline-none bg-transparent">
                         <ProfileTab token={token} userData={userData} setProfilePic={setProfilePic} setUsername={setUsername} setBio={setBio} setStatusEmoji={setStatusEmoji} profilePic={profilePic} onSave={handleSaveProfile} />
                       </TabsContent>
 
-                      <TabsContent value="preferences" className="mt-0">
+                      <TabsContent value="preferences" className="mt-0 outline-none bg-transparent">
                         <PreferencesTab token={token} userData={userData} bannerImg={bannerImg} setBannerImg={setBannerImg} onSave={handleSavePreferences} setUsernameEffect={setUsernameEffect} />
                       </TabsContent>
 
-                      <TabsContent value="signature" className="mt-0">
+                      <TabsContent value="signature" className="mt-0 outline-none bg-transparent">
                         <SignatureTab token={token} isDarkTheme={true} userData={userData} onSave={handleSaveProfile} />
                       </TabsContent>
 
-                      <TabsContent value="security" className="mt-0">
+                      <TabsContent value="security" className="mt-0 outline-none bg-transparent">
                         <SecurityTab token={token} onChangePassword={handleChangePassword} userData={userData} />
                       </TabsContent>
 
-                      <TabsContent value="danger" className="mt-0">
+                      <TabsContent value="danger" className="mt-0 outline-none bg-transparent">
                         <DangerZoneTab userData={userData} token={token} />
                       </TabsContent>
                     </motion.div>
@@ -316,35 +322,36 @@ function OverviewTab({ token, bannerImg, userData, emojis, bio, username, status
 
   return (
     <div className="space-y-6 border-0">
-      <Card className="bg-zinc-800 text-white border-0 border-zinc-700">
+      <Card className="bg-zinc-900/50 backdrop-blur-lg border-white/10 overflow-hidden">
         <CardContent
-          className="p-6"
+          className="p-6 relative"
           style={
             bannerImg && bannerImg.trim() !== ""
               ? {
-                background: `url(${bannerImg}) no-repeat`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                width: "100%",
-                borderRadius: "16px",
-                opacity: 0.8,
-              }
-              : {}
+                  background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url(${bannerImg}) no-repeat center/cover`,
+                  minHeight: "150px",
+                }
+              : {
+                  background: "linear-gradient(to right, rgba(24, 24, 27, 0.5), rgba(39, 39, 42, 0.5))",
+                  minHeight: "150px",
+                }
           }
         >
-          <div className="flex items-start text-white gap-6">
-            <Avatar className="h-24 w-24">
-              <AvatarImage src={profilePic} />
-              <AvatarFallback>{username[0]}</AvatarFallback>
-            </Avatar>
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+            <div className="relative group">
+              <Avatar className="h-24 w-24 ring-2 ring-yellow-500/20 ring-offset-2 ring-offset-black">
+                <AvatarImage src={profilePic} />
+                <AvatarFallback>{username[0]}</AvatarFallback>
+              </Avatar>
+            </div>
 
-            <div className="space-y-1">
-              <h2 className="text-2xl font-bold flex items-center gap-2">
+            <div className="space-y-2 text-center md:text-left">
+              <h2 className="text-2xl font-bold flex items-center gap-2 justify-center md:justify-start">
                 <span className={usernameEffect}>{username}</span>
                 <span>{renderTextWithEmojis(statusEmoji, emojis)}</span>
               </h2>
-              <p className="text-white">{bio}</p>
-              <p className="text-sm text-white">
+              <p className="text-zinc-300">{bio}</p>
+              <p className="text-sm text-zinc-400">
                 Joined {formatDistanceToNow(new Date(userData.createdAt))} ago
               </p>
             </div>
@@ -352,65 +359,86 @@ function OverviewTab({ token, bannerImg, userData, emojis, bio, username, status
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-2 text-white md:grid-cols-3 gap-4">
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {stats.map((stat) => (
-          <Card key={stat.title} className="bg-zinc-800 border-0 text-white border-zinc-700">
+          <Card key={stat.title} className="bg-zinc-900/50 border-white/10">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+              <CardTitle className="text-sm font-medium text-zinc-300">{stat.title}</CardTitle>
               <stat.icon className={`h-4 w-4 ${stat.color}`} />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl text-white font-bold">{stat.value}</div>
+              <div className="text-2xl font-bold text-white">{stat.value}</div>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <Card className="bg-zinc-800 border-0 text-white border-zinc-700">
+      {/* Activity Chart */}
+      <Card className="bg-zinc-900/50 border-white/10">
         <CardHeader>
-          <CardTitle>Activity Overview</CardTitle>
+          <CardTitle className="text-lg text-zinc-100">Activity Overview</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-[200px] text-white">
+          <div className="h-[200px]">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={userData.activityData}>
-                <XAxis dataKey="date" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value}`} />
+                <XAxis 
+                  dataKey="date" 
+                  stroke="#525252" 
+                  fontSize={12} 
+                  tickLine={false} 
+                  axisLine={false} 
+                />
+                <YAxis 
+                  stroke="#525252" 
+                  fontSize={12} 
+                  tickLine={false} 
+                  axisLine={false} 
+                  tickFormatter={(value) => `${value}`} 
+                />
                 <Tooltip
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
                       return (
-                        <div className="bg-zinc-950 border border-zinc-800 p-2 rounded-lg">
-                          <p className="text-sm">
+                        <div className="bg-zinc-950 border border-zinc-800 p-2 rounded-lg shadow-xl">
+                          <p className="text-sm text-zinc-300">
                             {payload[0].payload.date}: {payload[0].value} posts
                           </p>
                         </div>
-                      )
+                      );
                     }
-                    return null
+                    return null;
                   }}
                 />
-                <Line type="monotone" dataKey="posts" stroke="#EAB308" strokeWidth={2} dot={{ fill: "#EAB308" }} />
+                <Line 
+                  type="monotone" 
+                  dataKey="posts" 
+                  stroke="#EAB308" 
+                  strokeWidth={2} 
+                  dot={{ fill: "#EAB308" }} 
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="bg-zinc-800 border-0 text-white border-zinc-700">
+      {/* Additional Info */}
+      <Card className="bg-zinc-900/50 border-white/10">
         <CardHeader>
-          <CardTitle>Additional Information</CardTitle>
+          <CardTitle className="text-lg text-zinc-100">Additional Information</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex text-white justify-between items-center">
-            <span className="text-gray-400">Premium Status</span>
-            <span className={userData.isPremium ? "text-yellow-500" : "text-gray-500"}>
+          <div className="flex justify-between items-center">
+            <span className="text-zinc-400">Premium Status</span>
+            <span className={userData.isPremium ? "text-yellow-500" : "text-zinc-500"}>
               {userData.isPremium ? "Active" : "Inactive"}
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-400">Last Login</span>
-            <span className="text-gray-300">
+            <span className="text-zinc-400">Last Login</span>
+            <span className="text-zinc-300">
               {formatDistanceToNow(new Date(userData.lastLogin))} ago
             </span>
           </div>
@@ -502,133 +530,6 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
     setCompletedCrop(crop)
   }
 
-  // const handleCropConfirm = async () => {
-  //   if (imageRef.current && completedCrop) {
-  //     const canvas = document.createElement('canvas')
-  //     const scaleX = imageRef.current.naturalWidth / imageRef.current.width
-  //     const scaleY = imageRef.current.naturalHeight / imageRef.current.height
-  //     canvas.width = completedCrop.width
-  //     canvas.height = completedCrop.height
-  //     const ctx = canvas.getContext('2d')
-
-  //     ctx.drawImage(
-  //       imageRef.current,
-  //       completedCrop.x * scaleX,
-  //       completedCrop.y * scaleY,
-  //       completedCrop.width * scaleX,
-  //       completedCrop.height * scaleY,
-  //       0,
-  //       0,
-  //       completedCrop.width,
-  //       completedCrop.height
-  //     )
-
-  //     canvas.toBlob(async (blob) => {
-  //       const base64Image = await new Promise((resolve) => {
-  //         const reader = new FileReader()
-  //         reader.onloadend = () => resolve(reader.result.split(',')[1])
-  //         reader.readAsDataURL(blob)
-  //       })
-
-  //       try {
-  //         const response = await fetch(`/api/edit-user?action=profilePic&token=${token}`, {
-  //           method: 'POST',
-  //           headers: { 'Content-Type': 'application/json' },
-  //           body: JSON.stringify({ profilePic: base64Image }),
-  //         })
-
-  //         const result = await response.json()
-  //         if (result.success) {
-  //           localStorage.setItem('accessToken', result.accessToken)
-  //           setProfilePic(result.user.profilePic)
-  //           toast({
-  //             title: "Profile Picture Updated",
-  //             description: "Your profile picture has been successfully updated.",
-  //             variant: "destructive",
-  //           })
-  //         } else {
-  //           throw new Error(result.message)
-  //         }
-  //       } catch (error) {
-  //         toast({
-  //           title: "Update Failed",
-  //           description: error.message || "An error occurred while updating your profile picture.",
-  //           variant: "destructive",
-  //         })
-  //       }
-  //       setIsUploadingImage(false)
-  //       setUploadedImage('')
-  //     })
-  //   }
-  // }
-  // const handleCropConfirm = async () => {
-  //   if (imageRef.current && completedCrop) {
-  //     const canvas = document.createElement('canvas');
-  //     const scaleX = imageRef.current.naturalWidth / imageRef.current.width;
-  //     const scaleY = imageRef.current.naturalHeight / imageRef.current.height;
-  //     canvas.width = completedCrop.width;
-  //     canvas.height = completedCrop.height;
-  //     const ctx = canvas.getContext('2d');
-
-  //     ctx.drawImage(
-  //       imageRef.current,
-  //       completedCrop.x * scaleX,
-  //       completedCrop.y * scaleY,
-  //       completedCrop.width * scaleX,
-  //       completedCrop.height * scaleY,
-  //       0,
-  //       0,
-  //       completedCrop.width,
-  //       completedCrop.height
-  //     );
-
-  //     canvas.toBlob(async (blob) => {
-  //       if (!blob) {
-  //         toast({
-  //           title: "Error",
-  //           description: "Failed to generate image blob.",
-  //           variant: "destructive",
-  //         });
-  //         return;
-  //       }
-
-  //       const base64Image = await new Promise((resolve) => {
-  //         const reader = new FileReader();
-  //         reader.onloadend = () => resolve(reader.result);
-  //         reader.readAsDataURL(blob);
-  //       });
-
-  //       try {
-  //         const response = await fetch(`/api/edit-user?action=profilePic&token=${token}`, {
-  //           method: 'POST',
-  //           headers: { 'Content-Type': 'application/json' },
-  //           body: JSON.stringify({ profilePic: base64Image }),
-  //         });
-
-  //         const result = await response.json();
-  //         if (result.success) {
-  //           localStorage.setItem('accessToken', result.accessToken);
-  //           setProfilePic(result.user.profilePic);
-  //           toast({
-  //             title: "Profile Picture Updated",
-  //             description: "Your profile picture has been successfully updated.",
-  //             variant: "destructive",
-  //           });
-  //         } else {
-  //           throw new Error(result.message);
-  //         }
-  //       } catch (error) {
-  //         toast({
-  //           title: "Update Failed",
-  //           description: error.message || "An error occurred while updating your profile picture.",
-  //           variant: "destructive",
-  //         });
-  //       }
-  //       setIsUploadingImage(false);
-  //       setUploadedImage('');
-  //     });
-  //   }
-  // };
   const handleCropConfirm = async () => {
     let base64Image;
 
@@ -713,8 +614,6 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
     setIsUploadingImage(false);
     setUploadedImage('');
   };
-
-
 
   const handleEmojiSelect = async (emoji) => {
     try {
@@ -1098,13 +997,6 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
               Customize Live Prices
             </Button>
           </div>
-          {/* <button
-          type='submit'
-            onClick={handleOpenDialog}
-            className="bg-yellow-500 mt-6 text-black hover:bg-yellow-600"
-          >
-            Customize Live Prices
-          </button> */}
           <CryptoSelectionDialog
             open={isDialogOpen}
             onOpenChange={setIsDialogOpen}
@@ -1162,21 +1054,191 @@ function PreferencesTab({ token, userData, onSave, setUsernameEffect, bannerImg,
 
 function SignatureTab({ token, isDarkTheme, userData, onSave }) {
   const [signature, setSignature] = useState(userData.signature);
-  const { toast } = useToast()
+  const [emojis, setEmojis] = useState([]);
+  const { toast } = useToast();
 
-  const handleEditorChange = ({ html, text }) => {
+  useEffect(() => {
+    const fetchEmojis = async () => {
+      try {
+        const response = await fetch('/api/emojis');
+        const data = await response.json();
+        setEmojis(data);
+      } catch (error) {
+        console.error('Error fetching emojis:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load emojis",
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchEmojis();
+  }, []);
+
+  const handleEditorChange = ({ text }) => {
     setSignature(text);
   };
 
-  const handleEmojiSelect = (emojiTitle) => {
-    const editor = document.querySelector('.markdown-editor-container textarea');
-    if (editor) {
-      const cursorPosition = editor.selectionStart;
-      const textBeforeCursor = signature.slice(0, cursorPosition);
-      const textAfterCursor = signature.slice(cursorPosition);
-
-      setSignature(`${textBeforeCursor} ${emojiTitle} ${textAfterCursor}`);
+  const handleEmojiSelect = (emoji) => {
+    const textArea = document.querySelector('.rc-md-editor textarea');
+    if (textArea) {
+      const start = textArea.selectionStart;
+      const end = textArea.selectionEnd;
+      const newText = signature.slice(0, start) + `:${emoji}:` + signature.slice(end);
+      setSignature(newText);
+      
+      setTimeout(() => {
+        textArea.focus();
+        const newPosition = start + emoji.length + 2;
+        textArea.setSelectionRange(newPosition, newPosition);
+      }, 0);
+    } else {
+      setSignature((prev) => prev + `:${emoji}:`);
     }
+  };
+
+  const CustomMarkdown = ({ content }) => {
+    if (!content) return null;
+
+    const processContent = (text) => {
+      if (!text || typeof text !== 'string') return text;
+      
+      const parts = text.split(/(:[\w-]+:)/g);
+      return parts.map((part, index) => {
+        const emojiMatch = part.match(/^:([\w-]+):$/);
+        if (emojiMatch) {
+          const emojiName = emojiMatch[1];
+          const emoji = emojis.find(e => e.emojiTitle === `:${emojiName}:`);
+          if (emoji) {
+            return (
+              <img
+                key={`emoji-${index}`}
+                src={emoji.emojiUrl}
+                alt={emoji.emojiTitle}
+                title={emoji.emojiTitle}
+                className="inline-block w-6 h-6 align-middle"
+              />
+            );
+          }
+        }
+        return part;
+      });
+    };
+
+    return (
+      <ReactMarkdown
+        components={{
+          p: ({ children }) => (
+            <p className="mb-4">
+              {Array.isArray(children) 
+                ? children.map((child, index) => (
+                    <span key={index}>
+                      {typeof child === 'string' ? processContent(child) : child}
+                    </span>
+                  ))
+                : processContent(children)}
+            </p>
+          ),
+          h1: ({ children }) => (
+            <h1 className="text-2xl font-bold mb-4">
+              {Array.isArray(children) 
+                ? children.map((child, index) => (
+                    <span key={index}>
+                      {typeof child === 'string' ? processContent(child) : child}
+                    </span>
+                  ))
+                : processContent(children)}
+            </h1>
+          ),
+          h2: ({ children }) => (
+            <h2 className="text-xl font-bold mb-3">
+              {Array.isArray(children) 
+                ? children.map((child, index) => (
+                    <span key={index}>
+                      {typeof child === 'string' ? processContent(child) : child}
+                    </span>
+                  ))
+                : processContent(children)}
+            </h2>
+          ),
+          h3: ({ children }) => (
+            <h3 className="text-lg font-bold mb-2">
+              {Array.isArray(children) 
+                ? children.map((child, index) => (
+                    <span key={index}>
+                      {typeof child === 'string' ? processContent(child) : child}
+                    </span>
+                  ))
+                : processContent(children)}
+            </h3>
+          ),
+          ul: ({ children }) => <ul className="list-disc list-inside mb-4">{children}</ul>,
+          ol: ({ children }) => <ol className="list-decimal list-inside mb-4">{children}</ol>,
+          li: ({ children }) => (
+            <li className="mb-1">
+              {Array.isArray(children) 
+                ? children.map((child, index) => (
+                    <span key={index}>
+                      {typeof child === 'string' ? processContent(child) : child}
+                    </span>
+                  ))
+                : processContent(children)}
+            </li>
+          ),
+          a: ({ href, children }) => (
+            <a href={href} className="text-blue-400 hover:text-blue-300 underline" target="_blank" rel="noopener noreferrer">
+              {Array.isArray(children) 
+                ? children.map((child, index) => (
+                    <span key={index}>
+                      {typeof child === 'string' ? processContent(child) : child}
+                    </span>
+                  ))
+                : processContent(children)}
+            </a>
+          ),
+          code: ({ children }) => (
+            <code className="bg-zinc-800 px-1.5 py-0.5 rounded text-sm">{children}</code>
+          ),
+          blockquote: ({ children }) => (
+            <blockquote className="border-l-4 border-zinc-600 pl-4 italic my-4">
+              {Array.isArray(children) 
+                ? children.map((child, index) => (
+                    <span key={index}>
+                      {typeof child === 'string' ? processContent(child) : child}
+                    </span>
+                  ))
+                : processContent(children)}
+            </blockquote>
+          ),
+          strong: ({ children }) => (
+            <strong className="font-bold">
+              {Array.isArray(children) 
+                ? children.map((child, index) => (
+                    <span key={index}>
+                      {typeof child === 'string' ? processContent(child) : child}
+                    </span>
+                  ))
+                : processContent(children)}
+            </strong>
+          ),
+          em: ({ children }) => (
+            <em className="italic">
+              {Array.isArray(children) 
+                ? children.map((child, index) => (
+                    <span key={index}>
+                      {typeof child === 'string' ? processContent(child) : child}
+                    </span>
+                  ))
+                : processContent(children)}
+            </em>
+          ),
+          hr: () => <hr className="my-4 border-zinc-700" />,
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -1200,8 +1262,8 @@ function SignatureTab({ token, isDarkTheme, userData, onSave }) {
       toast({
         title: "Signature Updated",
         description: "Your signature has been updated successfully.",
-        variant: "distructive",
-      })
+        variant: "destructive",
+      });
     } catch (error) {
       console.error("Error updating signature:", error);
       toast({
@@ -1213,254 +1275,239 @@ function SignatureTab({ token, isDarkTheme, userData, onSave }) {
   };
 
   return (
-    <div className={`space-y-8 p-6 rounded-lg ${isDarkTheme ? "bg-zinc-900" : "bg-white"}`}>
-      <h2 className={`text-3xl font-bold ${isDarkTheme ? "text-white" : "text-gray-800"}`}>Signature</h2>
-      <div className="flex items-start space-x-4">
-        <div className="markdown-editor-container flex-1">
-          <ReactMarkdownEditorLite
-            value={signature}
-            onChange={handleEditorChange}
-            className="w-full h-64 bg-zinc-800 text-black border-0"
-            style={{ backgroundColor: '#27272a' }}
-            config={{
-              view: {
-                menu: true,
-                md: true,
-                html: false,
-              },
-              theme: 'dark',
-            }}
-          />
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-white">Signature</h2>
+          <p className="text-zinc-400 mt-1">Customize your forum signature with markdown support</p>
         </div>
-
-        <EnhancedEmojiPicker
-          className="w-1/3 mt-1 ml-1"
-          onEmojiSelect={handleEmojiSelect}
-          isDarkTheme={isDarkTheme}
-        />
+        <div className="flex items-center gap-2">
+          <EnhancedEmojiPicker 
+            onEmojiSelect={handleEmojiSelect}
+            isDarkTheme={true}
+          />
+          <Button
+            onClick={handleSubmit}
+            className="bg-yellow-500 text-black hover:bg-yellow-600"
+          >
+            Save Changes
+          </Button>
+        </div>
       </div>
 
-      {/* Preview Section */}
-      <div className="space-y-2">
-        <Label className="text-lg font-semibold">Preview</Label>
-        <Card className={`border-0 w-[860px] rounded-lg ${isDarkTheme ? "bg-zinc-800" : "bg-gray-100"}`}>
-          <ScrollArea className={`w-full h-64 rounded-md overflow-y-auto ${isDarkTheme ? "bg-zinc-800" : "bg-gray-50"}`}>
-            <MarkdownWithEmojis
-              style={{ backgroundColor: isDarkTheme ? "#1E1E24" : "#FFFFFF" }}
-              className="p-4"
-              content={signature}
-            />
-          </ScrollArea>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="bg-zinc-900/50 border-white/10">
+          <CardHeader>
+            <CardTitle className="text-lg text-white">Editor</CardTitle>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="markdown-editor-container">
+              <ReactMarkdownEditorLite
+                value={signature}
+                onChange={handleEditorChange}
+                className="w-full min-h-[300px] bg-zinc-800/50 rounded-lg overflow-hidden border border-white/10"
+                renderHTML={text => <ReactMarkdown>{text}</ReactMarkdown>}
+                config={{
+                  view: {
+                    menu: true,
+                    md: true,
+                    html: false,
+                  },
+                  canView: {
+                    menu: true,
+                    md: true,
+                    html: false,
+                    fullScreen: false,
+                    hideMenu: false,
+                  },
+                }}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-zinc-900/50 border-white/10">
+          <CardHeader>
+            <CardTitle className="text-lg text-white">Preview</CardTitle>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="prose prose-invert max-w-none">
+              <div className="bg-zinc-800/50 text-white rounded-lg p-4 min-h-[300px] border border-white/10">
+                <CustomMarkdown content={signature} />
+              </div>
+            </div>
+          </CardContent>
         </Card>
       </div>
 
-      {/* Save Button */}
-      <div className="flex justify-end">
-        <Button
-          type="submit"
-          onClick={handleSubmit}
-          className="bg-yellow-500 mr-16 text-black hover:bg-yellow-600"
-        >
-          Save Signature
-        </Button>
-      </div>
+      <Card className="bg-zinc-900/50 border-white/10">
+        <CardHeader>
+          <CardTitle className="text-lg text-white">Tips & Formatting</CardTitle>
+        </CardHeader>
+        <CardContent className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <h3 className="font-medium text-white">Markdown Tips</h3>
+              <ul className="text-sm text-zinc-400 space-y-1">
+                <li>• Use ** ** for <span className="font-bold">bold</span></li>
+                <li>• Use * * for <span className="italic">italic</span></li>
+                <li>• Use ` ` for <code className="bg-zinc-800 px-1 rounded">code</code></li>
+                <li>• Use # for headers</li>
+                <li>• Use - for bullet points</li>
+              </ul>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-medium text-white">Guidelines</h3>
+              <ul className="text-sm text-zinc-400 space-y-1">
+                <li>• Keep it concise</li>
+                <li>• Avoid excessive formatting</li>
+                <li>• Use emojis sparingly</li>
+                <li>• Check preview before saving</li>
+              </ul>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
 
 
-// function SecurityTab({ onChangePassword }) {
-//   const [currentPassword, setCurrentPassword] = useState('')
-//   const [newPassword, setNewPassword] = useState('')
-//   const [confirmPassword, setConfirmPassword] = useState('')
-//   const [showPassword, setShowPassword] = useState(false)
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault()
-//     if (newPassword === confirmPassword) {
-//       onChangePassword(currentPassword, newPassword)
-//       setCurrentPassword('')
-//       setNewPassword('')
-//       setConfirmPassword('')
-//     } else {
-//       // Show error message that passwords don't match
-//     }
-//   }
-
-//   return (
-//     <div className="space-y-6">
-//       <h2 className="text-2xl text-white font-bold">Security Settings</h2>
-//       <Card className="bg-zinc-800 text-white border-zinc-700">
-//         <CardHeader>
-//           <CardTitle>Change Password</CardTitle>
-//         </CardHeader>
-//         <CardContent>
-//           <form onSubmit={handleSubmit} className="space-y-4">
-//             <div>
-//               <Label htmlFor="currentPassword">Current Password</Label>
-//               <div className="relative">
-//                 <Input
-//                   id="currentPassword"
-//                   type={showPassword ? "text" : "password"}
-//                   value={currentPassword}
-//                   onChange={(e) => setCurrentPassword(e.target.value)}
-//                   className="bg-zinc-800 border-zinc-700 text-white pr-10"
-//                 />
-//                 <button
-//                   type="button"
-//                   onClick={() => setShowPassword(!showPassword)}
-//                   className="absolute inset-y-0 right-0 flex items-center pr-3"
-//                 >
-//                   {showPassword ? (
-//                     <EyeOff className="h-5 w-5 text-gray-400" />
-//                   ) : (
-//                     <Eye className="h-5 w-5 text-gray-400" />
-//                   )}
-//                 </button>
-//               </div>
-//             </div>
-//             <div>
-//               <Label htmlFor="newPassword">New Password</Label>
-//               <Input
-//                 id="newPassword"
-//                 type="password"
-//                 value={newPassword}
-//                 onChange={(e) => setNewPassword(e.target.value)}
-//                 className="bg-zinc-800 border-zinc-700 text-white"
-//               />
-//             </div>
-//             <div>
-//               <Label htmlFor="confirmPassword">Confirm New Password</Label>
-//               <Input
-//                 id="confirmPassword"
-//                 type="password"
-//                 value={confirmPassword}
-//                 onChange={(e) => setConfirmPassword(e.target.value)}
-//                 className="bg-zinc-800 border-zinc-700 text-white"
-//               />
-//             </div>
-//             <Button type="submit" className="bg-yellow-500 text-black hover:bg-yellow-600">
-//               Change Password
-//             </Button>
-//           </form>
-//         </CardContent>
-//       </Card>
-//       {/* <Card className="bg-zinc-800 text-white border-zinc-700">
-//         <CardHeader>
-//           <CardTitle>Two-Factor Authentication</CardTitle>
-//         </CardHeader>
-//         <CardContent>
-//           <p className="text-gray-400 mb-4">Enhance your account security by enabling two-factor authentication.</p>
-//           <Button className="bg-yellow-500 text-black hover:bg-yellow-600">
-//             Set Up 2FA
-//           </Button>
-//         </CardContent>
-//       </Card> */}
-//     </div>
-//   )
-// }
-
-function SecurityTab({ token, userData }) {
+function SecurityTab({ token, onChangePassword, userData }) {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { toast } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (newPassword === confirmPassword) {
-      try {
-        const response = await fetch(`/api/mics/password?token=${token}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            oldPassword: currentPassword,
-            newPassword: newPassword,
-          }),
+    if (newPassword !== confirmPassword) {
+      toast({
+        title: "Error",
+        description: "New passwords do not match.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/auth/change-password?token=${token}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast({
+          title: "Success",
+          description: "Password changed successfully.",
+          variant: "destructive",
         });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to change password');
-        }
-
-        setSuccess(data.message);
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
-        setError(null); // Clear any previous errors
-      } catch (err) {
-        setError(err.message);
-        setSuccess(null); // Clear any previous success messages
+      } else {
+        throw new Error(data.message || 'Failed to change password');
       }
-    } else {
-      setError("New passwords don't match.");
-      setSuccess(null); // Clear any previous success messages
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to change password.",
+        variant: "destructive",
+      });
     }
   };
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl text-white font-bold">Security Settings</h2>
-      <Card className="bg-zinc-800 text-white border-zinc-700">
+      <div>
+        <h2 className="text-2xl font-bold text-white">Security Settings</h2>
+        <p className="text-zinc-400 mt-1">Manage your account security preferences</p>
+      </div>
+
+      <Card className="bg-zinc-900/50 border-white/10">
         <CardHeader>
-          <CardTitle>Change Password</CardTitle>
+          <CardTitle className="text-lg text-white">Change Password</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {error && <p className="text-red-500">{error}</p>}
-            {success && <p className="text-green-500">{success}</p>}
-            <div>
-              <Label htmlFor="currentPassword">Current Password</Label>
+            <div className="space-y-2">
+              <Label htmlFor="currentPassword" className="text-white/80">Current Password</Label>
               <div className="relative">
                 <Input
                   id="currentPassword"
-                  type={showPassword ? "text" : "password"}
+                  type={showCurrentPassword ? "text" : "password"}
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="bg-zinc-800 border-zinc-700 text-white pr-10"
+                  className="bg-zinc-800/50 border-white/10 pr-10"
                 />
-                <button
+                <Button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400" />
-                  )}
-                </button>
+                  {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </Button>
               </div>
             </div>
-            <div>
-              <Label htmlFor="newPassword">New Password</Label>
-              <Input
-                id="newPassword"
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="bg-zinc-800 border-zinc-700 text-white"
-              />
+
+            <div className="space-y-2">
+              <Label htmlFor="newPassword" className="text-white/80">New Password</Label>
+              <div className="relative">
+                <Input
+                  id="newPassword"
+                  type={showNewPassword ? "text" : "password"}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="bg-zinc-800/50 border-white/10 pr-10"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                >
+                  {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </Button>
+              </div>
             </div>
-            <div>
-              <Label htmlFor="confirmPassword">Confirm New Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="bg-zinc-800 border-zinc-700 text-white"
-              />
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword" className="text-white/80">Confirm New Password</Label>
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="bg-zinc-800/50 border-white/10 pr-10"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </Button>
+              </div>
             </div>
-            <Button type="submit" className="bg-yellow-500 text-black hover:bg-yellow-600">
-              Change Password
+
+            <Button type="submit" className="w-full bg-yellow-500 text-black hover:bg-yellow-600">
+              Update Password
             </Button>
           </form>
         </CardContent>
@@ -1468,45 +1515,6 @@ function SecurityTab({ token, userData }) {
     </div>
   );
 }
-
-// function DangerZoneTab({ userData, token }) {
-//   return (
-//     <div className="space-y-6">
-//       <h2 className="text-2xl text-white font-bold">Danger Zone</h2>
-//       <Card className="bg-red-900/20 border-red-900">
-//         <CardHeader>
-//           <CardTitle className="text-red-500">Delete Account</CardTitle>
-//         </CardHeader>
-//         <CardContent>
-//           <p className="text-gray-400 mb-4">
-//             Once you delete your account, there is no going back. Please be certain.
-//           </p>
-//           <AlertDialog>
-//             <AlertDialogTrigger asChild>
-//               <Button variant="destructive">Delete Account</Button>
-//             </AlertDialogTrigger>
-//             <AlertDialogContent className="bg-zinc-900 border-zinc-800">
-//               <AlertDialogHeader>
-//                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-//                 <AlertDialogDescription>
-//                   This action cannot be undone. This will permanently delete your account
-//                   and remove your data from our servers.
-//                 </AlertDialogDescription>
-//               </AlertDialogHeader>
-//               <AlertDialogFooter>
-//                 <AlertDialogCancel className="bg-zinc-700 text-white hover:bg-zinc-600">Cancel</AlertDialogCancel>
-//                 <AlertDialogAction onClick={onDeleteAccount} className="bg-red-600 text-white hover:bg-red-700">
-//                   Delete Account
-//                 </AlertDialogAction>
-//               </AlertDialogFooter>
-//             </AlertDialogContent>
-//           </AlertDialog>
-//         </CardContent>
-
-//       </Card>
-//     </div>
-//   )
-// }
 
 function DangerZoneTab({ userData, token }) {
   const [loading, setLoading] = useState(false);
