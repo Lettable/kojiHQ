@@ -72,7 +72,7 @@ export default function SiteStatusOverlay() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-black bg-opacity-95"
+          className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-black bg-opacity-70"
         >
           <motion.div
             initial={{ y: -20, opacity: 0 }}
@@ -84,7 +84,7 @@ export default function SiteStatusOverlay() {
               initial={{ y: -10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-4xl md:text-5xl font-bold mb-6 text-yellow-500 font-orbitron"
+              className="text-3xl md:text-5xl p-3 font-bold mb-6 text-yellow-500 font-orbitron"
             >
               {config?.status === "maintenance" ? "System Maintenance" : config?.message || "Site Unavailable"}
             </motion.h1>
