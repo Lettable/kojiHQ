@@ -1253,9 +1253,11 @@ const renderTextWithEmojis = (text, emojis) => {
             key={index}
             src={emoji.emojiUrl}
             alt={emoji.emojiTitle}
+            style={{ width: '18px', height: '18px' }}
             title={emoji.emojiTitle}
             className="inline-block w-6 h-6"
           />
+
         )
       } else {
         return `:${part}:`
@@ -1585,18 +1587,18 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       setIsDarkTheme(storedTheme ? storedTheme === "dark" : true)
     }
 
-     return () => {
-       if (wsRef.current) {
-         wsRef.current.close();
-       }
-     };
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.close();
+      }
+    };
   }, [connectWebSocket, scrollToBottom])
 
   const sendMessage = async () => {
     if (!user || !newMessage.trim() || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return
     const correctedTime = new Date(Date.now() + timeOffset).toISOString()
 
-    
+
     if (handleVB88Command(newMessage.trim())) {
       setNewMessage("")
       scrollToBottom();
@@ -1744,20 +1746,18 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
                     <div className={`flex flex-col ${message.userId === user?.userId ? "items-end" : "items-start"}`}>
                       <div className="relative group">
                         <div
-                          className={`px-4 py-2 rounded-lg max-w-sm sm:max-w-sm md:max-w-md lg:max-w-lg ${
-                            message.userId === user?.userId
+                          className={`px-4 py-2 rounded-lg max-w-sm sm:max-w-sm md:max-w-md lg:max-w-lg ${message.userId === user?.userId
                               ? "bg-blue-600 text-white"
                               : isDarkTheme
                                 ? "bg-zinc-800 text-white"
                                 : "bg-zinc-200 text-black"
-                          }`}
+                            }`}
                         >
                           {message.userId !== user?.userId && (
                             <>
                               <span
-                                className={`font-semibold text-sm ${message.usernameEffect} ${
-                                  isDarkTheme ? "text-gray-300" : "text-gray-600"
-                                }`}
+                                className={`font-semibold text-sm ${message.usernameEffect} ${isDarkTheme ? "text-gray-300" : "text-gray-600"
+                                  }`}
                               >
                                 {message.username}
                               </span>{" "}
@@ -1793,11 +1793,10 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
                     placeholder="Type your message..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value.slice(0, MAX_MESSAGE_LENGTH))}
-                    className={`flex-grow min-h-[31px] max-h-[41px] resize-none ${
-                      isDarkTheme
+                    className={`flex-grow min-h-[31px] max-h-[41px] resize-none ${isDarkTheme
                         ? "bg-white/5 border-white/10 focus:border-yellow-400/50"
                         : "bg-black/5 border-black/10 focus:border-yellow-600/50"
-                    } rounded-full py-2 px-4`}
+                      } rounded-full py-2 px-4`}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault()
