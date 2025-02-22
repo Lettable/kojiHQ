@@ -34,7 +34,13 @@ const groupData = {
     "trial": "https://images.ctfassets.net/49i3hw7ggo6y/7ARwDCuCYhErV0PlCzHBXr/479096a0bea3bad91ab2dfb071b3d1e0/fHXLiyP.png?fm=webp&w=225&h=75&q=100&fit=fill",
     "premium": "https://images.ctfassets.net/49i3hw7ggo6y/5l5AwxH2WjSN11MHl4tfgT/42276b950617188b3cb36413ad4023f4/4jnzT1l.png?fm=webp&w=225&h=75&q=100&fit=fill",
     "supreme": "https://images.ctfassets.net/49i3hw7ggo6y/4lUBsvc6yACiX2KiuBDjsc/d4e3a1d497cd99ce388d4ed6f9ae22c3/361Ft8A.png?fm=webp&w=225&h=75&q=100&fit=fill",
-    "staff": "https://images.ctfassets.net/49i3hw7ggo6y/2XxGlPPfYa1sLppIinPaU9/286a84a43365ece32959b47b835c6adf/br0lUXL.png?fm=webp&w=225&h=75&q=100&fit=fill"
+    "staff": "https://images.ctfassets.net/49i3hw7ggo6y/2XxGlPPfYa1sLppIinPaU9/286a84a43365ece32959b47b835c6adf/br0lUXL.png?fm=webp&w=225&h=75&q=100&fit=fill",
+    "cosmo": "https://images.ctfassets.net/49i3hw7ggo6y/4fgQmj0a3JewpJvHd4y4Uh/8e003ccd8f95f733788d878abf26d1b0/uSU0vt7.gif?fm=webp&w=225&h=75&q=100&fit=fill",
+    "cove": "https://images.ctfassets.net/49i3hw7ggo6y/5I6hsCgTiX1keqznJG4cvY/9b8bd7d05136c45360d343d1151d041e/g47n2HH.gif?fm=webp&w=225&h=75&q=100&fit=fill",
+    "coolcat": "https://images.ctfassets.net/49i3hw7ggo6y/1cJntr8SpHyMzKIDE4x4No/63a8231b4d80232d97bfa3c1e767f611/g5iepBV.png?fm=webp&w=225&h=75&q=100&fit=fill",
+    "comet": "https://images.ctfassets.net/49i3hw7ggo6y/iT7RYxSQnGEzQPI4QeaC9/756939bd02c4681f657616cf9f87cfc6/KKIJfcM.gif?fm=webp&w=225&h=75&q=100&fit=fill",
+    "bog": "https://images.ctfassets.net/49i3hw7ggo6y/3emSjA0JzihY44CFZ5I2mq/62cfa2293a39d83005dc92cb3da0baef/1cjcRlE.png?fm=webp&w=225&h=75&q=100&fit=fill"
+
 }
 
 export default function ForumUserProfile() {
