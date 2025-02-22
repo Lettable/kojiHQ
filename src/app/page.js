@@ -462,9 +462,9 @@ export default function HomePage() {
                 priority
               />
             </motion.div>
-            <motion.div className="text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase mt-4">
+            {/* <motion.div className="text-yellow-500 text-lg md:text-xl font-light tracking-[0.2em] uppercase mt-4">
               Seized, but Never Silenced
-            </motion.div>
+            </motion.div> */}
           </motion.div>
 
           {/* Bottom Ad Banner */}

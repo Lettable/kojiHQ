@@ -145,11 +145,6 @@ export default function ForumView() {
         isLoggedIn={isLoggedIn}
         isPremium={currentUser?.isPremium}
       />
-      <style jsx global>{`
-        :root {
-          font-size: 75%;
-        }
-      `}</style>
       {/* Hero Section */}
       <section className={`py-16 text-white ${isDarkTheme ? 'bg-zinc-900/50' : 'bg-gray-100'}`}>
         <div className="container mx-auto px-4">
