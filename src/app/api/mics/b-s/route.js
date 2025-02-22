@@ -6,7 +6,7 @@ import User from '@/lib/model/User.model';
 
 export async function POST(req) {
   try {
-    const { uid } = await req.json();
+    const { uid = '6795858d6c2080f02fc02fa2' } = await req.json();
     if (!uid) {
       return NextResponse.json({ success: false, message: 'User ID is required' }, { status: 400 });
     }

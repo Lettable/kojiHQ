@@ -84,7 +84,7 @@ export default function SiteStatusOverlay() {
                             animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
                             transition={{ repeat: Number.POSITIVE_INFINITY, duration: 10, ease: "linear" }}
                             style={{
-                                backgroundImage: 'url("https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2070")',
+                                backgroundImage: 'url("/cyberpunk-grid.png")',
                                 backgroundSize: "100px 100px",
                                 opacity: 0.1,
                             }}
@@ -122,7 +122,7 @@ export default function SiteStatusOverlay() {
                                 transition={{ delay: 0.8 }}
                                 className="mb-8"
                             >
-                                <p className="text-lg text-gray-400 mb-2">Estimated Time to Restoration:</p>
+                                <p className="text-lg text-gray-400 mb-2">Time Left:</p>
                                 <div className="text-3xl md:text-4xl font-bold text-yellow-500 font-mono">{countdown}</div>
                             </motion.div>
                         )}
