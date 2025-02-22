@@ -534,8 +534,11 @@ export default function ChatPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className={`flex h-[80vh] rounded-lg overflow-hidden border ${isDarkTheme ? 'border-white/10 backdrop-blur-lg bg-white/5' : 'border-black/10 backdrop-blur-lg bg-black/5'
-            }`}
+          className={`flex h-[85vh] rounded-xl overflow-hidden border shadow-lg backdrop-blur-xl ${
+            isDarkTheme 
+              ? 'border-white/10 bg-black/40' 
+              : 'border-black/10 bg-white/40'
+          }`}
         >
           {/* Chat list sidebar */}
           <AnimatePresence>
@@ -545,28 +548,31 @@ export default function ChatPage() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -300, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className={`${isMobile ? 'w-full' : 'w-1/4'} border-r ${isDarkTheme ? 'border-white/10' : 'border-black/10'}`}
+                className={`${isMobile ? 'w-full' : 'w-1/4'} border-r ${
+                  isDarkTheme ? 'border-white/10' : 'border-black/10'
+                }`}
               >
                 <div className="p-4 flex items-center space-x-2">
                   <Input
                     placeholder="Search chats"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className={`${isDarkTheme
-                      ? 'bg-white/5 border-white/10 focus:border-blue-400/50'
-                      : 'bg-black/5 border-black/10 focus:border-blue-600/50'
-                      } transition-colors`}
+                    className={`${
+                      isDarkTheme
+                        ? 'bg-white/5 border-white/10 focus:border-blue-400/50'
+                        : 'bg-black/5 border-black/10 focus:border-blue-600/50'
+                    } rounded-md transition-colors`}
                   />
                   <Button
                     onClick={() => setIsStartChatOpen(true)}
                     variant="ghost"
                     size="icon"
-                    className={`hover:bg-${isDarkTheme ? 'white' : 'black'}/10 hover:text-${isDarkTheme ? 'white' : 'black'}`}
+                    className={`rounded-md hover:bg-${isDarkTheme ? 'white' : 'black'}/10 hover:text-white`}
                   >
                     <Plus className="h-5 w-5" />
                   </Button>
                 </div>
-                <ScrollArea className="h-[calc(80vh-4rem)]">
+                <ScrollArea className="h-[calc(85vh-4rem)]">
                   <Reorder.Group axis="y" values={filteredChats} onReorder={reorderChats}>
                     {filteredChats.map((chat) => (
                       <Reorder.Item key={chat.userId} value={chat}>
@@ -680,37 +686,40 @@ export default function ChatPage() {
                               className={`group mb-4 flex ${message.senderId === currentUser.userId ? 'justify-end' : 'justify-start'}`}
                               ref={(el) => (messageRefs.current[message._id] = el)}
                             >
-                              {/* Message Bubble */}
                               <div
-                                className={`relative max-w-[70%] p-3 rounded-lg ${message.senderId === currentUser.userId
-                                  ? 'bg-blue-500 text-white'
-                                  : isDarkTheme
-                                    ? 'bg-gray-700 text-white'
-                                    : 'bg-gray-200 text-black'
-                                  }`}
+                                className={`relative max-w-[70%] p-4 rounded-2xl ${
+                                  message.senderId === currentUser.userId
+                                    ? 'bg-blue-600 text-white'
+                                    : isDarkTheme
+                                      ? 'bg-white/10 text-white'
+                                      : 'bg-black/5 text-black'
+                                } shadow-sm hover:shadow-md transition-shadow`}
                               >
-                                {/* Reply Indicator */}
                                 {message.parentId && (
                                   <div
-                                    className={`text-xs ${isDarkTheme ? 'text-white/50' : 'text-black/50'} mb-2 p-2 ${isDarkTheme ? 'bg-white/5' : 'bg-black/5'
-                                      } rounded cursor-pointer`}
+                                    className={`text-xs mb-2 p-2 rounded-lg cursor-pointer ${
+                                      isDarkTheme ? 'bg-black/20' : 'bg-white/20'
+                                    } hover:opacity-80 transition-opacity`}
                                     onClick={() => scrollToMessage(message.parentId)}
                                   >
                                     Replying to: {message.parentMessageContent || "Your own message"}
                                   </div>
                                 )}
-                                {renderTextWithEmojis(message.content, emojis)}
-                                <span className={`text-xs ${isDarkTheme ? 'text-white/50' : 'text-black/50'} mt-1 block`}>
+                                <div className="message-content">{renderTextWithEmojis(message.content, emojis)}</div>
+                                <span className={`text-xs ${isDarkTheme ? 'text-white/50' : 'text-black/50'} mt-2 block`}>
                                   {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </span>
                               </div>
 
-                              {/* Reply Button */}
                               <Button
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => handleReply(message)}
-                                className={`relative opacity-0 group-hover:opacity-100 hover:bg-${isDarkTheme ? 'white' : 'black'}/10 hover:text-${isDarkTheme ? 'white' : 'black'} transition-opacity ${message.senderId === currentUser.userId ? 'ml-3' : 'ml-3'}`}
+                                className={`relative opacity-0 group-hover:opacity-100 rounded-md hover:bg-${
+                                  isDarkTheme ? 'white' : 'black'
+                                }/10 hover:text-white transition-all duration-200 ${
+                                  message.senderId === currentUser.userId ? 'mr-2' : 'ml-2'
+                                }`}
                               >
                                 <CornerUpLeft className="h-4 w-4" />
                               </Button>
@@ -726,18 +735,20 @@ export default function ChatPage() {
                     {!blockedUsers.includes(selectedChat) && (
                       <form
                         onSubmit={handleSendMessage}
-                        className={`p-4 border-t ${isDarkTheme
-                          ? 'border-white/10 backdrop-blur-md bg-white/5'
-                          : 'border-black/10 backdrop-blur-md bg-black/5'
-                          } flex flex-col space-y-2`}
+                        className={`p-4 border-t ${
+                          isDarkTheme
+                            ? 'border-white/10 bg-black/20'
+                            : 'border-black/10 bg-white/20'
+                        } backdrop-blur-md`}
                       >
                         {replyTo && (
-                          <div className={`flex items-center justify-between ${isDarkTheme ? 'bg-white/10' : 'bg-black/10'
-                            } p-2 rounded`}>
+                          <div className={`flex items-center justify-between mb-2 p-2 rounded-md ${
+                            isDarkTheme ? 'bg-white/5' : 'bg-black/5'
+                          }`}>
                             <span className={`text-sm ${isDarkTheme ? 'text-white/70' : 'text-black/70'}`}>
                               Replying to: {replyTo.content}
                             </span>
-                            <Button variant="ghost" size="sm" onClick={handleCancelReply}>
+                            <Button variant="ghost" size="sm" onClick={handleCancelReply} className="rounded-md hover:text-white">
                               <X className="h-4 w-4" />
                             </Button>
                           </div>
@@ -746,22 +757,23 @@ export default function ChatPage() {
                           <Input
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter" && !e.shiftKey) {
-                                e.preventDefault();
-                                handleSendMessage(e);
-                              }
-                            }}
                             placeholder="Type a message..."
-                            className={`flex-1 ${isDarkTheme
-                              ? 'bg-white/5 border-white/10 focus:border-blue-400/50'
-                              : 'bg-black/5 border-black/10 focus:border-blue-600/50'
-                              } transition-colors`}
+                            className={`flex-1 rounded-md ${
+                              isDarkTheme
+                                ? 'bg-white/5 border-white/10 focus:border-blue-400/50'
+                                : 'bg-black/5 border-black/10 focus:border-blue-600/50'
+                            } transition-colors`}
                           />
                           <div onClick={(e) => { e.stopPropagation(); }}>
                             <EnhancedEmojiPicker onEmojiSelect={handleEmojiSelect} isDarkTheme={isDarkTheme} />
                           </div>
-                          <Button type="submit" variant="ghost" disabled={!newMessage.trim()} size="icon">
+                          <Button 
+                            type="submit" 
+                            variant="ghost" 
+                            disabled={!newMessage.trim()} 
+                            size="icon"
+                            className="rounded-md hover:bg-blue-500/20 hover:text-white transition-colors"
+                          >
                             <Send className="h-5 w-5" />
                           </Button>
                         </div>

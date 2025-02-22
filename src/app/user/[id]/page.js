@@ -13,7 +13,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useToast } from "@/hooks/use-toast"
 import Header from '@/partials/Header'
 import MarkdownWithEmojis from '@/partials/MarkdownWithEmojis'
-import { Calendar, MessageCircle, FileText, Award, ThumbsUp } from 'lucide-react'
+import { Calendar, MessageCircle, FileText, Award, ThumbsUp, Activity } from 'lucide-react'
 import { Clipboard, CoinsIcon } from 'lucide-react'
 import { FaCoins } from 'react-icons/fa'
 import { FaTelegram, FaDiscord } from 'react-icons/fa'
@@ -190,7 +190,61 @@ export default function ForumUserProfile() {
     }
 
     if (!userData) {
-        return <div className="flex items-center justify-center min-h-screen bg-black text-white">Loading...</div>
+        return (
+            <div className="min-h-screen bg-black text-white">
+                <div className="container mx-auto px-4 py-8">
+                    <div className="flex flex-col lg:flex-row gap-8">
+                        <div className="lg:w-1/4">
+                            <div className="bg-zinc-900/50 rounded-lg p-6 mb-4">
+                                <div className="h-6 bg-zinc-800 rounded mb-4 animate-pulse"></div>
+                                <div className="space-y-3">
+                                    {[...Array(6)].map((_, i) => (
+                                        <div key={i} className="flex items-center">
+                                            <div className="w-4 h-4 bg-zinc-800 rounded mr-2 animate-pulse"></div>
+                                            <div className="h-4 bg-zinc-800 rounded w-3/4 animate-pulse"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="lg:w-1/2">
+                            <div className="bg-zinc-900/50 rounded-lg p-6 mb-6">
+                                <div className="flex items-center mb-6">
+                                    <div className="w-24 h-24 bg-zinc-800 rounded-full mr-4 animate-pulse"></div>
+                                    <div className="flex-1">
+                                        <div className="h-8 bg-zinc-800 rounded w-1/2 mb-2 animate-pulse"></div>
+                                        <div className="h-4 bg-zinc-800 rounded w-3/4 animate-pulse"></div>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 mb-4">
+                                    {[...Array(4)].map((_, i) => (
+                                        <div key={i} className="bg-zinc-900/50 rounded-lg p-4">
+                                            <div className="h-5 bg-zinc-800 rounded w-1/2 mb-2 animate-pulse"></div>
+                                            <div className="h-4 bg-zinc-800 rounded w-1/4 animate-pulse"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="lg:w-1/4">
+                            <div className="bg-zinc-900/50 rounded-lg p-6 mb-6">
+                                <div className="h-6 bg-zinc-800 rounded mb-4 animate-pulse"></div>
+                                <div className="space-y-4">
+                                    {[...Array(4)].map((_, i) => (
+                                        <div key={i}>
+                                            <div className="h-4 bg-zinc-800 rounded w-3/4 mb-2 animate-pulse"></div>
+                                            <div className="h-4 bg-zinc-800 rounded w-1/2 animate-pulse"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     const userScore = userData.stats.posts * 2 + userData.stats.threads * 5 + userData.stats.reputation * 10
@@ -209,7 +263,6 @@ export default function ForumUserProfile() {
             />
             <main className="container mx-auto px-4 py-8">
                 <div className="flex flex-col lg:flex-row gap-8">
-                    {/* Left Column - User Overview */}
                     <div className="lg:w-1/4">
                         <Card className='bg-zinc-900/50 border-0 mb-4 text-zinc-200'>
                             <CardHeader>
@@ -397,35 +450,47 @@ export default function ForumUserProfile() {
                                     </CardContent>
                                 </Card>
                                 <div className="grid grid-cols-2 gap-4 mb-4">
-                                    <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-2">
+                                <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-2 hover:bg-zinc-900/70 transition-all duration-300 backdrop-blur-sm">
                                         <CardContent className="pt-6">
-                                            <div>
-                                                <p className="font-semibold">Reputation</p>
-                                                <p className='mt-2'>{userData.stats.reputation}</p>
+                                            <div className="flex flex-col">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <ThumbsUp className="h-4 w-4 text-yellow-500" />
+                                                    <p className="font-semibold">Reputation</p>
+                                                </div>
+                                                <p className='text-2xl font-bold text-white/80'>{userData.stats.reputation}</p>
                                             </div>
                                         </CardContent>
                                     </Card>
-                                    <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-2">
+                                    <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-2 hover:bg-zinc-900/70 transition-all duration-300 backdrop-blur-sm">
                                         <CardContent className="pt-6">
-                                            <div>
-                                                <p className="font-semibold">Threads</p>
-                                                <p className='mt-2'>{userData.stats.threads}</p>
+                                            <div className="flex flex-col">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <FileText className="h-4 w-4 text-yellow-500" />
+                                                    <p className="font-semibold">Threads</p>
+                                                </div>
+                                                <p className='text-2xl font-bold text-white/80'>{userData.stats.threads}</p>
                                             </div>
                                         </CardContent>
                                     </Card>
-                                    <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-2">
+                                    <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-2 hover:bg-zinc-900/70 transition-all duration-300 backdrop-blur-sm">
                                         <CardContent className="pt-6">
-                                            <div>
-                                                <p className="font-semibold">Posts</p>
-                                                <p className='mt-2'>{userData.stats.posts}</p>
+                                            <div className="flex flex-col">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <FileText className="h-4 w-4 text-yellow-500" />
+                                                    <p className="font-semibold">Posts</p>
+                                                </div>
+                                                <p className='text-2xl font-bold text-white/80'>{userData.stats.posts}</p>
                                             </div>
                                         </CardContent>
                                     </Card>
-                                    <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-2">
+                                    <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-2 hover:bg-zinc-900/70 transition-all duration-300 backdrop-blur-sm">
                                         <CardContent className="pt-6">
-                                            <div>
-                                                <p className="font-semibold">Trust Scan Value</p>
-                                                <p className='mt-2'>{Math.min(100, Math.floor(userScore / 10))}%</p>
+                                            <div className="flex flex-col">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <FaCoins className="h-4 w-4 text-yellow-500" />
+                                                    <p className="font-semibold">Credits</p>
+                                                </div>
+                                                <p className='text-2xl font-bold text-white/80'>{userData.credits.toFixed(2)}</p>
                                             </div>
                                         </CardContent>
                                     </Card>
@@ -480,44 +545,45 @@ export default function ForumUserProfile() {
                         </Card>
                     </div>
 
-                    {/* Right Column - User Content */}
                     <div className="lg:w-1/4">
-                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6">
+                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6 backdrop-blur-sm">
                             <CardHeader>
-                                <CardTitle>Recent Activity</CardTitle>
+                                <CardTitle className="text-lg flex items-center gap-2">
+                                    Recent Activity
+                                </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <ScrollArea className="h-[300px] overflow-y-auto">
+                                <ScrollArea className="h-[300px] overflow-y-auto pr-4">
                                     {userData.activity.threads.length > 0 || userData.activity.posts.length > 0 ? (
                                         <>
                                             {userData.activity.threads.length > 0 && (
                                                 <div>
-                                                    <h4 className="font-semibold text-lg mb-2">Threads</h4>
+                                                    <h4 className="font-semibold text-lg mb-2 text-yellow-500">Threads</h4>
                                                     {userData.activity.threads.map((thread) => (
-                                                        <div key={thread._id} className="mb-4">
-                                                            <a href={`/thread/${thread._id}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
+                                                        <div key={thread._id} className="mb-4 p-3 rounded-lg hover:bg-white/5 transition-colors duration-200">
+                                                            <a href={`/thread/${thread._id}`} className='text-white hover:text-yellow-500 transition-colors duration-200'>
                                                                 <h3 className="font-semibold">{thread.title}</h3>
                                                             </a>
                                                             <p className="text-sm text-gray-400">
                                                                 {new Date(thread.createdAt).toLocaleDateString()}
                                                             </p>
-                                                            <p className="text-sm mt-1">{renderTextWithEmojis(thread.content.substring(0, 100), emojis)}...</p>
+                                                            <p className="text-sm mt-1 text-gray-300">{renderTextWithEmojis(thread.content.substring(0, 100), emojis)}...</p>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
                                             {userData.activity.posts.length > 0 && (
                                                 <div className="mt-6">
-                                                    <h4 className="font-semibold text-lg mb-2">Posts</h4>
+                                                    <h4 className="font-semibold text-lg mb-2 text-yellow-500">Posts</h4>
                                                     {userData.activity.posts.map((post) => (
-                                                        <div key={post._id} className="mb-4">
-                                                            <a href={`/thread/${post.threadId}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
+                                                        <div key={post._id} className="mb-4 p-3 rounded-lg hover:bg-white/5 transition-colors duration-200">
+                                                            <a href={`/thread/${post.threadId}`} className='text-white hover:text-yellow-500 transition-colors duration-200'>
                                                                 <h3 className="font-semibold">{post.threadTitle || "Untitled Thread"}</h3>
                                                             </a>
                                                             <p className="text-sm text-gray-400">
                                                                 {new Date(post.createdAt).toLocaleDateString()}
                                                             </p>
-                                                            <p className="text-sm mt-1">{renderTextWithEmojis(post.content.substring(0, 100), emojis)}...</p>
+                                                            <p className="text-sm mt-1 text-gray-300">{renderTextWithEmojis(post.content.substring(0, 100), emojis)}...</p>
                                                         </div>
                                                     ))}
                                                 </div>
