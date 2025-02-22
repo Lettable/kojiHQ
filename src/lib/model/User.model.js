@@ -321,42 +321,18 @@ const UserSchema = new mongoose.Schema({
   },
   reputationGiven: [
     {
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-        },
-        value: {
-            type: Number,
-            default: 1
-        },
-        message: {
-            type: String,
-            default: ''
-        },
-        date: {
-            type: Date,
-            default: Date.now
-        }
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        message: { type: String },
+        type: { type: String, enum: ['positive', 'negative'] },
+        givenAt: { type: Date, default: Date.now }
     }
   ],
   reputationTaken: [
     {
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-        },
-        value: {
-            type: Number,
-            default: 1
-        },
-        message: {
-            type: String,
-            default: ''
-        },
-        date: {
-            type: Date,
-            default: Date.now
-        }
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        message: { type: String },
+        type: { type: String, enum: ['positive', 'negative'] },
+        givenAt: { type: Date, default: Date.now }
     }
   ],
   savedThreads: [
