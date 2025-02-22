@@ -68,7 +68,7 @@ export default function SiteStatusOverlay() {
   if (loading) return null
 
   return (
-    <Dialog open={open} onOpenChange={() => {}} className="border-1 border-zinc-800 shadow-md bg-opacity-90">
+    <Dialog open={open} onOpenChange={() => {}} className="border-1 border-zinc-800 shadow-md bg-opacity-70">
       <DialogContent className="sm:max-w-md bg-black border-1 border-zinc-800 text-white" onPointerDownOutside={(e) => e.preventDefault()} >
         <DialogHeader>
           <DialogTitle className="text-center text-white">
