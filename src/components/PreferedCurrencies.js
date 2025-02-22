@@ -20,7 +20,7 @@ const cryptoColors = {
   DOGE: "text-[#C2A633]",
   ADA: "text-[#0033AD]",
   STETH: "text-[#00A3FF]",
-  
+
   TRX: "text-[#FF0013]",
   WBTC: "text-[#F7931A]",
   LINK: "text-[#2A5ADA]",
@@ -140,14 +140,14 @@ export default function PreferredCurrencies() {
       try {
         const prices = {};
         const changes = {};
-        
+
         for (const currency of preferredCurrencies) {
           const priceResponse = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${currency}USDT`);
           const priceData = await priceResponse.json();
-          
+
           const statsResponse = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${currency}USDT`);
           const statsData = await statsResponse.json();
-          
+
           prices[currency] = parseFloat(priceData.price);
           changes[currency] = {
             priceChange: parseFloat(statsData.priceChange).toFixed(2),
@@ -200,7 +200,7 @@ export default function PreferredCurrencies() {
         </div>
       </CardHeader>
 
-      <CardContent className="py-2">
+      <CardContent className="!p-4">
         <AnimatePresence mode="wait">
           {isLoading ? (
             <motion.div
@@ -229,10 +229,10 @@ export default function PreferredCurrencies() {
                     animate={{ opacity: 1, y: 0 }}
                     className="group cursor-pointer"
                   >
-                    <div className="bg-zinc-900/50 rounded-lg p-3 hover:bg-zinc-900/70 transition-all duration-300 hover:border-yellow-500/20">
+                    <div className="bg-zinc-900/50 rounded-lg p-3 hover:bg-zinc-900/50 transition-all duration-300 hover:border-yellow-500/20">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-3">
-                          <motion.div 
+                          <motion.div
                             className="relative w-8 h-8"
                           >
                             <Image
@@ -248,7 +248,7 @@ export default function PreferredCurrencies() {
                           </motion.div>
                           <div className="flex flex-col">
                             <span className={`font-bold ${cryptoColors[currency] || 'text-white'}`}>{currency}</span>
-                            <motion.span 
+                            <motion.span
                               className={`flex items-center gap-1 text-xs ${isPositive ? 'text-green-500' : 'text-red-500'}`}
                               animate={{ scale: [1, 1.1, 1] }}
                               transition={{ duration: 0.5 }}
@@ -281,7 +281,7 @@ export default function PreferredCurrencies() {
                       </div>
 
                       <div className="grid grid-cols-2 gap-4 mt-2">
-                        <div className="flex flex-col bg-zinc-800/30 rounded-lg p-2.5 transition-all duration-300 hover:bg-zinc-900/50">
+                        <div className="flex flex-col bg-zinc-800/30 rounded-lg p-2.5 transition-all duration-300 hover:bg-zinc-800/30">
                           <span className="text-xs text-gray-400 mb-1">24h High</span>
                           <span className="text-sm font-medium text-green-500">
                             ${parseFloat(change?.high).toLocaleString(undefined, {
@@ -290,7 +290,7 @@ export default function PreferredCurrencies() {
                             })}
                           </span>
                         </div>
-                        <div className="flex flex-col bg-zinc-800/30 rounded-lg p-2.5 transition-all duration-300 hover:bg-zinc-900/50">
+                        <div className="flex flex-col bg-zinc-800/30 rounded-lg p-2.5 transition-all duration-300 hover:bg-zinc-800/30">
                           <span className="text-xs text-gray-400 mb-1">24h Low</span>
                           <span className="text-sm font-medium text-red-500">
                             ${parseFloat(change?.low).toLocaleString(undefined, {
@@ -308,7 +308,7 @@ export default function PreferredCurrencies() {
           )}
         </AnimatePresence>
       </CardContent>
-      
+
       <CryptoSelectionDialog
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}

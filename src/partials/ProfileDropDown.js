@@ -74,7 +74,7 @@ export function ProfileDropdown({
     >
       <div className="px-4 py-3">
         <div className="flex items-center">
-          <img className="h-10 w-10 rounded-full" src={avatar} alt="" />
+          <img className="h-10 w-10 mr-4 rounded-full" src={avatar} alt="" />
           <div className="ml-3">
             <p className="text-sm font-medium text-white">{username}</p>
             {/* <p className="text-xs font-medium text-gray-400 cursor-pointer hover:text-yellow-500" onClick={() => { router.push(`/user/${userId}`); onClose(); }}>View Profile</p> */}

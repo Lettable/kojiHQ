@@ -37,6 +37,7 @@ export default function ThreadView() {
     const [currencies, setCurrencies] = useState()
     const [isSubmitting, setIsSubmitting] = useState(false)
     const replyBoxRef = useRef(null)
+    const router = useRouter()
 
     useEffect(() => {
         const storedCurrencies = localStorage.getItem('preferredCurrencies');
@@ -241,7 +242,7 @@ export default function ThreadView() {
                             </div>
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-3 mb-2">
-                                    <span className={`font-semibold truncate ${post.author.usernameEffect} hover:text-yellow-500 transition-colors duration-300`}>
+                                    <span onClick={() => router.push(`/user/${post.author.username}`)} className={`font-semibold truncate ${post.author.usernameEffect} hover:text-yellow-500 transition-colors duration-300`}>
                                         {post.author.username}
                                     </span>
                                     <span className="text-xs text-gray-400 flex items-center gap-2">
@@ -485,7 +486,7 @@ export default function ThreadView() {
             <div className="container mx-auto text-white px-4 py-8">
                 <div className="flex flex-col text-white lg:flex-row gap-8">
                     <div className="lg:w-3/4 space-y-6">
-                        <Card className={`${isDarkTheme ? 'bg-zinc-900/50 hover:bg-zinc-900/70' : 'bg-white'} 
+                        <Card className={`${isDarkTheme ? 'bg-zinc-900/50 hover:bg-zinc-900/50' : 'bg-white'} 
                             text-white border-0 transition-all duration-200 shadow-xl rounded-xl overflow-hidden`}>
                             <CardContent className="p-8">
                                 <div className="flex items-center text-white justify-between mb-8">
@@ -498,7 +499,7 @@ export default function ThreadView() {
                                             <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-4 border-zinc-900"></div>
                                         </div>
                                         <div>
-                                            <span className={`text-xl font-semibold ${thread.author.usernameEffect} hover:text-yellow-500 transition-colors duration-200`}>
+                                            <span onClick={() => router.push(`/user/${thread.author.username}`)} className={`text-xl font-semibold ${thread.author.usernameEffect} hover:text-yellow-500 transition-colors duration-200`}>
                                                 {thread.author.username}
                                             </span>
                                             <p className="text-sm text-gray-400">{formatDate(thread.createdAt)}</p>

@@ -618,7 +618,7 @@ export default function HomePage() {
                   <span>Your Stats</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="!p-6 !pt-2">
                 <div className="space-y-3">
                   <div 
                     className={`p-4 rounded-lg ${
