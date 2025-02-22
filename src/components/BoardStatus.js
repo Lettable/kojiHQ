@@ -16,7 +16,11 @@ export default function SiteStatusOverlay() {
                 const token = localStorage.getItem("accessToken")
                 if (token) {
                     const decoded = jwtDecode(token)
-                    uid = decoded.userId
+                    if (decoded.userId.trim() !== "") {
+                        uid = decoded.userId
+                    } else {
+                        uid = '6795858d6c2080f02fc02fa2'
+                    }
                 }
                 const res = await fetch("/api/mics/b-s", {
                     method: "POST",
@@ -80,7 +84,7 @@ export default function SiteStatusOverlay() {
                             animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
                             transition={{ repeat: Number.POSITIVE_INFINITY, duration: 10, ease: "linear" }}
                             style={{
-                                backgroundImage: 'url("/cyberpunk-grid.png")',
+                                backgroundImage: 'url("https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2070")',
                                 backgroundSize: "100px 100px",
                                 opacity: 0.1,
                             }}
