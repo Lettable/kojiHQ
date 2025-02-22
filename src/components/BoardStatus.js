@@ -68,8 +68,8 @@ export default function SiteStatusOverlay() {
   if (loading) return null
 
   return (
-    <Dialog open={open} onOpenChange={() => {}} className="border-1 border-zinc-800 shadow-md bg-opacity-70">
-      <DialogContent className="sm:max-w-md bg-black border-1 border-zinc-800 text-white" onPointerDownOutside={(e) => e.preventDefault()} >
+    <Dialog open={open} onOpenChange={() => {}} className="border-2 border-zinc-400 shadow-md bg-opacity-70">
+      <DialogContent className="sm:max-w-md bg-black border-2 border-zinc-400 text-white bg-opacity-70" onPointerDownOutside={(e) => e.preventDefault()} >
         <DialogHeader>
           <DialogTitle className="text-center text-white">
             {config?.status === "maintenance" ? "System Maintenance" : config?.message || "Site Unavailable"}
