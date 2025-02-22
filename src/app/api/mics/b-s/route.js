@@ -6,31 +6,26 @@ import User from '@/lib/model/User.model';
 
 export async function POST(req) {
   try {
-    const { uid = '6795858d6c2080f02fc02fa2' } = await req.json();
-    if (!uid) {
-      return NextResponse.json({ success: false, message: 'User ID is required' }, { status: 400 });
-    }
+    const { uid } = await req.json();
 
     await connectDB();
-
-    const user = await User.findOne({ userId: uid });
-    if (!user) {
-      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 });
-    }
 
     const config = await SiteConfig.findOne({});
     if (!config) {
       return NextResponse.json({ success: false, message: 'Config not found' }, { status: 404 });
     }
 
-    if (user.isAdmin) {
-      return NextResponse.json({
-        success: true,
-        config: {
-          status: 'open',
-          message: 'Site is open (Admin override)',
-        },
-      });
+    if (uid) {
+      const user = await User.findOne({ userId: uid });
+      if (user && user.isAdmin) {
+        return NextResponse.json({
+          success: true,
+          config: {
+            status: 'open',
+            message: 'Site is open (Admin override)',
+          },
+        });
+      }
     }
 
     return NextResponse.json({ success: true, config });
