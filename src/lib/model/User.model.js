@@ -321,15 +321,43 @@ const UserSchema = new mongoose.Schema({
   },
   reputationGiven: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        value: {
+            type: Number,
+            default: 1
+        },
+        message: {
+            type: String,
+            default: ''
+        },
+        date: {
+            type: Date,
+            default: Date.now
+        }
+    }
   ],
   reputationTaken: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        value: {
+            type: Number,
+            default: 1
+        },
+        message: {
+            type: String,
+            default: ''
+        },
+        date: {
+            type: Date,
+            default: Date.now
+        }
+    }
   ],
   savedThreads: [
     {

@@ -20,6 +20,7 @@ import remarkGfm from 'remark-gfm'
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import MarkdownWithEmojis from '@/partials/MarkdownWithEmojis'
 import PreferredCurrencies from '@/components/PreferedCurrencies'
+import Link from 'next/link'
 
 export default function ThreadView() {
     const [currentUser, setCurrentUser] = useState(null)
@@ -350,65 +351,99 @@ export default function ThreadView() {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-black">
+            <div className="min-h-screen bg-black text-white">
+                <Header
+                    avatar={currentUser?.profilePic}
+                    userId={currentUser?.userId}
+                    currentPage="/thread"
+                    isDarkTheme={isDarkTheme}
+                    toggleTheme={() => setIsDarkTheme(!isDarkTheme)}
+                    isLoggedIn={isLoggedIn}
+                />
                 <div className="container mx-auto px-4 py-8">
                     <div className="flex flex-col lg:flex-row gap-8">
-                        <div className="lg:w-3/4 space-y-6">
-                            <div className="bg-zinc-900/50 rounded-xl p-8 animate-pulse">
+                        <div className="lg:w-3/4">
+                            <div className="bg-zinc-900/50 rounded-xl p-6 mb-6">
                                 <div className="flex items-center justify-between mb-8">
                                     <div className="flex items-center space-x-4">
-                                        <div className="w-14 h-14 bg-zinc-800 rounded-full"></div>
+                                        <div className="relative">
+                                            <div className="w-14 h-14 bg-zinc-800 rounded-full animate-pulse"></div>
+                                            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-zinc-800 rounded-full border-4 border-zinc-900 animate-pulse"></div>
+                                        </div>
                                         <div className="space-y-2">
-                                            <div className="h-4 w-32 bg-zinc-800 rounded"></div>
-                                            <div className="h-3 w-24 bg-zinc-800 rounded"></div>
+                                            <div className="h-6 w-32 bg-zinc-800 rounded animate-pulse"></div>
+                                            <div className="h-4 w-24 bg-zinc-800 rounded animate-pulse"></div>
                                         </div>
                                     </div>
                                     <div className="flex items-center space-x-6">
-                                        <div className="h-4 w-16 bg-zinc-800 rounded"></div>
-                                        <div className="h-4 w-16 bg-zinc-800 rounded"></div>
+                                        <div className="h-5 w-20 bg-zinc-800 rounded animate-pulse"></div>
+                                        <div className="h-5 w-20 bg-zinc-800 rounded animate-pulse"></div>
                                     </div>
                                 </div>
-                                
-                                <div className="flex justify-center mb-8">
-                                    <div className="h-8 w-2/3 bg-zinc-800 rounded"></div>
+
+                                {/* Title skeleton */}
+                                <div className="h-12 w-3/4 mx-auto bg-zinc-800 rounded-lg mb-8 animate-pulse"></div>
+
+                                {/* Content skeleton */}
+                                <div className="space-y-4 mb-8">
+                                    <div className="h-4 w-full bg-zinc-800 rounded animate-pulse"></div>
+                                    <div className="h-4 w-5/6 bg-zinc-800 rounded animate-pulse"></div>
+                                    <div className="h-4 w-4/6 bg-zinc-800 rounded animate-pulse"></div>
                                 </div>
-                                
-                                <div className="space-y-4">
-                                    <div className="h-4 w-full bg-zinc-800 rounded"></div>
-                                    <div className="h-4 w-5/6 bg-zinc-800 rounded"></div>
-                                    <div className="h-4 w-4/6 bg-zinc-800 rounded"></div>
+
+                                {/* Attachments skeleton */}
+                                <div className="space-y-3">
+                                    <div className="h-6 w-32 bg-zinc-800 rounded animate-pulse"></div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {[1, 2].map((_, index) => (
+                                            <div 
+                                                key={index}
+                                                className="flex items-center space-x-3 p-4 bg-zinc-800/50 rounded-lg animate-pulse"
+                                                style={{ animationDelay: `${index * 150}ms` }}
+                                            >
+                                                <div className="w-8 h-8 bg-zinc-700 rounded"></div>
+                                                <div className="flex-1">
+                                                    <div className="h-4 w-3/4 bg-zinc-700 rounded mb-2"></div>
+                                                    <div className="h-3 w-1/2 bg-zinc-700 rounded"></div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
 
-                            {[1, 2, 3].map((_, index) => (
-                                <div 
-                                    key={index}
-                                    className="bg-zinc-900/50 rounded-xl p-6 animate-pulse"
-                                    style={{
-                                        animationDelay: `${index * 150}ms`
-                                    }}
-                                >
-                                    <div className="flex items-start space-x-4">
-                                        <div className="w-10 h-10 bg-zinc-800 rounded-full"></div>
-                                        <div className="flex-1 space-y-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="h-4 w-24 bg-zinc-800 rounded"></div>
-                                                <div className="h-3 w-32 bg-zinc-800 rounded"></div>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <div className="h-4 w-full bg-zinc-800 rounded"></div>
-                                                <div className="h-4 w-5/6 bg-zinc-800 rounded"></div>
-                                            </div>
-                                            <div className="flex gap-4">
-                                                <div className="h-8 w-24 bg-zinc-800 rounded-md"></div>
-                                                <div className="h-8 w-32 bg-zinc-800 rounded-md"></div>
+                            {/* Posts skeleton */}
+                            <div className="space-y-4">
+                                {[1, 2, 3].map((_, index) => (
+                                    <div 
+                                        key={index}
+                                        className="bg-zinc-900/50 rounded-xl p-6 animate-pulse"
+                                        style={{ animationDelay: `${index * 150}ms` }}
+                                    >
+                                        <div className="flex items-start space-x-4">
+                                            <div className="w-10 h-10 bg-zinc-800 rounded-full"></div>
+                                            <div className="flex-1 space-y-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="h-5 w-32 bg-zinc-800 rounded"></div>
+                                                    <div className="h-4 w-24 bg-zinc-800 rounded"></div>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <div className="h-4 w-full bg-zinc-800 rounded"></div>
+                                                    <div className="h-4 w-5/6 bg-zinc-800 rounded"></div>
+                                                    <div className="h-4 w-4/6 bg-zinc-800 rounded"></div>
+                                                </div>
+                                                <div className="flex gap-4">
+                                                    <div className="h-8 w-24 bg-zinc-800 rounded-md"></div>
+                                                    <div className="h-8 w-24 bg-zinc-800 rounded-md"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
 
+                        {/* Right sidebar skeleton */}
                         <div className="lg:w-1/4 space-y-6">
                             <div className="bg-zinc-900/50 rounded-xl p-6 animate-pulse">
                                 <div className="h-6 w-40 bg-zinc-800 rounded mb-4"></div>
@@ -417,12 +452,10 @@ export default function ThreadView() {
                                         <div 
                                             key={index}
                                             className="flex items-center justify-between"
-                                            style={{
-                                                animationDelay: `${index * 150}ms`
-                                            }}
+                                            style={{ animationDelay: `${index * 150}ms` }}
                                         >
-                                            <div className="h-4 w-20 bg-zinc-800 rounded"></div>
                                             <div className="h-4 w-24 bg-zinc-800 rounded"></div>
+                                            <div className="h-4 w-16 bg-zinc-800 rounded"></div>
                                         </div>
                                     ))}
                                 </div>
@@ -435,9 +468,7 @@ export default function ThreadView() {
                                         <div 
                                             key={index}
                                             className="flex items-center gap-3"
-                                            style={{
-                                                animationDelay: `${index * 150}ms`
-                                            }}
+                                            style={{ animationDelay: `${index * 150}ms` }}
                                         >
                                             <div className="w-2 h-2 bg-zinc-800 rounded-full"></div>
                                             <div className="h-4 w-full bg-zinc-800 rounded"></div>
@@ -491,16 +522,16 @@ export default function ThreadView() {
                                 <div className="flex items-center text-white justify-between mb-8">
                                     <div className="flex items-center text-white space-x-4">
                                         <div className="relative group">
-                                            <Avatar className="w-14 h-14 ring-4 ring-yellow-500/20 transition-all duration-200 group-hover:ring-yellow-500/40">
+                                            <Avatar className="w-14 h-14 ring-2 ring-white/70 transition-all duration-200">
                                                 <AvatarImage src={thread.author.profilePic} />
                                                 <AvatarFallback>{thread.author.username}</AvatarFallback>
                                             </Avatar>
                                             <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-4 border-zinc-900"></div>
                                         </div>
                                         <div>
-                                            <span className={`text-xl font-semibold ${thread.author.usernameEffect} hover:text-yellow-500 transition-colors duration-200`}>
+                                            <Link href={`/user/${thread.author.username}`} className={`text-xl font-semibold ${thread.author.usernameEffect} hover:text-yellow-500 transition-colors duration-200`}>
                                                 {thread.author.username}
-                                            </span>
+                                            </Link>
                                             <p className="text-sm text-gray-400">{formatDate(thread.createdAt)}</p>
                                         </div>
                                     </div>
@@ -522,7 +553,7 @@ export default function ThreadView() {
 
                                 {currentUser ? (
                                     <div className={`prose ${isDarkTheme ? 'prose-invert' : ''} max-w-none mb-8 
-                                        p-6 rounded-xl bg-zinc-800/30 border border-yellow-500/10 hover:border-yellow-500/20 
+                                        p-6 rounded-xl bg-zinc-800/30 border border-white/10 
                                         transition-all duration-200`}>
                                         <MarkdownWithEmojis content={thread.content} />
                                     </div>
