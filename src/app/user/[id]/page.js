@@ -21,6 +21,9 @@ import { usePathname } from 'next/navigation'
 import { AlertCircle } from 'lucide-react'
 import { Toaster } from '@/components/ui/toaster'
 import { FaBan } from 'react-icons/fa'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 
 const groupData = {
     "admin": "https://images.ctfassets.net/49i3hw7ggo6y/3OkSp11XO91MOQtGUptuVg/25987da20092116b791efd3b3c8f5e21/SyTqJLO.png?fm=webp&w=225&h=75&q=100&fit=fill",
@@ -52,6 +55,8 @@ export default function ForumUserProfile() {
     const router = useRouter()
     const { toast } = useToast()
     const pathname = usePathname()
+    const [repMessage, setRepMessage] = useState('');
+    const [showRepDialog, setShowRepDialog] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -116,8 +121,17 @@ export default function ForumUserProfile() {
     };
 
     const handleRepToggle = async () => {
-        if (!userData || !currentUser) return
+        if (!userData || !currentUser) return;
 
+        if (!userData.reputation?.includes(currentUser.userId)) {
+            setShowRepDialog(true);
+            return;
+        }
+
+        submitRep('');
+    };
+
+    const submitRep = async (message) => {
         try {
             const response = await fetch('/api/user-action/rep', {
                 method: 'POST',
@@ -125,14 +139,15 @@ export default function ForumUserProfile() {
                 body: JSON.stringify({
                     userGiving: currentUser.userId,
                     userToGiveRep: userData.userId,
+                    message: message
                 }),
-            })
+            });
 
-            if (!response.ok) throw new Error('Failed to toggle reputation')
-            const result = await response.json()
+            if (!response.ok) throw new Error('Failed to toggle reputation');
+            const result = await response.json();
 
             setUserData(prevData => {
-                if (!prevData) return null
+                if (!prevData) return null;
                 return {
                     ...prevData,
                     stats: {
@@ -143,22 +158,25 @@ export default function ForumUserProfile() {
                         ? [...prevData.reputation, currentUser.userId]
                         : prevData.reputation.filter(id => id !== currentUser.userId)
                 }
-            })
+            });
+
+            setShowRepDialog(false);
+            setRepMessage('');
 
             toast({
                 title: result.hasGivenRep ? 'Reputation Given' : 'Reputation Removed',
                 description: result.message,
-                variant: 'destructive',
-            })
+                variant: 'default',
+            });
         } catch (error) {
-            console.error('Error toggling reputation:', error)
+            console.error('Error toggling reputation:', error);
             toast({
                 title: 'Error',
                 description: 'Failed to update reputation',
                 variant: 'destructive',
-            })
+            });
         }
-    }
+    };
 
     const renderTextWithEmojis = (text, emojis) => {
         if (!text || typeof text !== 'string') return text || ''
@@ -192,16 +210,39 @@ export default function ForumUserProfile() {
     if (!userData) {
         return (
             <div className="min-h-screen bg-black text-white">
+                <Header
+                    avatar={currentUser?.profilePic}
+                    userId={currentUser?.userId}
+                    currentPage="/profile"
+                    isDarkTheme={isDarkTheme}
+                    toggleTheme={() => setIsDarkTheme(!isDarkTheme)}
+                    isLoggedIn={isLoggedIn}
+                />
                 <div className="container mx-auto px-4 py-8">
                     <div className="flex flex-col lg:flex-row gap-8">
                         <div className="lg:w-1/4">
                             <div className="bg-zinc-900/50 rounded-lg p-6 mb-4">
-                                <div className="h-6 bg-zinc-800 rounded mb-4 animate-pulse"></div>
-                                <div className="space-y-3">
+                                <div className="h-7 bg-zinc-800 rounded w-1/2 mb-6 animate-pulse"></div>
+                                <div className="space-y-4">
                                     {[...Array(6)].map((_, i) => (
-                                        <div key={i} className="flex items-center">
-                                            <div className="w-4 h-4 bg-zinc-800 rounded mr-2 animate-pulse"></div>
-                                            <div className="h-4 bg-zinc-800 rounded w-3/4 animate-pulse"></div>
+                                        <div key={i} className="flex items-center space-x-3">
+                                            <div className="w-5 h-5 bg-zinc-800 rounded animate-pulse"></div>
+                                            <div className="h-5 bg-zinc-800 rounded w-2/3 animate-pulse"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="bg-zinc-900/50 rounded-lg p-6">
+                                <div className="h-7 bg-zinc-800 rounded w-1/2 mb-6 animate-pulse"></div>
+                                <div className="space-y-4">
+                                    {[...Array(3)].map((_, i) => (
+                                        <div key={i} className="flex items-center space-x-3">
+                                            <div className="w-10 h-10 bg-zinc-800 rounded-full animate-pulse"></div>
+                                            <div className="flex-1">
+                                                <div className="h-4 bg-zinc-800 rounded w-1/2 mb-2 animate-pulse"></div>
+                                                <div className="h-3 bg-zinc-800 rounded w-1/3 animate-pulse"></div>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
@@ -211,31 +252,51 @@ export default function ForumUserProfile() {
                         <div className="lg:w-1/2">
                             <div className="bg-zinc-900/50 rounded-lg p-6 mb-6">
                                 <div className="flex items-center mb-6">
-                                    <div className="w-24 h-24 bg-zinc-800 rounded-full mr-4 animate-pulse"></div>
+                                    <div className="w-24 h-24 bg-zinc-800 rounded-lg mr-4 animate-pulse"></div>
                                     <div className="flex-1">
-                                        <div className="h-8 bg-zinc-800 rounded w-1/2 mb-2 animate-pulse"></div>
+                                        <div className="h-8 bg-zinc-800 rounded w-1/2 mb-3 animate-pulse"></div>
                                         <div className="h-4 bg-zinc-800 rounded w-3/4 animate-pulse"></div>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4 mb-4">
+                                <div className="grid grid-cols-2 gap-4 mb-6">
                                     {[...Array(4)].map((_, i) => (
-                                        <div key={i} className="bg-zinc-900/50 rounded-lg p-4">
+                                        <div key={i} className="bg-zinc-800/50 rounded-lg p-4">
                                             <div className="h-5 bg-zinc-800 rounded w-1/2 mb-2 animate-pulse"></div>
-                                            <div className="h-4 bg-zinc-800 rounded w-1/4 animate-pulse"></div>
+                                            <div className="h-7 bg-zinc-800 rounded w-1/3 animate-pulse"></div>
                                         </div>
                                     ))}
+                                </div>
+                                <div className="space-y-3">
+                                    <div className="h-6 bg-zinc-800 rounded w-1/4 mb-4 animate-pulse"></div>
+                                    <div className="h-20 bg-zinc-800 rounded w-full animate-pulse"></div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="lg:w-1/4">
                             <div className="bg-zinc-900/50 rounded-lg p-6 mb-6">
-                                <div className="h-6 bg-zinc-800 rounded mb-4 animate-pulse"></div>
-                                <div className="space-y-4">
+                                <div className="h-7 bg-zinc-800 rounded w-1/2 mb-6 animate-pulse"></div>
+                                <div className="space-y-6">
                                     {[...Array(4)].map((_, i) => (
-                                        <div key={i}>
-                                            <div className="h-4 bg-zinc-800 rounded w-3/4 mb-2 animate-pulse"></div>
+                                        <div key={i} className="space-y-2">
+                                            <div className="h-5 bg-zinc-800 rounded w-3/4 animate-pulse"></div>
                                             <div className="h-4 bg-zinc-800 rounded w-1/2 animate-pulse"></div>
+                                            <div className="h-4 bg-zinc-800 rounded w-full animate-pulse"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="bg-zinc-900/50 rounded-lg p-6">
+                                <div className="h-7 bg-zinc-800 rounded w-1/2 mb-6 animate-pulse"></div>
+                                <div className="space-y-4">
+                                    {[...Array(3)].map((_, i) => (
+                                        <div key={i} className="flex items-center space-x-3">
+                                            <div className="w-10 h-10 bg-zinc-800 rounded-full animate-pulse"></div>
+                                            <div className="flex-1">
+                                                <div className="h-4 bg-zinc-800 rounded w-1/2 mb-2 animate-pulse"></div>
+                                                <div className="h-3 bg-zinc-800 rounded w-1/3 animate-pulse"></div>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
@@ -264,7 +325,7 @@ export default function ForumUserProfile() {
             <main className="container mx-auto px-4 py-8">
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="lg:w-1/4">
-                        <Card className='bg-zinc-900/50 border-0 mb-4 text-zinc-200'>
+                        <Card className={`bg-zinc-900/50 border-0 mb-4 text-zinc-200 ${userData.isBanned ? 'opacity-50 pointer-events-none' : ''}`}>
                             <CardHeader>
                                 <CardTitle>About {userData.username}</CardTitle>
                             </CardHeader>
@@ -331,7 +392,7 @@ export default function ForumUserProfile() {
                             </CardContent>
                         </Card>
 
-                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg rounded-lg">
+                        <Card className={`bg-zinc-900/50 text-white border-0 shadow-lg rounded-lg ${userData.isBanned ? 'opacity-50 pointer-events-none' : ''}`}>
                             <CardHeader>
                                 <CardTitle className="text-lg font-semibold">Recent Reputation</CardTitle>
                             </CardHeader>
@@ -354,13 +415,25 @@ export default function ForumUserProfile() {
                         </Card>
                     </div>
 
-                    {/* Center Column - User Stats and Groups */}
                     <div className="lg:w-1/2">
-                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6">
+                        {userData.isBanned && (
+                            <div className="bg-red-500/10 border-l-4 border-red-500 p-4 mb-4 rounded-md">
+                                <div className="container mx-auto flex items-center justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <FaBan className="h-6 w-6 text-red-500" />
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-red-500">Account Permanently Banned</h3>
+                                            <p className="text-zinc-300">This user has been permanently banned from the platform.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        <Card className={`bg-zinc-900/50 text-white border-0 shadow-lg mb-6 ${userData.isBanned ? 'opacity-50' : ''}`}>
                             <CardContent className="pt-6">
-                                <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-4">
+                                <Card className={`bg-zinc-900/50 text-white border-0 shadow-lg mb-4 ${userData.isBanned ? 'grayscale' : ''}`}>
                                     <CardContent className="pt-6" style={
-                                        userData.bannerImg && userData.bannerImg.trim() !== ""
+                                        userData.bannerImg && userData.bannerImg.trim() !== "" && !userData.isBanned
                                             ? {
                                                 background: `url(${userData.bannerImg}) no-repeat`,
                                                 backgroundSize: "cover",
@@ -373,31 +446,25 @@ export default function ForumUserProfile() {
                                     }>
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center">
-                                                <Avatar className="w-24 h-24 mr-4">
+                                                <Avatar className={`w-24 h-24 mr-4 ${userData.isBanned ? 'grayscale' : ''}`}>
                                                     <AvatarImage
-                                                        src={
-                                                            userData.isBanned
-                                                                ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2-flKQOIE8ribInudJWpIsy94v1B7LMCemuBf8RcjpIY1Pt3hLHZR5r78rXBFW0cIhVg&usqp=CAU"
-                                                                : userData.profilePicture
+                                                        src={userData.isBanned 
+                                                            ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2-flKQOIE8ribInudJWpIsy94v1B7LMCemuBf8RcjpIY1Pt3hLHZR5r78rXBFW0cIhVg&usqp=CAU"
+                                                            : userData.profilePicture
                                                         }
                                                         alt={userData.username}
+                                                        className={userData.isBanned ? 'opacity-50' : ''}
                                                     />
                                                     <AvatarFallback>{userData.username[0]}</AvatarFallback>
                                                 </Avatar>
 
                                                 <div className="flex flex-col">
-                                                    {userData.isBanned ? (
-                                                        <div className="text-2xl font-bold line-through text-white flex items-center gap-2">
+                                                    <div className={`text-2xl font-bold flex items-center gap-2 ${userData.isBanned ? 'line-through text-red-500' : ''}`}>
+                                                        <span className={userData.isBanned ? '' : userData.usernameEffect}>
                                                             {userData.username}
-                                                        </div>
-                                                    ) : (
-                                                        <div className="text-2xl font-bold flex items-center gap-2">
-                                                            <span className={userData.isSuspended ? "" : userData.usernameEffect}>
-                                                                {userData.username}
-                                                            </span>
-                                                            {renderTextWithEmojis(userData.statusEmoji, emojis)}
-                                                        </div>
-                                                    )}
+                                                        </span>
+                                                        {!userData.isBanned && renderTextWithEmojis(userData.statusEmoji, emojis)}
+                                                    </div>
 
                                                     {!userData.isBanned && (
                                                         <>
@@ -413,12 +480,17 @@ export default function ForumUserProfile() {
                                                             )}
                                                         </>
                                                     )}
+                                                    {userData.isBanned && (
+                                                        <p className="text-red-500 italic mt-1">
+                                                            This account has been permanently banned
+                                                        </p>
+                                                    )}
                                                 </div>
                                             </div>
 
 
                                             {/* Reputation Button */}
-                                            {currentUser && currentUser.userId !== userData.userId && (
+                                            {currentUser && currentUser.userId !== userData.userId && !userData.isBanned && (
                                                 <div className="flex-shrink-0">
                                                     <TooltipProvider>
                                                         <Tooltip>
@@ -546,7 +618,7 @@ export default function ForumUserProfile() {
                     </div>
 
                     <div className="lg:w-1/4">
-                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-6 backdrop-blur-sm">
+                        <Card className={`bg-zinc-900/50 text-white border-0 shadow-lg mb-6 ${userData.isBanned ? 'opacity-50 pointer-events-none' : ''}`}>
                             <CardHeader>
                                 <CardTitle className="text-lg flex items-center gap-2">
                                     Recent Activity
@@ -598,7 +670,7 @@ export default function ForumUserProfile() {
                             </CardContent>
                         </Card>
 
-                        {userData.favSpotifyTrack && userData.favSpotifyTrack.trim() !== "" ? (
+                        {userData.favSpotifyTrack && userData.favSpotifyTrack.trim() !== "" && !userData.isBanned ? (
                             <iframe
                                 style={{ borderRadius: "12px" }}
                                 src={`https://open.spotify.com/embed/track/${extractSpotifyTrackId(userData.favSpotifyTrack)}?utm_source=generator&theme=0`}
@@ -613,7 +685,7 @@ export default function ForumUserProfile() {
 
 
 
-                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg rounded-lg mb-6">
+                        <Card className={`bg-zinc-900/50 text-white border-0 shadow-lg rounded-lg mb-6 ${userData.isBanned ? 'opacity-50 pointer-events-none' : ''}`}>
                             <CardHeader>
                                 <CardTitle className="text-lg font-semibold">Latest Visitors</CardTitle>
                             </CardHeader>
@@ -645,6 +717,48 @@ export default function ForumUserProfile() {
                     </div>
                 </div>
                 <Toaster />
+                {showRepDialog && (
+                    <Dialog open={showRepDialog} onOpenChange={setShowRepDialog}>
+                        <DialogContent className="bg-zinc-900/95 border border-zinc-800 text-white shadow-xl backdrop-blur-xl">
+                            <DialogHeader>
+                                <DialogTitle className="text-xl font-semibold text-white flex items-center gap-2">
+                                    <ThumbsUp className="w-5 h-5 text-yellow-500" />
+                                    Give Reputation
+                                </DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4 py-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="repMessage" className="text-zinc-400">Message (optional)</Label>
+                                    <Textarea
+                                        id="repMessage"
+                                        placeholder="e.g., +rep very good person"
+                                        value={repMessage}
+                                        onChange={(e) => setRepMessage(e.target.value)}
+                                        className="min-h-[100px] bg-zinc-800/50 border-zinc-700/50 focus:border-yellow-500/50 
+                                            placeholder:text-zinc-500 text-white resize-none rounded-xl transition-all duration-200
+                                            focus:ring-yellow-500/20 hover:border-yellow-500/30"
+                                    />
+                                </div>
+                            </div>
+                            <DialogFooter className="gap-2">
+                                <Button 
+                                    variant="ghost" 
+                                    onClick={() => setShowRepDialog(false)}
+                                    className="bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
+                                >
+                                    Cancel
+                                </Button>
+                                <Button 
+                                    onClick={() => submitRep(repMessage)}
+                                    className="bg-yellow-500 hover:bg-yellow-600 text-black transition-all duration-200 
+                                        rounded-xl px-6 shadow-lg hover:shadow-yellow-500/20"
+                                >
+                                    Give Rep
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                )}
             </main>
         </div>
     )

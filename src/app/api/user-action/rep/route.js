@@ -7,7 +7,7 @@ const isObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
 export async function POST(req) {
     await connectDB();
 
-    const { userGiving, userToGiveRep } = await req.json();
+    const { userGiving, userToGiveRep, message } = await req.json();
 
     if (!userGiving || !userToGiveRep) {
         return NextResponse.json({ message: 'Both userGiving and userToGiveRep are required' }, { status: 400 });
@@ -31,18 +31,32 @@ export async function POST(req) {
             return NextResponse.json({ message: 'User to give rep not found' }, { status: 404 });
         }
 
-        const hasGivenRep = userGivingDoc.reputationGiven.includes(userToGiveRepDoc._id.toString());
+        const hasGivenRep = userGivingDoc.reputationGiven.some(rep => 
+            rep.user && rep.user.toString() === userToGiveRepDoc._id.toString()
+        );
 
         if (hasGivenRep) {
-            userGivingDoc.reputationGiven = userGivingDoc.reputationGiven.filter(id => 
-                id.toString() !== userToGiveRepDoc._id.toString()
+            userGivingDoc.reputationGiven = userGivingDoc.reputationGiven.filter(rep => 
+                !rep.user || rep.user.toString() !== userToGiveRepDoc._id.toString()
             );
-            userToGiveRepDoc.reputationTaken = userToGiveRepDoc.reputationTaken.filter(id => 
-                id.toString() !== userGiving
+            userToGiveRepDoc.reputationTaken = userToGiveRepDoc.reputationTaken.filter(rep => 
+                !rep.user || rep.user.toString() !== userGiving.toString()
             );
         } else {
-            userGivingDoc.reputationGiven.push(userToGiveRepDoc._id);
-            userToGiveRepDoc.reputationTaken.push(userGiving);
+            const repData = {
+                user: userToGiveRepDoc._id,
+                message: message || '',
+                date: new Date()
+            };
+            
+            const repTakenData = {
+                user: userGiving,
+                message: message || '',
+                date: new Date()
+            };
+
+            userGivingDoc.reputationGiven.push(repData);
+            userToGiveRepDoc.reputationTaken.push(repTakenData);
         }
 
         await userGivingDoc.save();
