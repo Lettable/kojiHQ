@@ -1,213 +1,17 @@
-// "use client"
-
-// import React, { useState, useEffect } from 'react'
-// import { motion } from 'framer-motion'
-// import { Check, Star, Zap, MessageCircle, User, Image, Sparkles } from 'lucide-react'
-// import { Button } from "@/components/ui/button"
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-// import { jwtDecode } from 'jwt-decode'
-
-// const PremiumSubscription = () => {
-//     const [selectedPlan, setSelectedPlan] = useState(null)
-//     const [currentUser, setCurrentUser] = useState()
-
-//     useEffect(() => {
-//         try {
-//             const token = localStorage.getItem("accessToken");
-//             if (!token) {
-//                 router.push("/auth");
-//                 return;
-//             }
-//             const decoded = jwtDecode(token);
-//             setCurrentUser(decoded);
-//         } catch (error) {
-//             console.error("Error decoding token or fetching data:", error);
-//             router.push("/auth");
-//         }
-//     }, [])
-
-//     const handleSubscription = async (plan) => {
-//         const response = await fetch('/api/premium-callback', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({
-//                 name: plan.name,
-//                 description: `Premium ${plan.name} subscription on SideProjector`,
-//                 amount: plan.price,
-//                 currency: 'USD',
-//                 userId: currentUser.userId,
-//                 email: currentUser.email,
-//                 telegramUID: currentUser.telegramUID,
-//                 redirectUrl: window.location.href,
-//             }),
-//         });
-
-//         if (response.ok) {
-//             const data = await response.json();
-//             window.open(data.charge.payment_url, '_blank');
-//         } else {
-//             console.error('Error creating charge:', await response.json());
-//         }
-//     };
-
-
-//     const plans = [
-//         {
-//             name: 'Weekly',
-//             price: '4.99',
-//             period: 'week',
-//             features: [
-//                 'Custom Status',
-//                 'Access to Premium Emojis',
-//                 'Premium API access (fast and reliable)',
-//                 'Longer Bio',
-//                 'Priority Support',
-//                 'Increased Visibility'
-//             ]
-//         },
-//         {
-//             name: 'Monthly',
-//             price: '16.99',
-//             period: 'month',
-//             features: [
-//                 'All Weekly features',
-//                 'Access to Premium Emojis',
-//                 'Premium API access (fast and reliable)',
-//                 'Longer Bio and Username',
-//                 'Priority Support',
-//                 'Maximum Visibility Boost'
-//             ]
-//         },
-//         {
-//             name: 'Yearly',
-//             price: '299.99',
-//             period: 'year',
-//             features: [
-//                 'All Monthly Features',
-//                 'Custom Badge with Tagline',
-//                 'Early Access to New Features',
-//                 'Personal Account Manager',
-//                 'Unlimited Project Showcases',
-//                 'VIP Community Access'
-//             ]
-//         }
-//     ]
-
-//     return (
-//         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-//             <div className="container mx-auto px-4 py-16">
-//                 <motion.div
-//                     initial={{ opacity: 0, y: -20 }}
-//                     animate={{ opacity: 1, y: 0 }}
-//                     transition={{ duration: 0.5 }}
-//                     className="text-center mb-16"
-//                 >
-//                     <h1 className="text-5xl md:text-7xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
-//                         Elevate Your Experience
-//                     </h1>
-//                     <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
-//                         Unlock premium features and take your products to new heights with our exclusive subscription plans
-//                     </p>
-//                 </motion.div>
-
-//                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-//                     {plans.map((plan, index) => (
-//                         <motion.div
-//                             key={plan.name}
-//                             initial={{ opacity: 0, y: 20 }}
-//                             animate={{ opacity: 1, y: 0 }}
-//                             transition={{ duration: 0.5, delay: index * 0.1 }}
-//                         >
-//                             <Card className={`bg-gradient-to-br from-gray-800 to-gray-900 border-2 rounded-3xl overflow-hidden ${selectedPlan === plan.name.toLowerCase() ? 'border-purple-500 shadow-lg shadow-purple-500/20' : 'border-gray-700'} hover:border-purple-500 transition-all duration-300`}>
-//                                 <CardHeader className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 p-6">
-//                                     <CardTitle className="text-3xl font-bold text-center text-white">
-//                                         {plan.name}
-//                                     </CardTitle>
-//                                     <div className="text-center mt-2">
-//                                         <span className="text-4xl font-bold text-white">${plan.price}</span>
-//                                         <span className="text-gray-300">/{plan.period}</span>
-//                                     </div>
-//                                 </CardHeader>
-//                                 <CardContent className="p-6">
-//                                     <ul className="space-y-3">
-//                                         {plan.features.map((feature, index) => (
-//                                             <li key={index} className="flex items-center">
-//                                                 <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0" />
-//                                                 <span className="text-gray-300">{feature}</span>
-//                                             </li>
-//                                         ))}
-//                                     </ul>
-//                                     <Button
-//                                         className="w-full mt-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 rounded-full text-lg transition-all duration-300 transform hover:scale-105"
-//                                         onClick={() => handleSubscription(plan)}
-//                                     >
-//                                         Choose {plan.name}
-//                                     </Button>
-//                                 </CardContent>
-//                             </Card>
-//                         </motion.div>
-//                     ))}
-//                 </div>
-
-//                 <motion.div
-//                     initial={{ opacity: 0, y: 20 }}
-//                     animate={{ opacity: 1, y: 0 }}
-//                     transition={{ duration: 0.5, delay: 0.4 }}
-//                     className="text-center"
-//                 >
-//                     <h2 className="text-4xl font-bold mb-12 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Premium Perks</h2>
-//                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-//                         <PerkCard icon={<Star className="w-12 h-12 text-yellow-400" />} title="Custom Badges">
-//                             Stand out with unique profile badges that showcase your premium status
-//                         </PerkCard>
-//                         <PerkCard icon={<Zap className="w-12 h-12 text-blue-400" />} title="Boosted Visibility">
-//                             Get your products in front of more eyes with increased visibility in feeds and search results
-//                         </PerkCard>
-//                         <PerkCard icon={<MessageCircle className="w-12 h-12 text-green-400" />} title="Priority Support">
-//                             Skip the queue and get help faster with our dedicated premium support team
-//                         </PerkCard>
-//                         <PerkCard icon={<User className="w-12 h-12 text-purple-400" />} title="Flexible Identity">
-//                             Change your username anytime and express yourself with longer bios and custom taglines
-//                         </PerkCard>
-//                         <PerkCard icon={<Image className="w-12 h-12 text-pink-400" />} title="Unlimited Changes">
-//                             Keep your profile fresh by updating your picture as often as you like
-//                         </PerkCard>
-//                         <PerkCard icon={<Sparkles className="w-12 h-12 text-indigo-400" />} title="Premium Emojis">
-//                             Express yourself with our exclusive set of premium emojis across the entire platform
-//                         </PerkCard>
-//                     </div>
-//                 </motion.div>
-//             </div>
-//         </div>
-//     )
-// }
-
-// const PerkCard = ({ icon, title, children }) => (
-//     <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-gray-700 hover:border-purple-500 rounded-3xl overflow-hidden transition-all duration-300 group">
-//         <CardContent className="p-6 text-center">
-//             <div className="mb-4 transform group-hover:scale-105 transition-transform duration-300">{icon}</div>
-//             <h3 className="text-2xl font-bold mb-2 text-white">{title}</h3>
-//             <p className="text-gray-300">{children}</p>
-//         </CardContent>
-//     </Card>
-// )
-
-// export default PremiumSubscription
-
 "use client"
 
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Check, Star, Zap, MessageCircle, User, Image, Sparkles } from 'lucide-react'
+import { Check, Star, Zap, MessageCircle, User, Sparkles, Crown, Lock, Shield, Rocket } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { jwtDecode } from 'jwt-decode'
 import { useRouter } from 'next/navigation'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useToast } from '@/hooks/use-toast'
+import Header from '@/partials/Header'
+import { Separator } from '@/components/ui/separator'
+import Image from 'next/image'
 
 const PremiumSubscription = () => {
     const [selectedPlan, setSelectedPlan] = useState(null)
@@ -292,10 +96,10 @@ const PremiumSubscription = () => {
 
     const plans = [
         {
-            name: 'Weekly',
-            price: 4.99,
+            name: 'Heaven',
+            price: '$4.99',
             period: 'week',
-            groups: ['heaven'],
+            image: '/groupimgs/heaven.png',
             features: [
                 'Custom Status',
                 'Access to Premium Emojis',
@@ -303,54 +107,76 @@ const PremiumSubscription = () => {
                 'Longer Bio',
                 'Priority Support',
                 'Increased Visibility'
-            ]
+            ],
+            highlight: false
         },
         {
-            name: 'Monthly',
-            price: 16.99,
+            name: 'Godlike',
+            price: '$16.99',
             period: 'month',
-            groups: ['godlike'],
+            image: '/groupimgs/godlike.png',
             features: [
-                'All Weekly features',
+                'All Heaven features',
                 'Access to Premium Emojis',
                 'Premium API access (fast and reliable)',
                 'Longer Bio and Username',
                 'Priority Support',
                 'Maximum Visibility Boost'
-            ]
+            ],
+            highlight: true
         },
         {
-            name: 'Yearly',
-            price: 299.99,
+            name: 'Supreme',
+            price: '$299.99',
             period: 'year',
-            groups: ['supreme'],
+            image: '/groupimgs/supreme.png',
             features: [
-                'All Monthly Features',
+                'All Godlike Features',
                 'Custom Badge with Tagline',
                 'Early Access to New Features',
                 'Personal Account Manager',
                 'Unlimited Project Showcases',
                 'VIP Community Access'
-            ]
+            ],
+            highlight: false
         }
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-            <div className="container mx-auto px-4 py-16">
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="text-center mb-16"
-                >
-                    <h1 className="text-5xl md:text-7xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
-                        Elevate Your Experience
-                    </h1>
-                    <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
-                        Unlock premium features and take your products to new heights with our exclusive subscription plans
-                    </p>
-                </motion.div>
+        <div className="min-h-screen bg-black text-white">
+            <Header
+                avatar={currentUser?.profilePic}
+                userId={currentUser?.userId}
+                currentPage="/premium"
+                isDarkTheme={true}
+                isLoggedIn={!!currentUser}
+                isPremium={currentUser?.isPremium}
+            />
+
+            <div className="container mx-auto px-4 py-2">
+                <section className="py-16 text-center relative">
+                    <div className="absolute inset-0" />
+                    <div className="absolute inset-0">
+                        <div className="absolute top-10 left-1/4 w-72 h-72 bg-yellow-500/20 rounded-full filter blur-3xl" />
+                        <div className="absolute bottom-10 right-1/4 w-72 h-72 bg-purple-500/20 rounded-full filter blur-3xl" />
+                    </div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="relative z-10"
+                    >
+                        <Crown className="w-24 h-24 text-yellow-400 mx-auto mb-8" />
+                        <h1 className="text-7xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent">
+                            Elevate Your Experience
+                        </h1>
+                        <p className="text-2xl text-zinc-400 max-w-3xl mx-auto">
+                            Join our elite community and unlock premium features that will transform your journey
+                        </p>
+                    </motion.div>
+                </section>
+
+                <Separator className="my-12 bg-zinc-800" />
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                     {plans.map((plan, index) => (
@@ -359,64 +185,55 @@ const PremiumSubscription = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
+                            className={`relative group`}
                         >
-                            <Card
-                                className={`bg-gradient-to-br from-gray-800 to-gray-900 border-2 rounded-3xl overflow-hidden ${selectedPlan === plan.name.toLowerCase()
-                                        ? 'border-purple-500 shadow-lg shadow-purple-500/20'
-                                        : 'border-gray-700'
-                                    } hover:border-purple-500 transition-all duration-300`}
-                            >
-                                <CardHeader className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 p-6">
-                                    <CardTitle className="text-3xl font-bold text-center text-white">
+                            {plan.highlight && (
+                                <div className="absolute -top-4 left-0 right-0 text-center z-20 transition-transform duration-300 group-hover:translate-y-[-5px]">
+                                    <span className="bg-yellow-500 text-black px-4 py-1 rounded-full text-sm font-bold">
+                                        Most Popular
+                                    </span>
+                                </div>
+                            )}
+                            <Card className={`relative overflow-hidden backdrop-blur-sm bg-zinc-900/30 border-2 ${plan.highlight ? 'border-yellow-400' : 'border-zinc-800'} hover:translate-y-[-10px] hover:shadow-2xl hover:shadow-yellow-500/20 transition-all duration-300`}>
+                                <div className="absolute inset-0 transition-opacity duration-300" />
+                                <div className={`absolute inset-x-0 h-1 top-0`} />
+                                <CardHeader className="space-y-4 text-center relative z-10">
+                                    <CardTitle className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
                                         {plan.name}
                                     </CardTitle>
-                                    <div className="text-center mt-2">
-                                        <span className="text-4xl font-bold text-white">
-                                            {plan.price} Credits
-                                        </span>
-                                        <span className="text-gray-300">/{plan.period}</span>
+                                    <div className="text-5xl font-bold text-white">
+                                        {plan.price}
+                                        <span className="text-lg text-zinc-400 ml-2">/ {plan.period}</span>
+                                    </div>
+                                    <div className="w-32 h-20 mx-auto mb-4 relative group">
+                                        <Image
+                                            src={plan.image}
+                                            alt={`${plan.name} rank`}
+                                            width={512}
+                                            height={512}
+                                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
+                                        />
                                     </div>
                                 </CardHeader>
 
-                                <CardContent className="p-6 space-y-6">
-                                    {plan.groups.length > 0 && (
-                                        <div>
-                                            <h3 className="text-lg font-semibold text-blue-400 mb-2 uppercase">
-                                                Included Groups
-                                            </h3>
-                                            <ul className="space-y-2">
-                                                {plan.groups.map((group, index) => (
-                                                    <li key={index} className="flex items-center">
-                                                        <Check className="w-5 h-5 text-blue-400 mr-2 flex-shrink-0" />
-                                                        <span className="text-gray-300">{group}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                <CardContent className="space-y-6 relative z-10">
+                                <div className="space-y-4">
+                                    {plan.features.map((feature) => (
+                                        <div key={feature} className="flex items-center gap-3 text-zinc-300 hover:text-white transition-colors duration-200">
+                                        <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 flex items-center justify-center">
+                                            <Check className="w-3 h-3 text-yellow-400" />
                                         </div>
-                                    )}
-
-                                    {plan.features.length > 0 && (
-                                        <div>
-                                            <h3 className="text-lg font-semibold text-green-400 mb-2 uppercase">
-                                                Additional Features
-                                            </h3>
-                                            <ul className="space-y-2">
-                                                {plan.features.map((feature, index) => (
-                                                    <li key={index} className="flex items-center">
-                                                        <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0" />
-                                                        <span className="text-gray-300">{feature}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                        <span className="text-sm">{feature}</span>
                                         </div>
-                                    )}
+                                    ))}
+                                </div>
 
                                     <Button
-                                        className="w-full mt-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 rounded-full text-lg transition-all duration-300 transform hover:scale-105"
+                                        className="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-black font-bold transition-all duration-300"
                                         onClick={() => handleSubscription(plan)}
-                                        
+                                        disabled={isLoading}
                                     >
-                                        {`Choose ${plan.name}`}
+                                        {isLoading ? 'Processing...' : `Upgrade to ${plan.name}`}
                                     </Button>
                                 </CardContent>
                             </Card>
@@ -424,42 +241,40 @@ const PremiumSubscription = () => {
                     ))}
                 </div>
 
-
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                    className="text-center"
-                >
-                    <h2 className="text-4xl font-bold mb-12 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Premium Perks</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <PerkCard icon={<Star className="w-12 h-12 text-yellow-400" />} title="Custom Badges">
-                            Stand out with unique profile badges that showcase your premium status
-                        </PerkCard>
-                        <PerkCard icon={<Zap className="w-12 h-12 text-blue-400" />} title="Boosted Visibility">
-                            Get your products in front of more eyes with increased visibility in feeds and search results
-                        </PerkCard>
-                        <PerkCard icon={<MessageCircle className="w-12 h-12 text-green-400" />} title="Priority Support">
-                            Skip the queue and get help faster with our dedicated premium support team
-                        </PerkCard>
-                        <PerkCard icon={<User className="w-12 h-12 text-purple-400" />} title="Flexible Identity">
-                            Change your username anytime and express yourself with longer bios and custom taglines
-                        </PerkCard>
-                        <PerkCard icon={<Image className="w-12 h-12 text-pink-400" />} title="Unlimited Changes">
-                            Keep your profile fresh by updating your picture as often as you like
-                        </PerkCard>
-                        <PerkCard icon={<Sparkles className="w-12 h-12 text-indigo-400" />} title="Premium Emojis">
-                            Express yourself with our exclusive set of premium emojis across the entire platform
-                        </PerkCard>
+                <section className="py-16">
+                    <h2 className="text-3xl font-bold mb-12 text-center bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                        Premium Benefits
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <BenefitCard
+                            icon={<Shield className="w-8 h-8 text-yellow-400" />}
+                            title="Enhanced Security"
+                            description="Advanced account protection and monitoring"
+                        />
+                        <BenefitCard
+                            icon={<Rocket className="w-8 h-8 text-yellow-400" />}
+                            title="Faster Performance"
+                            description="Priority access to all platform features"
+                        />
+                        <BenefitCard
+                            icon={<Sparkles className="w-8 h-8 text-yellow-400" />}
+                            title="Exclusive Content"
+                            description="Early access to new features and updates"
+                        />
+                        <BenefitCard
+                            icon={<Crown className="w-8 h-8 text-yellow-400" />}
+                            title="VIP Support"
+                            description="24/7 priority customer support"
+                        />
                     </div>
-                </motion.div>
+                </section>
             </div>
 
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="bg-zinc-900 text-white border-gray-700">
+                <DialogContent className="bg-zinc-900 text-white border-zinc-800">
                     <DialogHeader>
                         <DialogTitle>{dialogContent.title}</DialogTitle>
-                        <DialogDescription className="text-gray-300">
+                        <DialogDescription className="text-zinc-400">
                             {dialogContent.message}
                         </DialogDescription>
                     </DialogHeader>
@@ -469,14 +284,14 @@ const PremiumSubscription = () => {
     )
 }
 
-const PerkCard = ({ icon, title, children }) => (
-    <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-gray-700 hover:border-purple-500 rounded-3xl overflow-hidden transition-all duration-300 group">
-        <CardContent className="p-6 text-center">
-            <div className="mb-4 transform group-hover:scale-105 transition-transform duration-300">{icon}</div>
-            <h3 className="text-2xl font-bold mb-2 text-white">{title}</h3>
-            <p className="text-gray-300">{children}</p>
-        </CardContent>
-    </Card>
+const BenefitCard = ({ icon, title, description }) => (
+  <Card className="bg-zinc-900/30 backdrop-blur-sm border-zinc-800 hover:border-yellow-400/50 transition-all duration-300 group">
+    <CardContent className="p-6">
+      <div className="mb-4">{icon}</div>
+      <h3 className="text-xl font-bold mb-2 text-white bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">{title}</h3>
+      <p className="text-zinc-400 group-hover:text-zinc-300 transition-colors duration-300">{description}</p>
+    </CardContent>
+  </Card>
 )
 
 export default PremiumSubscription

@@ -4,7 +4,6 @@ const connections = {};
 
 export const connectDB = async (dbName = "KojiHQ") => {
   if (connections[dbName]) {
-    console.log(`Using existing connection to ${dbName}`);
     return connections[dbName];
   }
 
@@ -15,7 +14,6 @@ export const connectDB = async (dbName = "KojiHQ") => {
     const newConnection = await mongoose.createConnection(MONGO_URI);
 
     connections[dbName] = newConnection;
-    console.log(`Connected to database: ${dbName}`);
     return newConnection;
   } catch (error) {
     console.error(`Error connecting to database ${dbName}:`, error);

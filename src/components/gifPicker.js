@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { FileImage, Search } from "lucide-react"
-import { FaFileImage } from "react-icons/fa"
+import { FaImage } from "react-icons/fa"
 import { debounce } from "lodash"
 
 const TENOR_KEY = "LIVDSRZULELA"
@@ -72,27 +72,29 @@ export default function GifPicker({ onGifSelect, isDarkTheme}) {
     }, [isOpen])
 
     const searchGifs = async (query) => {
-        setIsLoading(false)
+        setIsLoading(true)
         try {
             const response = await fetch(`${SEARCH_URL}&q=${encodeURIComponent(query)}`)
             const data = await response.json()
             setSearchResults(data.results || [])
         } catch (error) {
             console.error("Error searching gifs:", error)
+            setSearchResults([])
         }
         setIsLoading(false)
     }
 
-    const debouncedSearch = debounce(searchGifs, 500)
+    const debouncedSearch = useRef(debounce(searchGifs, 500)).current
 
     useEffect(() => {
         if (searchTerm) {
             debouncedSearch(searchTerm)
-        } else {
-            setSearchResults([])
         }
-        return () => debouncedSearch.cancel()
-    }, [searchTerm, debouncedSearch])
+        
+        return () => {
+            debouncedSearch.cancel()
+        }
+    }, [searchTerm])
 
     const handleCategoryClick = (category) => {
         setSearchTerm(category.searchterm)
@@ -120,7 +122,7 @@ export default function GifPicker({ onGifSelect, isDarkTheme}) {
                         : "bg-white text-black border-zinc-500 hover:text-black hover:bg-zinc-200"
                     }`}
             >
-                <FaFileImage className="h-5 w-5" />
+                <FaImage className="h-5 w-5" />
             </Button>
 
             <AnimatePresence>

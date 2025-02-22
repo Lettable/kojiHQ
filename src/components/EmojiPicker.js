@@ -119,36 +119,35 @@ export default function EnhancedEmojiPicker({ onEmojiSelect, isDarkTheme }) {
               <hr className={`border-t ${isDarkTheme ? 'border-white/20' : 'border-black/10'}`} />
             </div>
             <div className="max-h-60 overflow-y-auto p-4 grid grid-cols-4 gap-4">
-              <AnimatePresence>
-                {filteredEmojis.map(emoji => (
-                  <TooltipProvider key={emoji.id}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          onClick={() => handleEmojiClick(emoji)}
-                          className={`relative flex items-center justify-center p-2 rounded-lg cursor-pointer transition-all hover:bg-black/10 hover:scale-110 ${emoji.isPremium && !isPremiumUser ? 'opacity-50' : ''}`}
-                        >
-                          <img
-                            src={emoji.emojiUrl}
-                            className="w-8 h-8"
-                          />
-                          {emoji.isPremium && !isPremiumUser && (
-                            <Lock className="absolute top-0 right-0 h-4 w-4 text-yellow-500" />
-                          )}
-                        </motion.div>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        {emoji.isPremium && !isPremiumUser
-                          ? "Subscribe to premium to use this emoji"
-                          : emoji.emojiTitle}
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                ))}
-              </AnimatePresence>
+              {filteredEmojis.map((emoji, index) => (
+                <TooltipProvider key={`${emoji.id}-${index}`}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => handleEmojiClick(emoji)}
+                        className={`relative flex items-center justify-center p-2 rounded-lg cursor-pointer transition-all hover:bg-black/10 hover:scale-110 ${emoji.isPremium && !isPremiumUser ? 'opacity-50' : ''}`}
+                      >
+                        <img
+                          src={emoji.emojiUrl}
+                          alt={emoji.emojiTitle}
+                          className="w-8 h-8"
+                        />
+                        {emoji.isPremium && !isPremiumUser && (
+                          <Lock className="absolute top-0 right-0 h-4 w-4 text-yellow-500" />
+                        )}
+                      </motion.div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {emoji.isPremium && !isPremiumUser
+                        ? "Subscribe to premium to use this emoji"
+                        : emoji.emojiTitle}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ))}
             </div>
           </motion.div>
         )}
