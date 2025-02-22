@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { MessageSquare, Users, Clock, Bitcoin, DollarSign, MessageCircle, BookMarkedIcon, CoinsIcon } from 'lucide-react'
+import { MessageSquare, Users, Clock, Bitcoin, DollarSign, MessageCircle, BookMarkedIcon, CoinsIcon, ChartBarIcon, Trophy, Coins, MessageSquareIcon } from 'lucide-react'
 import { FaTelegram } from 'react-icons/fa'
 import Header from '@/partials/Header'
 import Shoutbox from '@/components/ShoutBox'
@@ -534,8 +534,9 @@ export default function HomePage() {
         <div className="flex flex-col text-white lg:flex-row gap-8">
           <div className="lg:w-3/4 text-white space-y-8">
             <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
-              <CardHeader className="pt-5 pl-10 pr-10 pb-5">
+              <CardHeader className="pt-5 pl-6 pr-10 pb-5 border-b border-zinc-800/50">
                 <div className="flex items-center">
+                  <MessageSquareIcon className="w-5 h-5 text-yellow-500 mr-2" />
                   <CardTitle className="text-lg">Shoutbox</CardTitle>
                   <button
                       onClick={() => setIsSettingsDialogOpen(true)}
@@ -545,7 +546,7 @@ export default function HomePage() {
                   </button>
                 </div>
               </CardHeader>
-              <CardContent className="h-[550px] p-1">
+              <CardContent className="h-[550px] p-0">
                 <Shoutbox isSettingsDialogOpen={isSettingsDialogOpen} setIsSettingsDialogOpen={setIsSettingsDialogOpen}/>
               </CardContent>
             </Card>
@@ -612,26 +613,107 @@ export default function HomePage() {
 
             {/* User Stats */}
             <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} border-0 text-white shadow-lg`}>
-              <CardHeader>
-                <CardTitle className="text-lg">Your Stats</CardTitle>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg flex items-center space-x-2">
+                  <span>Your Stats</span>
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>Reputation</span>
-                    <span>{userStats.reputation}</span>
+                <div className="space-y-3">
+                  <div 
+                    className={`p-4 rounded-lg ${
+                      isDarkTheme 
+                        ? 'bg-white/5 hover:bg-white/10' 
+                        : 'bg-black/5 hover:bg-black/10'
+                    } transition-all duration-200 group cursor-default`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 rounded-md bg-yellow-500/10">
+                          <Trophy className="w-4 h-4 text-yellow-500" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-yellow-500">Reputation</p>
+                          <p className="text-xs text-zinc-400">Community standing</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-lg font-semibold text-yellow-500">{userStats.reputation}</p>
+                        <p className="text-xs text-zinc-400">points</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Posts</span>
-                    <span>{userStats.totalPosts}</span>
+
+                  <div 
+                    className={`p-4 rounded-lg ${
+                      isDarkTheme 
+                        ? 'bg-white/5 hover:bg-white/10' 
+                        : 'bg-black/5 hover:bg-black/10'
+                    } transition-all duration-200 group cursor-default`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 rounded-md bg-blue-500/10">
+                          <MessageSquare className="w-4 h-4 text-blue-500" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-blue-500">Posts</p>
+                          <p className="text-xs text-zinc-400">Total contributions</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-lg font-semibold text-blue-500">{userStats.totalPosts}</p>
+                        <p className="text-xs text-zinc-400">posts</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Threads</span>
-                    <span>{userStats.totalThreads}</span>
+
+                  <div 
+                    className={`p-4 rounded-lg ${
+                      isDarkTheme 
+                        ? 'bg-white/5 hover:bg-white/10' 
+                        : 'bg-black/5 hover:bg-black/10'
+                    } transition-all duration-200 group cursor-default`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 rounded-md bg-green-500/10">
+                          <MessageCircle className="w-4 h-4 text-green-500" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-green-500">Threads</p>
+                          <p className="text-xs text-zinc-400">Discussions started</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-lg font-semibold text-green-500">{userStats.totalThreads}</p>
+                        <p className="text-xs text-zinc-400">threads</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Credits</span>
-                    <span>{userStats.credits.toFixed(2)}</span>
+
+                  <div 
+                    className={`p-4 rounded-lg ${
+                      isDarkTheme 
+                        ? 'bg-white/5 hover:bg-white/10' 
+                        : 'bg-black/5 hover:bg-black/10'
+                    } transition-all duration-200 group cursor-default`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 rounded-md bg-purple-500/10">
+                          <Coins className="w-4 h-4 text-purple-500" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-purple-500">Credits</p>
+                          <p className="text-xs text-zinc-400">Available balance</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-lg font-semibold text-purple-500">{userStats.credits.toFixed(2)}</p>
+                        <p className="text-xs text-zinc-400">credits</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </CardContent>

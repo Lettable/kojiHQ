@@ -12,11 +12,13 @@ import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
 import ProfileDropdown from './ProfileDropDown';
 import { FaTelegram, FaFacebookMessenger, FaBell } from 'react-icons/fa';
+import NotificationPopup from './NotificationPopup'
 
 const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDarkTheme, isPremium, isLoggedIn }) => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const router = useRouter();
 
   const handleSubmit = () => {
@@ -106,32 +108,23 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
 
     return (
       <>
-        {/* <Button
-          variant="ghost"
-          size="icon"
-          className="relative hover:bg-white/10 hover:text-white"
-          onClick={handleNotification}
+        <Button 
+          onClick={() => setIsNotificationOpen(!isNotificationOpen)} 
+          className={`relative ${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}
         >
-          <Bell className="h-5 w-5" />
+          <FaBell />
           {hasUnreadNotifications && (
-            <span className="absolute top-0 right-0 h-2 w-2 bg-yellow-400 rounded-full" />
+            <span className="absolute -top-1 -right-1 h-2 w-2 bg-yellow-400 rounded-full" />
           )}
-        </Button> */}
+        </Button>
 
         <Button onClick={() => { router.push('/chat') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
           <FaFacebookMessenger />
         </Button>
 
-        <Button onClick={() => { router.push('/notifications') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
-          <FaBell />
-        </Button>
-
         <Button onClick={() => { router.push('https://t.me/suizedto') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
           <FaTelegram /> Join Telegram
         </Button>
-
-        {/* <ChatApp isOpen={isChatOpen} setIsOpen={setIsChatOpen} /> */}
-        {/* <NotificationTab isOpen={isOpen} setIsOpen={setIsOpen} userId={userId} isDarkTheme={isDarkTheme} /> */}
 
         {!isPremium && isLoggedIn && (
           <Button
@@ -142,36 +135,6 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
           </Button>
         )}
 
-        {/* {isLoggedIn && (
-          <>
-            <Button onClick={() => { router.push('/ad-bot') }} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
-              Ad Bot
-            </Button>
-            <Button onClick={handleCreateThread} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
-              Create Thread
-            </Button>
-            <Button onClick={handleSubmit} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
-              + SUBMIT A PRODUCT
-            </Button>
-          </>
-        )}
-
-        {isLoggedIn && (
-          <div
-            onClick={handleAvatarClick}
-            className="hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:border-2 hover:border-yellow-500 overflow-hidden cursor-pointer relative"
-          ><img
-              src={avatar}
-              alt="User Avatar"
-              className="object-cover w-full h-full"
-            />
-          </div>
-        )}
-        {!isLoggedIn && (
-          <Button onClick={handleGoLogin} className={`${isDarkTheme ? 'bg-white/10 text-white font-semibold shadow-lg hover:shadow-xl transition-all hidden md:flex' : 'bg-black/10 hover:bg-black/10 hover:shadow-xl text-black font-semibold shadow-lg transition-all hidden md:flex'}`}>
-            Login / Register
-          </Button>
-        )} */}
         <div className="flex items-center space-x-4">
           {isLoggedIn ? (
             <div className="relative">
@@ -193,7 +156,6 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
                     onClose={() => setIsProfileDropdownOpen(false)}
                     avatar={avatar}
                     userId={userId}
-                    // username={username}
                     isPremium={isPremium}
                     hasUnreadNotifications={hasUnreadNotifications}
                     isDarkTheme={isDarkTheme}
@@ -206,6 +168,15 @@ const Header = ({ avatar, userId, onFilterClick, onMenuClick, currentPage, isDar
               Login / Register
             </Button>
           )}
+        </div>
+
+        <div className="relative">
+          <NotificationPopup
+            isOpen={isNotificationOpen}
+            onClose={() => setIsNotificationOpen(false)}
+            userId={userId}
+            isDarkTheme={isDarkTheme}
+          />
         </div>
       </>
     );
