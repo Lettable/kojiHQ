@@ -202,7 +202,7 @@ export default function NotificationPopup({ isOpen, onClose, userId, isDarkTheme
                 <Bell className="w-12 h-12 text-zinc-500 mb-4" />
                 <h3 className="text-lg font-medium text-zinc-300 mb-2">No notifications</h3>
                 <p className="text-sm text-zinc-500">
-                  You're all caught up!
+                  You&apos;re all caught up!
                 </p>
               </div>
             )}
