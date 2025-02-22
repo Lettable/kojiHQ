@@ -22,6 +22,21 @@ import { AlertCircle } from 'lucide-react'
 import { Toaster } from '@/components/ui/toaster'
 import { FaBan } from 'react-icons/fa'
 
+const groupData = {
+    "admin": "https://images.ctfassets.net/49i3hw7ggo6y/3OkSp11XO91MOQtGUptuVg/25987da20092116b791efd3b3c8f5e21/SyTqJLO.png?fm=webp&w=225&h=75&q=100&fit=fill",
+    "contributor": "https://images.ctfassets.net/49i3hw7ggo6y/7sKOblJXtyf8YR1aNp6NXk/78adef95a04390195381a1fca1596313/support.webp?fm=webp&w=225&h=75&q=100&fit=fill",
+    "galactic": "https://images.ctfassets.net/49i3hw7ggo6y/5Mh8K3UQyTFfp1sTWpqPcg/40e93b2c7933ec385f4a69b119737cbe/5sNGdAL.png?fm=webp&w=225&h=75&q=100&fit=fill",
+    "godlike": "https://images.ctfassets.net/49i3hw7ggo6y/2IL92NOuNK3ufF4JFSMFo/089fb56e993f6a676ae699dc38812e19/fRCBfPu.gif?fm=webp&w=225&h=75&q=100&fit=fill",
+    "heaven": "https://images.ctfassets.net/49i3hw7ggo6y/3QsgBLBMNfu1PltPoEWZOT/40eb7e51de1a36a8a577390614839e1c/WPnWq0L.png?fm=webp&w=225&h=75&q=100&fit=fill",
+    "infinity": "https://images.ctfassets.net/49i3hw7ggo6y/2LeTt6bXPzHGICIEL5HvVH/8cbb3bf7f0e263f539f4dfd93c47fda5/vkIVNSd.png?fm=webp&w=225&h=75&q=100&fit=fill",
+    "member": "https://images.ctfassets.net/49i3hw7ggo6y/623jSob0Jrcm3ZE1MVbzdE/0a1bf5b0bcb589b1179c3209abb5d915/0kkt6E5.gif?fm=webp&w=225&h=75&q=100&fit=fill",
+    "mod": "https://images.ctfassets.net/49i3hw7ggo6y/lYIccvwCjhEnkLHFaoX2a/f764d06f2bc9d5bd6ebf5193c5bd5562/5lWeWt2.png?fm=webp&w=225&h=75&q=100&fit=fill",
+    "trial": "https://images.ctfassets.net/49i3hw7ggo6y/7ARwDCuCYhErV0PlCzHBXr/479096a0bea3bad91ab2dfb071b3d1e0/fHXLiyP.png?fm=webp&w=225&h=75&q=100&fit=fill",
+    "premium": "https://images.ctfassets.net/49i3hw7ggo6y/5l5AwxH2WjSN11MHl4tfgT/42276b950617188b3cb36413ad4023f4/4jnzT1l.png?fm=webp&w=225&h=75&q=100&fit=fill",
+    "supreme": "https://images.ctfassets.net/49i3hw7ggo6y/4lUBsvc6yACiX2KiuBDjsc/d4e3a1d497cd99ce388d4ed6f9ae22c3/361Ft8A.png?fm=webp&w=225&h=75&q=100&fit=fill",
+    "staff": "https://images.ctfassets.net/49i3hw7ggo6y/2XxGlPPfYa1sLppIinPaU9/286a84a43365ece32959b47b835c6adf/br0lUXL.png?fm=webp&w=225&h=75&q=100&fit=fill"
+}
+
 export default function ForumUserProfile() {
     const [userData, setUserData] = useState(null)
     const [currentUser, setCurrentUser] = useState(null)
@@ -225,13 +240,13 @@ export default function ForumUserProfile() {
                                             <FaTelegram className="mr-2 h-4 w-4" />
                                             <span>Telegram UID: {userData.telegramUID}</span>
                                         </div>
-                                    ) :  null}
+                                    ) : null}
                                     {userData.discordId && userData.discordId.trim() !== "" ? (
                                         <div className="flex items-center">
                                             <FaDiscord className="mr-2 h-4 w-4" />
                                             <span>Discord UID: {userData.discordId}</span>
                                         </div>
-                                    ) :  null}
+                                    ) : null}
 
                                     {/* BTC Address with Copy Function */}
                                     {userData.btcAddress && userData.btcAddress.length > 0 && (
@@ -413,15 +428,21 @@ export default function ForumUserProfile() {
                                 <div className="mb-4">
                                     <p className="font-semibold mb-2">Groups</p>
                                     <div className="flex flex-wrap gap-2">
-                                        {userData.groups.map((group, index) => (
-                                            <img
-                                                key={index} // Add a key for each mapped element
-                                                src={`/groupimgs/${group.groupName.toLowerCase()}.png`}
-                                                alt={group.groupName}
-                                                style={{ width: '150px', height: '50px' }} // Set inline styles
-                                                className="mr-1" // Keep margin class if needed
-                                            />
-                                        ))}
+                                        {userData.groups.map((group, index) => {
+                                            const groupKey = group.groupName.toLowerCase();
+                                            const imageUrl = groupData[groupKey];
+
+                                            return (
+                                                <img
+                                                    key={index}
+                                                    src={imageUrl}
+                                                    alt={group.groupName}
+                                                    style={{ width: '150px', height: '50px' }}
+                                                    className="mr-1"
+                                                />
+                                            );
+                                        })}
+
                                     </div>
                                 </div>
                                 {userData.signature &&
