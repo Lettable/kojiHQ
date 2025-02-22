@@ -68,10 +68,10 @@ export default function SiteStatusOverlay() {
   if (loading) return null
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-md">
+    <Dialog open={open} onOpenChange={() => {}} className="border-0">
+      <DialogContent className="sm:max-w-md bg-black border-0 text-white" onPointerDownOutside={(e) => e.preventDefault()} >
         <DialogHeader>
-          <DialogTitle className="text-center">
+          <DialogTitle className="text-center text-white">
             {config?.status === "maintenance" ? "System Maintenance" : config?.message || "Site Unavailable"}
           </DialogTitle>
         </DialogHeader>
@@ -80,12 +80,12 @@ export default function SiteStatusOverlay() {
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
           >
-            <Loader2 className="h-12 w-12 text-primary" />
+            <Loader2 className="h-12 w-12 text-white" />
           </motion.div>
           {config?.countdownTimestamp && (
             <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-1">Estimated Time Remaining:</p>
-              <p className="text-2xl font-bold">{countdown}</p>
+              <p className="text-sm text-gray-400 mb-1">Estimated Time Remaining:</p>
+              <p className="text-2xl font-bold text-white">{countdown}</p>
             </div>
           )}
         </div>
