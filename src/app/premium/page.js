@@ -99,7 +99,7 @@ const PremiumSubscription = () => {
             name: 'HEAVEN',
             price: '$4.99',
             period: 'week',
-            image: '/groupimgs/heaven.png',
+            image: 'https://images.ctfassets.net/49i3hw7ggo6y/3QsgBLBMNfu1PltPoEWZOT/40eb7e51de1a36a8a577390614839e1c/WPnWq0L.png?fm=webp&w=225&h=75&q=100&fit=fill',
             features: [
                 'Custom Status',
                 'Access to Premium Emojis',
@@ -114,7 +114,7 @@ const PremiumSubscription = () => {
             name: 'GODLIKE',
             price: '$16.99',
             period: 'month',
-            image: '/groupimgs/godlike.png',
+            image: 'https://images.ctfassets.net/49i3hw7ggo6y/2IL92NOuNK3ufF4JFSMFo/089fb56e993f6a676ae699dc38812e19/fRCBfPu.gif?fm=webp&w=225&h=75&q=100&fit=fill',
             features: [
                 'All Heaven features',
                 'Access to Premium Emojis',
@@ -129,7 +129,7 @@ const PremiumSubscription = () => {
             name: 'SUPREME',
             price: '$299.99',
             period: 'year',
-            image: '/groupimgs/supreme.png',
+            image: 'https://images.ctfassets.net/49i3hw7ggo6y/4lUBsvc6yACiX2KiuBDjsc/d4e3a1d497cd99ce388d4ed6f9ae22c3/361Ft8A.png?fm=webp&w=225&h=75&q=100&fit=fill',
             features: [
                 'All Godlike Features',
                 'Custom Badge with Tagline',
