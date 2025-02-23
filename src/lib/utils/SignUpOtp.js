@@ -13,7 +13,7 @@ const sendOtpEmail = async (toEmail, otp, purpose) => {
     "sign-up": {
       subject: "Your Sign-Up OTP Code",
       message: `
-        <h2>Welcome to Koji Marketplace!</h2>
+        <h2>Welcome to Suized!</h2>
         <p>Use the OTP below to complete your sign-up:</p>
       `,
     },
@@ -29,7 +29,7 @@ const sendOtpEmail = async (toEmail, otp, purpose) => {
   const { subject, message } = purposes[purpose] || purposes["sign-up"];
 
   const mailOptions = {
-    from: `"Koji Marketplace" <${process.env.EMAIL_USER}>`,
+    from: `"Suized" <${process.env.EMAIL_USER}>`,
     to: toEmail,
     subject,
     html: `
@@ -44,77 +44,93 @@ const sendOtpEmail = async (toEmail, otp, purpose) => {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #1A202C;
-            color: #EDF2F7; 
+            background-color: #000000;
+            color: #FFFFFF;
           }
           .container {
             max-width: 600px;
             margin: 20px auto;
-            background-color: #2D3748;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            background-color: #18181B;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
           }
           .header {
-            background-color: #4A5568; 
+            background: linear-gradient(to right, #EAB308, #F59E0B);
             text-align: center;
             padding: 20px;
-            color: #F6E05E;
+          }
+          .header img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
           }
           .header h1 {
             margin: 0;
+            color: #000000;
             font-size: 28px;
-          }
-          .header p {
-            margin: 5px 0 0;
-            font-size: 14px;
-            color: #E2E8F0;
+            font-weight: bold;
           }
           .content {
-            padding: 20px;
+            padding: 30px;
             text-align: center;
+            background-color: #18181B;
           }
           .otp {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
-            margin: 15px 0;
-            color: #F6E05E;
-            background-color: #1A202C;
-            border: 2px solid #F6E05E;
-            padding: 10px 20px;
-            border-radius: 8px;
+            margin: 20px 0;
+            color: #EAB308;
+            background-color: rgba(234, 179, 8, 0.1);
+            border: 2px solid #EAB308;
+            padding: 15px 30px;
+            border-radius: 12px;
             display: inline-block;
+            letter-spacing: 4px;
           }
           .footer {
-            background-color: #4A5568; 
+            background-color: #27272A;
             text-align: center;
-            padding: 10px;
-            color: #E2E8F0; 
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.6);
             font-size: 12px;
           }
           .footer a {
-            color: #63B3ED;
+            color: #EAB308;
             text-decoration: none;
           }
           .footer a:hover {
             text-decoration: underline;
+          }
+          .blur-effect {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(234, 179, 8, 0.15);
+            filter: blur(50px);
+            z-index: 0;
           }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h1>Koji Marketplace</h1>
-            <p>Your Gateway to Premium Services</p>
+            <img src="https://i.postimg.cc/85s7TkJz/suize-364-424-og-white-logo.png" alt="Suized Logo">
+            <h1>Suized</h1>
           </div>
           <div class="content">
+            <div class="blur-effect" style="top: 20%; left: 20%;"></div>
+            <div class="blur-effect" style="bottom: 20%; right: 20%;"></div>
             ${message}
             <div class="otp">${otp}</div>
-            <p>The OTP is valid for 15 minutes. Please do not share it with anyone.</p>
+            <p style="color: rgba(255, 255, 255, 0.6);">This OTP is valid for 15 minutes. Please do not share it with anyone.</p>
           </div>
           <div class="footer">
-            <p>&copy; ${new Date().getFullYear()} Koji Marketplace. All rights reserved.</p>
-            <p>If you did not request this email, please ignore it. For help, contact <a href="mailto:mirzyadev@gmail.com">mirzyadev@gmail.com</a>.</p>
+            <p>&copy; ${new Date().getFullYear()} Suized. All rights reserved.</p>
+            <p>If you did not request this email, please ignore it.</p>
+            <p>Need help? Contact us at <a href="mailto:support@suized.com">support@suized.com</a></p>
           </div>
         </div>
       </body>

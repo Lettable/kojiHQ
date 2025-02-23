@@ -253,11 +253,19 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  telegramUID: {
+  telegramUsername: {
     type: String,
     required: false,
+    sparse: true,
     unique: true,
-    trim: true
+    trim: true,
+    lowercase: true,
+    validate: {
+      validator: function(v) {
+        return !v || /^[a-zA-Z0-9_]{5,32}$/.test(v);
+      },
+      message: props => `${props.value} is not a valid Telegram username!`
+    }
   },
   profilePic: {
     type: String,
@@ -321,42 +329,18 @@ const UserSchema = new mongoose.Schema({
   },
   reputationGiven: [
     {
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-        },
-        value: {
-            type: Number,
-            default: 1
-        },
-        message: {
-            type: String,
-            default: ''
-        },
-        date: {
-            type: Date,
-            default: Date.now
-        }
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        message: { type: String },
+        type: { type: String, enum: ['positive', 'negative'] },
+        givenAt: { type: Date, default: Date.now }
     }
   ],
   reputationTaken: [
     {
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-        },
-        value: {
-            type: Number,
-            default: 1
-        },
-        message: {
-            type: String,
-            default: ''
-        },
-        date: {
-            type: Date,
-            default: Date.now
-        }
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        message: { type: String },
+        type: { type: String, enum: ['positive', 'negative'] },
+        givenAt: { type: Date, default: Date.now }
     }
   ],
   savedThreads: [
@@ -390,6 +374,7 @@ const UserSchema = new mongoose.Schema({
   walletAddress: {
     type: String,
     unique: true,
+    sparse: true,
     required: false,
   },
   nonce: {

@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { MessageSquare, Users, Clock, Bitcoin, DollarSign, MessageCircle, BookMarkedIcon, CoinsIcon, ChartBarIcon, Trophy, Coins, MessageSquareIcon } from 'lucide-react'
+import { MessageSquare, Users, Clock, Bitcoin, DollarSign, MessageCircle, BookMarkedIcon, CoinsIcon, ChartBarIcon, Trophy, Coins, MessageSquareIcon, SettingsIcon } from 'lucide-react'
 import { FaTelegram } from 'react-icons/fa'
 import Header from '@/partials/Header'
 import Shoutbox from '@/components/ShoutBox'
@@ -536,13 +536,12 @@ export default function HomePage() {
             <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
               <CardHeader className="pt-5 pl-6 pr-10 pb-5 border-b border-zinc-800/50">
                 <div className="flex items-center">
-                  <MessageSquareIcon className="w-5 h-5 text-yellow-500 mr-2" />
                   <CardTitle className="text-lg">Shoutbox</CardTitle>
                   <button
                       onClick={() => setIsSettingsDialogOpen(true)}
                       className="bg-transparent ml-2 h-6 w-6 text-white"
                     >
-                    <FiSettings className="mr-2" />
+                    <SettingsIcon className="w-4 h-4 mr-2" />
                   </button>
                 </div>
               </CardHeader>
@@ -551,7 +550,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <div className="grid grid-cols-1 bg-zinc-900/50 p-5 rounded-xl md:grid-cols-3 gap-4">
+            {/*<div className="grid grid-cols-1 bg-zinc-900/50 p-5 rounded-xl md:grid-cols-3 gap-4">
               <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white p-3 hover:bg-zinc-800/50 border-0 shadow-lg cursor-pointer hover:scale-105 transition-transform`}
                 onClick={() => window.location.href = '/market'}>
                 <CardContent className="flex flex-col items-center justify-center p-6">
@@ -578,7 +577,7 @@ export default function HomePage() {
                   <p className='text-sm'>Chat with someone privately</p>
                 </CardContent>
               </Card>
-            </div>
+            </div>*/}
 
             {/* Forums List */}
             <div className="text-white space-y-6">

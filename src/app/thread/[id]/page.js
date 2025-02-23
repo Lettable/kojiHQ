@@ -235,7 +235,7 @@ export default function ThreadView() {
                     <CardContent className="p-6">
                         <div className="flex items-start space-x-4">
                             <div className="relative group">
-                                <Avatar className="w-10 h-10 ring-2 ring-yellow-500/20 transition-all duration-300 group-hover:ring-yellow-500/40">
+                                <Avatar className="w-10 h-10 transition-all duration-300 group-hover:ring-yellow-500/40">
                                     <AvatarImage src={post.author.profilePic} />
                                     <AvatarFallback>{post.author.username}</AvatarFallback>
                                 </Avatar>
@@ -392,7 +392,6 @@ export default function ThreadView() {
                                     <div className="h-4 w-4/6 bg-zinc-800 rounded animate-pulse"></div>
                                 </div>
 
-                                {/* Attachments skeleton */}
                                 <div className="space-y-3">
                                     <div className="h-6 w-32 bg-zinc-800 rounded animate-pulse"></div>
                                     <div className="grid grid-cols-2 gap-4">
@@ -523,7 +522,7 @@ export default function ThreadView() {
                                 <div className="flex items-center text-white justify-between mb-8">
                                     <div className="flex items-center text-white space-x-4">
                                         <div className="relative group">
-                                            <Avatar className="w-14 h-14 ring-2 ring-white/70 transition-all duration-200">
+                                            <Avatar className="w-14 h-14 transition-all duration-200">
                                                 <AvatarImage src={thread.author.profilePic} />
                                                 <AvatarFallback>{thread.author.username}</AvatarFallback>
                                             </Avatar>
@@ -585,7 +584,6 @@ export default function ThreadView() {
                                                     key={file._id}
                                                     className={`flex items-center text-white justify-between p-4 rounded-xl
                                                         ${isDarkTheme ? 'bg-zinc-800/50' : 'bg-gray-100'}
-                                                        border border-yellow-500/10 hover:border-yellow-500/30
                                                         transition-all duration-200`}
                                                 >
                                                     <div className="flex items-center text-white space-x-3">
@@ -596,7 +594,7 @@ export default function ThreadView() {
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() => window.open(file.fileUrl, '_blank')}
-                                                        className="hover:bg-yellow-500/10 hover:text-yellow-500 rounded-full"
+                                                        className="hover:bg-yellow-500/10 hover:text-yellow-500 rounded-md"
                                                     >
                                                         <Download className="w-4 h-4" />
                                                     </Button>
@@ -612,14 +610,15 @@ export default function ThreadView() {
                             <AnimatePresence>
                                 {posts.length === 0 && currentUser && (
                                     <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0 }}
-                                    >
-                                        <p className="flex items-center text-white justify-center text-xl mt-30 pt-30">
-                                            No posts found!
-                                        </p>
-                                    </motion.div>
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0 }}
+                                    className="flex flex-col items-center justify-center p-8 bg-zinc-900/50 rounded-xl border border-zinc-800/50 backdrop-blur-sm"
+                                  >
+                                    <MessageSquare className="w-16 h-16 text-yellow-500/50 mb-4" />
+                                    <h3 className="text-xl font-semibold text-white mb-2">No Replies Found</h3>
+                                    <p className="text-zinc-400 text-center mb-6">Be the first one to start the discussion!</p>
+                                  </motion.div>
                                 )}
 
                                 {!currentUser && (
@@ -681,7 +680,7 @@ export default function ThreadView() {
                                                             
                                                             return (
                                                                 <div className="flex gap-4">
-                                                                    <Avatar className="w-10 h-10 ring-2 ring-yellow-500/20">
+                                                                    <Avatar className="w-10 h-10">
                                                                         <AvatarImage src={replyingTo.author.profilePic} />
                                                                         <AvatarFallback>{replyingTo.author.username[0]}</AvatarFallback>
                                                                     </Avatar>

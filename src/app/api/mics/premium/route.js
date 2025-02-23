@@ -8,7 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 const PLANS = [
   {
-    name: 'Weekly',
+    name: 'HEAVEN',
     price: 4.99,
     period: 'week',
     groups: ['heaven'],
@@ -22,7 +22,7 @@ const PLANS = [
     ]
   },
   {
-    name: 'Monthly',
+    name: 'GODLIKE',
     price: 16.99,
     period: 'month',
     groups: ['godlike'],
@@ -36,7 +36,7 @@ const PLANS = [
     ]
   },
   {
-    name: 'Yearly',
+    name: 'SUPREME',
     price: 299.99,
     period: 'year',
     groups: ['supreme'],

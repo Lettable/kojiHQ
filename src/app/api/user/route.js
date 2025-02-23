@@ -96,10 +96,42 @@ export async function GET(req) {
         }
       ]);
   
-      const reputationGivers = await User.find(
-        { _id: { $in: user.reputationTaken } },
-        { username: 1, profilePic: 1, _id: 1, statusEmoji: 1, usernameEffect: 1 }
-      );
+      const reputationGivers = await User.aggregate([
+        {
+          $match: {
+            _id: { $in: user.reputationTaken.map(rep => 
+              rep.userId instanceof mongoose.Types.ObjectId ? rep.userId : new mongoose.Types.ObjectId(rep.userId)
+            )}
+          }
+        },
+        {
+          $project: {
+            username: 1,
+            profilePic: 1,
+            statusEmoji: 1,
+            usernameEffect: 1
+          }
+        }
+      ]);
+  
+      const reputationData = user.reputationTaken.map(rep => {
+        const repUserId = rep.userId instanceof mongoose.Types.ObjectId 
+          ? rep.userId.toString() 
+          : rep.userId;
+  
+        const giver = reputationGivers.find(g => g._id.toString() === repUserId);
+        
+        return {
+          userId: repUserId,
+          username: giver?.username || 'Unknown User',
+          profilePic: giver?.profilePic || null,
+          usernameEffect: giver?.usernameEffect || 'regular-effect',
+          statusEmoji: giver?.statusEmoji || null,
+          message: rep.message || '',
+          type: rep.type || 'positive',
+          givenAt: rep.givenAt || new Date()
+        };
+      });
   
       const totalLikes = threads.reduce((acc, thread) => acc + thread.likes, 0) +
         posts.reduce((acc, post) => acc + post.likes, 0);
@@ -121,6 +153,10 @@ export async function GET(req) {
             }
         ];
       }
+  
+      const reputationCount = reputationData.reduce((acc, rep) => {
+        return acc + (rep.type === 'positive' ? 1 : -1);
+      }, 0);
   
       const userData = {
         userId: user._id,
@@ -144,21 +180,15 @@ export async function GET(req) {
         favSpotifyTrack: user.favSpotifyTrack || "",
         isVerified: user.isVerified,
         createdAt: user.createdAt,
-        reputation: user.reputationTaken,
-        reputationGivers: reputationGivers.map(giver => ({
-          userId: giver._id,
-          username: giver.username,
-          profilePic: giver.profilePic,
-          usernameEffect: giver.usernameEffect || "regular-effect",
-          statusEmoji: giver.statusEmoji,
-        })),
+        reputation: user.reputationTaken || [],
+        reputationGivers: reputationData,
         stats: {
           threads: threads.length,
           posts: posts.length,
           totalLikes: totalLikes,
           savedThreads: user.savedThreads?.length || 0,
           savedPosts: user.savePost?.length || 0,
-          reputation: user.reputationTaken.length
+          reputation: reputationCount
         },
         activity: {
           threads: threads.slice(0, 5),

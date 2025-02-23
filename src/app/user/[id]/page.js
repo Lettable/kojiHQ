@@ -13,15 +13,22 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useToast } from "@/hooks/use-toast"
 import Header from '@/partials/Header'
 import MarkdownWithEmojis from '@/partials/MarkdownWithEmojis'
-import { Calendar, MessageCircle, FileText, Award, ThumbsUp, Activity } from 'lucide-react'
-import { Clipboard, CoinsIcon } from 'lucide-react'
+import { Calendar, MessageCircle, FileText, Award, ThumbsUp, Activity, Check, ThumbsDown, Users, Clock, UserX, History, MessageSquare, User, Trophy, Bitcoin, Clipboard, Video } from 'lucide-react'
 import { FaCoins } from 'react-icons/fa'
 import { FaTelegram, FaDiscord } from 'react-icons/fa'
 import { usePathname } from 'next/navigation'
 import { AlertCircle } from 'lucide-react'
 import { Toaster } from '@/components/ui/toaster'
 import { FaBan } from 'react-icons/fa'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 
@@ -55,8 +62,11 @@ export default function ForumUserProfile() {
     const router = useRouter()
     const { toast } = useToast()
     const pathname = usePathname()
-    const [repMessage, setRepMessage] = useState('');
-    const [showRepDialog, setShowRepDialog] = useState(false);
+    const [repDialogOpen, setRepDialogOpen] = useState(false)
+    const [repType, setRepType] = useState("positive")
+    const [repMessage, setRepMessage] = useState("")
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isReputationDialogOpen, setIsReputationDialogOpen] = useState(false)
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -120,18 +130,9 @@ export default function ForumUserProfile() {
         return match ? match[1] : null;
     };
 
-    const handleRepToggle = async () => {
-        if (!userData || !currentUser) return;
+    const handleRepSubmit = async () => {
+        if (!userData || !currentUser) return
 
-        if (!userData.reputation?.includes(currentUser.userId)) {
-            setShowRepDialog(true);
-            return;
-        }
-
-        submitRep('');
-    };
-
-    const submitRep = async (message) => {
         try {
             const response = await fetch('/api/user-action/rep', {
                 method: 'POST',
@@ -139,44 +140,44 @@ export default function ForumUserProfile() {
                 body: JSON.stringify({
                     userGiving: currentUser.userId,
                     userToGiveRep: userData.userId,
-                    message: message
+                    message: repMessage,
+                    type: repType
                 }),
-            });
+            })
 
-            if (!response.ok) throw new Error('Failed to toggle reputation');
-            const result = await response.json();
+            if (!response.ok) throw new Error('Failed to give reputation')
+            const result = await response.json()
 
-            setUserData(prevData => {
-                if (!prevData) return null;
-                return {
-                    ...prevData,
-                    stats: {
-                        ...prevData.stats,
-                        reputation: result.hasGivenRep ? prevData.stats.reputation + 1 : prevData.stats.reputation - 1
-                    },
-                    reputation: result.hasGivenRep
-                        ? [...prevData.reputation, currentUser.userId]
-                        : prevData.reputation.filter(id => id !== currentUser.userId)
-                }
-            });
-
-            setShowRepDialog(false);
-            setRepMessage('');
+            setUserData(prevData => ({
+                ...prevData,
+                stats: {
+                    ...prevData.stats,
+                    reputation: result.hasGivenRep 
+                        ? prevData.stats.reputation + (repType === 'positive' ? 1 : -1)
+                        : prevData.stats.reputation - (repType === 'positive' ? 1 : -1)
+                },
+                reputation: result.hasGivenRep
+                    ? [...prevData.reputation, currentUser.userId]
+                    : prevData.reputation.filter(id => id !== currentUser.userId)
+            }))
 
             toast({
-                title: result.hasGivenRep ? 'Reputation Given' : 'Reputation Removed',
+                title: 'Success',
                 description: result.message,
                 variant: 'default',
-            });
+            })
+            setRepDialogOpen(false)
+            setRepMessage("")
+            setRepType("positive")
         } catch (error) {
-            console.error('Error toggling reputation:', error);
+            console.error('Error giving reputation:', error)
             toast({
                 title: 'Error',
-                description: 'Failed to update reputation',
+                description: 'Failed to give reputation',
                 variant: 'destructive',
-            });
+            })
         }
-    };
+    }
 
     const renderTextWithEmojis = (text, emojis) => {
         if (!text || typeof text !== 'string') return text || ''
@@ -311,6 +312,408 @@ export default function ForumUserProfile() {
     const userScore = userData.stats.posts * 2 + userData.stats.threads * 5 + userData.stats.reputation * 10
     const videoId = getYouTubeVideoId(userData.favYtVideo);
 
+    const ReputationCard = () => (
+        <Dialog>
+            <DialogTrigger asChild>
+                <Card className="bg-zinc-900/50 text-white border-0 shadow-lg hover:bg-zinc-900/70 transition-all duration-300 backdrop-blur-sm group cursor-pointer">
+                    <CardContent className="pt-6">
+                        <div className="flex flex-col">
+                            <div className="flex items-center gap-3 mb-3">
+                                <div className="p-2.5 rounded-lg bg-yellow-500/10 group-hover:bg-yellow-500/20 transition-colors duration-300">
+                                    <ThumbsUp className="h-5 w-5 text-yellow-500" />
+                                </div>
+                                <div>
+                                    <p className="font-medium">Reputation</p>
+                                    <p className="text-xs text-zinc-400">Community standing</p>
+                                </div>
+                            </div>
+                            <p className="text-2xl font-bold text-yellow-500">
+                                {userData.stats.reputation}
+                            </p>
+                        </div>
+                    </CardContent>
+                </Card>
+            </DialogTrigger>
+            <DialogContent className="bg-zinc-950 border-zinc-900/50 text-white max-w-3xl backdrop-blur-xl">
+                <DialogHeader>
+                    <DialogTitle className="text-xl flex items-center gap-2">
+                        <Award className="h-5 w-5 text-yellow-500" />
+                        Reputation History
+                    </DialogTitle>
+                    <div className="text-sm text-muted-foreground flex items-center gap-4 pt-2">
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900/90 rounded-lg">
+                            <Trophy className="h-4 w-4 text-yellow-500" />
+                            <span className="text-white font-medium">{userData.stats.reputation}</span>
+                            <span className="text-zinc-400">Total Reputation</span>
+                        </div>
+                        <div className="h-6 w-px bg-zinc-800/50"></div>
+                        <div className="flex gap-3">
+                            <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/5 rounded-lg">
+                                <ThumbsUp className="h-4 w-4 text-green-500" />
+                                <span className="text-green-500 font-medium">
+                                    +{userData.reputationGivers?.filter(r => r.type === 'positive').length || 0}
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-2 px-3 py-1.5 bg-red-500/5 rounded-lg">
+                                <ThumbsDown className="h-4 w-4 text-red-500" />
+                                <span className="text-red-500 font-medium">
+                                    -{userData.reputationGivers?.filter(r => r.type === 'negative').length || 0}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </DialogHeader>
+                
+                <ScrollArea className="mt-6 h-[500px] pr-4">
+                    {userData.reputationGivers && userData.reputationGivers.length > 0 ? (
+                        <div className="space-y-4">
+                            {userData.reputationGivers.map((giver, index) => (
+                                <div 
+                                    key={index}
+                                    className={`
+                                        relative rounded-lg border backdrop-blur-sm transition-colors duration-200
+                                        ${giver.type === 'positive' 
+                                            ? 'border-green-500/20 bg-green-500/5 hover:bg-green-500/10' 
+                                            : 'border-red-500/20 bg-red-500/5 hover:bg-red-500/10'}
+                                    `}
+                                >
+                                    <div className="p-4">
+                                        <div className="flex items-start gap-4">
+                                            <Avatar className="h-10 w-10 ring-2 ring-zinc-800">
+                                                <AvatarImage src={giver.profilePic} />
+                                                <AvatarFallback>{giver.username[0]}</AvatarFallback>
+                                            </Avatar>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <a 
+                                                        href={`/user/${giver.username}`}
+                                                        className={`font-medium hover:underline ${giver.usernameEffect}`}
+                                                    >
+                                                        {giver.username}
+                                                    </a>
+                                                    <Badge 
+                                                        variant={giver.type === 'positive' ? 'success' : 'destructive'}
+                                                        className={`
+                                                            px-2 py-0.5 text-xs font-medium
+                                                            ${giver.type === 'positive'
+                                                                ? 'bg-green-500/10 text-green-500 border-green-500/20'
+                                                                : 'bg-red-500/10 text-red-500 border-red-500/20'}
+                                                        `}
+                                                    >
+                                                        {giver.type === 'positive' ? '+1' : '-1'}
+                                                    </Badge>
+                                                </div>
+                                                <p className="text-sm text-zinc-300 break-words">
+                                                    {giver.message || "No message provided"}
+                                                </p>
+                                                <div className="flex items-center gap-2 mt-2">
+                                                    <Clock className="h-3 w-3 text-zinc-500" />
+                                                    <span className="text-xs text-zinc-500">
+                                                        {new Date(giver.givenAt).toLocaleDateString()} at{' '}
+                                                        {new Date(giver.givenAt).toLocaleTimeString()}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div 
+                                        className={`
+                                            absolute top-4 right-4 h-2 w-2 rounded-full
+                                            ${giver.type === 'positive' ? 'bg-green-500' : 'bg-red-500'}
+                                        `}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center py-12">
+                            <Award className="h-12 w-12 text-zinc-700 mb-3" />
+                            <p className="text-zinc-500 text-center">No reputation history yet</p>
+                            <p className="text-zinc-600 text-sm text-center mt-1">
+                                Be active in the community to earn reputation
+                            </p>
+                        </div>
+                    )}
+                </ScrollArea>
+            </DialogContent>
+        </Dialog>
+    );
+
+    const ReputationDialog = () => {
+        const existingRep = userData.reputationGivers?.find(
+            rep => rep.userId === currentUser?.userId
+        );
+
+        const [localRepType, setLocalRepType] = useState('positive');
+        const [localRepMessage, setLocalRepMessage] = useState('');
+        const [open, setOpen] = useState(false);
+
+        const handleOpenChange = (newOpen) => {
+            setOpen(newOpen);
+            if (!newOpen) {
+                setLocalRepType('positive');
+                setLocalRepMessage('');
+            }
+        };
+
+        const handleLocalSubmit = async () => {
+            setIsSubmitting(true);
+            try {
+                const response = await fetch('/api/user-action/rep', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userGiving: currentUser.userId,
+                        userToGiveRep: userData.userId,
+                        message: localRepMessage,
+                        type: localRepType
+                    }),
+                });
+
+                if (!response.ok) throw new Error('Failed to give reputation');
+                const result = await response.json();
+
+                setUserData(prevData => ({
+                    ...prevData,
+                    stats: {
+                        ...prevData.stats,
+                        reputation: result.hasGivenRep 
+                            ? prevData.stats.reputation + (localRepType === 'positive' ? 1 : -1)
+                            : prevData.stats.reputation - (localRepType === 'positive' ? 1 : -1)
+                    },
+                    reputationGivers: result.hasGivenRep
+                        ? [...(prevData.reputationGivers || []), {
+                            userId: currentUser.userId,
+                            username: currentUser.username,
+                            profilePic: currentUser.profilePic,
+                            message: localRepMessage,
+                            type: localRepType,
+                            givenAt: new Date()
+                          }]
+                        : (prevData.reputationGivers || []).filter(rep => rep.userId !== currentUser.userId)
+                }));
+
+                toast({
+                    title: 'Success',
+                    description: result.message,
+                    variant: 'default',
+                });
+                setOpen(false);
+            } catch (error) {
+                console.error('Error giving reputation:', error);
+                toast({
+                    title: 'Error',
+                    description: 'Failed to give reputation',
+                    variant: 'destructive',
+                });
+            } finally {
+                setIsSubmitting(false);
+            }
+        };
+
+        return (
+            <Dialog open={open} onOpenChange={handleOpenChange}>
+                <DialogTrigger asChild>
+                    <Button
+                        variant={existingRep ? "destructive" : "default"}
+                        className={`
+                            ${existingRep
+                                ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30'
+                                : 'bg-yellow-500 text-black hover:bg-yellow-600'}
+                                transition-colors duration-200
+                        `}
+                    >
+                        {isSubmitting ? (
+                            <div className="flex items-center justify-center">
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
+                                {existingRep ? 'Removing...' : 'Submitting...'}
+                            </div>
+                        ) : (
+                            <div className="flex items-center justify-center">
+                                {existingRep ? (
+                                    <>
+                                        <UserX className="h-4 w-4 mr-2" />
+                                        Remove Reputation
+                                    </>
+                                ) : (
+                                    <>
+                                        <Award className="h-4 w-4 mr-2" />
+                                        Give Reputation
+                                    </>
+                                )}
+                            </div>
+                        )}
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-zinc-900 border-zinc-800 text-white">
+                    <DialogHeader>
+                        <DialogTitle>
+                            {existingRep ? 'Remove Reputation' : 'Give Reputation'}
+                        </DialogTitle>
+                        <DialogDescription className="text-zinc-400">
+                            {existingRep 
+                                ? 'Are you sure you want to remove your reputation?'
+                                : 'Choose the type of reputation and add a message'}
+                        </DialogDescription>
+                    </DialogHeader>
+                    {!existingRep ? (
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-2 gap-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setLocalRepType('positive')}
+                                    className={`
+                                        relative p-4 rounded-lg border-2 transition-all duration-200
+                                        ${localRepType === 'positive'
+                                            ? 'border-yellow-500 bg-yellow-500/10'
+                                            : 'border-zinc-700 bg-zinc-800/50 hover:border-yellow-500/50'}
+                                    `}
+                                >
+                                    <div className="flex flex-col items-center gap-2">
+                                        <div className={`
+                                            p-3 rounded-full transition-colors duration-200
+                                            ${localRepType === 'positive'
+                                                ? 'bg-yellow-500/20'
+                                                : 'bg-zinc-700'}
+                                        `}>
+                                            <ThumbsUp className={`
+                                                w-6 h-6 transition-colors duration-200
+                                                ${localRepType === 'positive'
+                                                    ? 'text-yellow-500'
+                                                    : 'text-zinc-400'}
+                                            `} />
+                                        </div>
+                                        <span className={`
+                                            font-medium transition-colors duration-200
+                                            ${localRepType === 'positive'
+                                                ? 'text-yellow-500'
+                                                : 'text-zinc-400'}
+                                        `}>
+                                            Positive
+                                        </span>
+                                        <span className={`
+                                            text-sm transition-colors duration-200
+                                            ${localRepType === 'positive'
+                                                ? 'text-yellow-500/70'
+                                                : 'text-zinc-500'}
+                                        `}>
+                                            +1 Reputation
+                                        </span>
+                                    </div>
+                                    {localRepType === 'positive' && (
+                                        <div className="absolute -top-2 -right-2">
+                                            <div className="bg-yellow-500 rounded-full p-1">
+                                                <Check className="w-3 h-3 text-black" />
+                                            </div>
+                                        </div>
+                                    )}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setLocalRepType('negative')}
+                                    className={`
+                                        relative p-4 rounded-lg border-2 transition-all duration-200
+                                        ${localRepType === 'negative'
+                                            ? 'border-red-500 bg-red-500/10'
+                                            : 'border-zinc-700 bg-zinc-800/50 hover:border-red-500/50'}
+                                    `}
+                                >
+                                    <div className="flex flex-col items-center gap-2">
+                                        <div className={`
+                                            p-3 rounded-full transition-colors duration-200
+                                            ${localRepType === 'negative'
+                                                ? 'bg-red-500/20'
+                                                : 'bg-zinc-700'}
+                                        `}>
+                                            <ThumbsDown className={`
+                                                w-6 h-6 transition-colors duration-200
+                                                ${localRepType === 'negative'
+                                                    ? 'text-red-500'
+                                                    : 'text-zinc-400'}
+                                            `} />
+                                        </div>
+                                        <span className={`
+                                            font-medium transition-colors duration-200
+                                            ${localRepType === 'negative'
+                                                ? 'text-red-500'
+                                                : 'text-zinc-400'}
+                                        `}>
+                                            Negative
+                                        </span>
+                                        <span className={`
+                                            text-sm transition-colors duration-200
+                                            ${localRepType === 'negative'
+                                                ? 'text-red-500/70'
+                                                : 'text-zinc-500'}
+                                        `}>
+                                            -1 Reputation
+                                        </span>
+                                    </div>
+                                    {localRepType === 'negative' && (
+                                        <div className="absolute -top-2 -right-2">
+                                            <div className="bg-red-500 rounded-full p-1">
+                                                <Check className="w-3 h-3 text-black" />
+                                            </div>
+                                        </div>
+                                    )}
+                                </button>
+                            </div>
+
+                            <Textarea
+                                placeholder="Enter your reputation message..."
+                                value={localRepMessage}
+                                onChange={(e) => setLocalRepMessage(e.target.value)}
+                                className={`
+                                    w-full min-h-[100px] bg-zinc-800 border-2 rounded-lg p-3 
+                                    transition-colors duration-200
+                                    ${localRepType === 'positive'
+                                        ? 'focus:border-yellow-500/50'
+                                        : 'focus:border-red-500/50'}
+                                    ${localRepType === 'positive'
+                                        ? 'border-yellow-500/20'
+                                        : 'border-red-500/20'}
+                                `}
+                            />
+                        </div>
+                    ) : (
+                        <div className="text-zinc-400 mb-4">
+                            This will remove your {existingRep.type === 'positive' ? '+1' : '-1'} reputation from {userData.username}.
+                        </div>
+                    )}
+                    <Button 
+                        onClick={handleLocalSubmit}
+                        disabled={isSubmitting}
+                        className={`w-full ${existingRep 
+                            ? 'bg-red-500 hover:bg-red-600' 
+                            : 'bg-yellow-500 hover:bg-yellow-600'} text-black`}
+                    >
+                        {isSubmitting ? (
+                            <div className="flex items-center justify-center">
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
+                                {existingRep ? 'Removing...' : 'Submitting...'}
+                            </div>
+                        ) : (
+                            <div className="flex items-center justify-center">
+                                {existingRep ? (
+                                    <>
+                                        <UserX className="h-4 w-4 mr-2" />
+                                        Remove Reputation
+                                    </>
+                                ) : (
+                                    <>
+                                        <Award className="h-4 w-4 mr-2" />
+                                        Give Reputation
+                                    </>
+                                )}
+                            </div>
+                        )}
+                    </Button>
+                </DialogContent>
+            </Dialog>
+        );
+    };
+
     return (
         <div className="min-h-screen bg-black text-white">
             <Header
@@ -323,64 +726,425 @@ export default function ForumUserProfile() {
                 isPremium={userData.isPremium}
             />
             <main className="container mx-auto px-4 py-8">
-                <div className="flex flex-col lg:flex-row gap-8">
-                    <div className="lg:w-1/4">
-                        <Card className={`bg-zinc-900/50 border-0 mb-4 text-zinc-200 ${userData.isBanned ? 'opacity-50 pointer-events-none' : ''}`}>
+                {/* Ban Notice - Moved to top */}
+                {userData.isBanned && (
+                    <div className="bg-red-500/10 border-l-4 border-red-500 p-4 mb-6 rounded-md">
+                        <div className="flex items-center space-x-3">
+                            <FaBan className="h-6 w-6 text-red-500" />
+                            <div>
+                                <h3 className="text-lg font-semibold text-red-500">Account Permanently Banned</h3>
+                                <p className="text-zinc-300">This user has been permanently banned from the platform.</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Main Grid Layout */}
+                <div className={`grid grid-cols-1 lg:grid-cols-12 gap-6 ${userData.isBanned ? 'opacity-50 pointer-events-none' : ''}`}>
+                    {/* Main Profile Section - Spans 8 columns */}
+                    <div className="lg:col-span-8 space-y-6">
+                        {/* Profile Banner Card */}
+                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg backdrop-blur-sm overflow-hidden">
+                            <CardContent 
+                                className="pt-6 relative" 
+                                style={
+                                    userData.bannerImg && userData.bannerImg.trim() !== "" && !userData.isBanned
+                                        ? {
+                                            background: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)), url(${userData.bannerImg}) no-repeat center/cover`,
+                                            minHeight: "200px",
+                                        }
+                                        : {
+                                            background: "rgba(24, 24, 27, 0.05)",
+                                            minHeight: "200px",
+                                        }
+                                }
+                            >
+                                <div className="flex items-start justify-between relative z-10 p-6">
+                                    <div className="flex items-start gap-6">
+                                        <Avatar className={`w-28 h-28 ring-4 ${userData.isBanned ? 'grayscale ring-red-500/20' : 'ring-yellow-500/30'} ring-offset-4 ring-offset-black/50 transition-all duration-300 shadow-xl`}>
+                                            <AvatarImage
+                                                src={userData.isBanned 
+                                                    ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2-flKQOIE8ribInudJWpIsy94v1B7LMCemuBf8RcjpIY1Pt3hLHZR5r78rXBFW0cIhVg&usqp=CAU"
+                                                    : userData.profilePicture
+                                                }
+                                                alt={userData.username}
+                                                className={`${userData.isBanned ? 'opacity-50' : ''} object-cover`}
+                                            />
+                                            <AvatarFallback>{userData.username[0]}</AvatarFallback>
+                                        </Avatar>
+
+                                        <div className="flex flex-col mt-2">
+                                            <div className={`text-3xl font-bold flex items-center gap-3 ${userData.isBanned ? 'line-through text-red-500' : ''}`}>
+                                                <span className={`${userData.isBanned ? '' : userData.usernameEffect} transition-all duration-300`}>
+                                                    {userData.username}
+                                                </span>
+                                                {!userData.isBanned && renderTextWithEmojis(userData.statusEmoji, emojis)}
+                                            </div>
+
+                                            {!userData.isBanned && (
+                                                <>
+                                                    <p className="text-lg text-zinc-300 mt-2">
+                                                        {userData.bio === "Edit your bio..." ? "Bio not set" : userData.bio}
+                                                    </p>
+                                                    <div className="flex items-center gap-4 mt-3">
+                                                        <div className="flex items-center gap-2 text-sm text-zinc-400">
+                                                            <Calendar className="w-4 h-4" />
+                                                            Joined {new Date(userData.createdAt).toLocaleDateString()}
+                                                        </div>
+                                                        {userData.isSuspended && (
+                                                            <div className="flex items-center gap-2 text-sm text-red-400 bg-red-500/10 px-3 py-1 rounded-full">
+                                                                <AlertCircle className="w-4 h-4" />
+                                                                Suspended until {new Date(userData.suspendUntil).toLocaleDateString()}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Reputation Button */}
+                                    {currentUser && currentUser.userId !== userData.userId && !userData.isBanned && (
+                                        <div className="flex-shrink-0 flex flex-col gap-2">
+                                            <Button
+                                                variant="default"
+                                                className="bg-zinc-900/90 hover:bg-zinc-800 text-white border border-zinc-800/50 transition-colors duration-200"
+                                                onClick={() => {
+                                                    fetch('/api/start-chat', {
+                                                        method: 'POST',
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
+                                                            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                                                        },
+                                                        body: JSON.stringify({
+                                                            starterId: currentUser.userId,
+                                                            recipientId: userData.userId
+                                                        })
+                                                    })
+                                                    .then(response => response.json())
+                                                    .then(data => {
+                                                        if (data.success) {
+                                                            window.location.href = `/chat?user=${userData.userId}`;
+                                                        } else {
+                                                            toast({
+                                                                title: "Error",
+                                                                description: "Failed to start chat",
+                                                                variant: "destructive",
+                                                            });
+                                                        }
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('Error starting chat:', error);
+                                                        toast({
+                                                            title: "Error",
+                                                            description: "Failed to start chat",
+                                                            variant: "destructive",
+                                                        });
+                                                    });
+                                                }}
+                                            >
+                                                <MessageCircle className="h-4 w-4 mr-2" />
+                                                Message
+                                            </Button>
+                                            <ReputationDialog />
+                                        </div>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Stats Grid */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <ReputationCard />
+                            {[
+                                {
+                                    title: "Threads",
+                                    value: userData.stats.threads,
+                                    icon: FileText,
+                                    color: "blue",
+                                    description: "Total threads"
+                                },
+                                {
+                                    title: "Posts",
+                                    value: userData.stats.posts,
+                                    icon: MessageCircle,
+                                    color: "green",
+                                    description: "Total posts"
+                                },
+                                {
+                                    title: "Credits",
+                                    value: userData.credits.toFixed(2),
+                                    icon: FaCoins,
+                                    color: "purple",
+                                    description: "Available balance"
+                                }
+                            ].map((stat, index) => (
+                                <Card 
+                                    key={index} 
+                                    className="bg-zinc-900/50 text-white border-0 shadow-lg hover:bg-zinc-900/70 transition-all duration-300 backdrop-blur-sm group"
+                                >
+                                    <CardContent className="pt-6">
+                                        <div className="flex flex-col">
+                                            <div className="flex items-center gap-3 mb-3">
+                                                <div className={`p-2.5 rounded-lg bg-${stat.color}-500/10 group-hover:bg-${stat.color}-500/20 transition-colors duration-300`}>
+                                                    <stat.icon className={`h-5 w-5 text-${stat.color}-500`} />
+                                                </div>
+                                                <div>
+                                                    <p className="font-medium">{stat.title}</p>
+                                                    <p className="text-xs text-zinc-400">{stat.description}</p>
+                                                </div>
+                                            </div>
+                                            <p className={`text-2xl font-bold text-${stat.color}-500`}>
+                                                {stat.value}
+                                            </p>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
+
+                        {/* Groups Section - Moved up */}
+                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg">
                             <CardHeader>
-                                <CardTitle>About {userData.username}</CardTitle>
+                                <CardTitle className="text-lg flex items-center gap-2">
+                                    <User className="h-5 w-5 text-yellow-500" />
+                                    Groups
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex flex-wrap gap-3">
+                                    {userData.groups.map((group, index) => {
+                                        const groupKey = group.groupName.toLowerCase();
+                                        const imageUrl = groupData[groupKey];
+                                        return (
+                                            <div key={index} className="relative group">
+                                                <img
+                                                    src={imageUrl}
+                                                    alt={group.groupName}
+                                                    style={{ width: '150px', height: '50px' }}
+                                                    className="rounded-md transition-transform duration-200 group-hover:scale-105 group-hover:opacity-70"
+                                                />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:cursor-default group-hover:opacity-100 transition-opacity duration-200 rounded-md flex items-center justify-center">
+                                                    <span className="text-white text-lg font-medium uppercase">{group.groupName}</span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Recent Activity - Moved from sidebar */}
+                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg">
+                            <CardHeader>
+                                <CardTitle className="text-lg flex items-center gap-2">
+                                    <History className="h-5 w-5 text-yellow-500" />
+                                    Recent Activity
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                {userData.activity.threads.length > 0 || userData.activity.posts.length > 0 ? (
+                                    <div className="space-y-4">
+                                        {userData.activity.threads.length > 0 && (
+                                            <div>
+                                                <h4 className="text-sm font-medium text-zinc-400 mb-2">Latest Threads</h4>
+                                                <div className="space-y-2">
+                                                    {userData.activity.threads.slice(0, 3).map((thread) => (
+                                                        <a 
+                                                            key={thread._id} 
+                                                            href={`/thread/${thread._id}`}
+                                                            className="block p-4 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70 transition-all duration-200"
+                                                        >
+                                                            <div className="flex items-start gap-2">
+                                                                <MessageSquare className="h-4 w-4 text-yellow-500 mt-1 flex-shrink-0" />
+                                                                <div className="min-w-0">
+                                                                    <h3 className="font-medium text-sm text-white line-clamp-1">
+                                                                        {thread.title}
+                                                                    </h3>
+                                                                    <div className="flex items-center gap-2 mt-1">
+                                                                        <Clock className="h-3 w-3 text-zinc-500" />
+                                                                        <span className="text-xs text-zinc-500">
+                                                                            {new Date(thread.createdAt).toLocaleDateString()}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                        
+                                        {userData.activity.posts.length > 0 && (
+                                            <div>
+                                                <h4 className="text-sm font-medium text-zinc-400 mb-2">Latest Posts</h4>
+                                                <div className="space-y-2">
+                                                    {userData.activity.posts.slice(0, 3).map((post) => (
+                                                        <a 
+                                                            key={post._id} 
+                                                            href={`/thread/${post.threadId}`}
+                                                            className="block p-4 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70 transition-all duration-200"
+                                                        >
+                                                            <div className="flex items-start gap-2">
+                                                                <MessageCircle className="h-4 w-4 text-yellow-500 mt-1 flex-shrink-0" />
+                                                                <div className="min-w-0">
+                                                                    <h3 className="font-medium text-sm text-white line-clamp-1">
+                                                                        {post.threadTitle || "Untitled Thread"}
+                                                                    </h3>
+                                                                    <p className="text-xs text-zinc-400 line-clamp-1 mt-0.5">
+                                                                        {renderTextWithEmojis(post.content, emojis)}
+                                                                    </p>
+                                                                    <div className="flex items-center gap-2 mt-1">
+                                                                        <Clock className="h-3 w-3 text-zinc-500" />
+                                                                        <span className="text-xs text-zinc-500">
+                                                                            {new Date(post.createdAt).toLocaleDateString()}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-4">
+                                        <History className="h-8 w-8 text-zinc-700 mx-auto mb-2" />
+                                        <p className="text-sm text-zinc-500">No recent activity</p>
+                                    </div>
+                                )}
+                            </CardContent>
+                        </Card>
+
+                        {/* Signature Section */}
+                        {userData.signature && (
+                            <Card className="bg-zinc-900/50 text-white border-0 shadow-lg">
+                                <CardHeader>
+                                    <CardTitle className="text-lg flex items-center gap-2">
+                                        <FileText className="h-5 w-5 text-yellow-500" />
+                                        Signature
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="prose prose-invert max-w-none">
+                                        <MarkdownWithEmojis content={userData.signature} />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
+                    </div>
+
+                    {/* Sidebar - Spans 4 columns */}
+                    <div className="lg:col-span-4 space-y-6">
+                        {/* About User Card */}
+                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2">
+                                    <User className="h-5 w-5 text-yellow-500" />
+                                    About {userData.username}
+                                </CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-4">
-                                    <div className="flex items-center">
-                                        <Calendar className="mr-2 h-4 w-4" />
-                                        <span>Joined on {new Date(userData.createdAt).toLocaleDateString()}</span>
-                                    </div>
-                                    <div className="flex items-center">
-                                        <MessageCircle className="mr-2 h-4 w-4" />
-                                        <span>{userData.stats.posts} post(s)</span>
-                                    </div>
-                                    <div className="flex items-center">
-                                        <FileText className="mr-2 h-4 w-4" />
-                                        <span>{userData.stats.threads} thread(s)</span>
-                                    </div>
-                                    <div className="flex items-center">
-                                        <Award className="mr-2 h-4 w-4" />
-                                        <span>Level {Math.floor(userData.stats.posts / 10) + 1}</span>
-                                    </div>
-                                    <div className="flex items-center">
-                                        <Award className="mr-2 h-4 w-4" />
-                                        <span>Overall Score {userScore}</span>
-                                    </div>
-                                    <div className="flex items-center">
-                                        <FaCoins className="mr-2 h-4 w-4" />
-                                        <span>Credits: {userData.credits.toFixed(2)}</span>
-                                    </div>
-                                    {userData.telegramUID && userData.telegramUID.trim() !== "" ? (
-                                        <div className="flex items-center">
-                                            <FaTelegram className="mr-2 h-4 w-4" />
-                                            <span>Telegram UID: {userData.telegramUID}</span>
+                                    {/* Join Date */}
+                                    <div className="flex items-center p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70  transition-all duration-200">
+                                        <Calendar className="mr-3 h-4 w-4 text-yellow-500" />
+                                        <div>
+                                            <span className="text-sm text-zinc-400">Joined</span>
+                                            <p className="text-white">{new Date(userData.createdAt).toLocaleDateString()}</p>
                                         </div>
-                                    ) : null}
-                                    {userData.discordId && userData.discordId.trim() !== "" ? (
-                                        <div className="flex items-center">
-                                            <FaDiscord className="mr-2 h-4 w-4" />
-                                            <span>Discord UID: {userData.discordId}</span>
-                                        </div>
-                                    ) : null}
+                                    </div>
 
-                                    {/* BTC Address with Copy Function */}
+                                    {/* Posts & Threads */}
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="flex items-center p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70  transition-all duration-200">
+                                            <MessageCircle className="mr-3 h-4 w-4 text-yellow-500" />
+                                            <div>
+                                                <span className="text-sm text-zinc-400">Posts</span>
+                                                <p className="text-white">{userData.stats.posts}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70  transition-all duration-200">
+                                            <FileText className="mr-3 h-4 w-4 text-yellow-500" />
+                                            <div>
+                                                <span className="text-sm text-zinc-400">Threads</span>
+                                                <p className="text-white">{userData.stats.threads}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Level & Score */}
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="flex items-center p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70  transition-all duration-200">
+                                            <Award className="mr-3 h-4 w-4 text-yellow-500" />
+                                            <div>
+                                                <span className="text-sm text-zinc-400">Level</span>
+                                                <p className="text-white">{Math.floor(userData.stats.posts / 10) + 1}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70  transition-all duration-200">
+                                            <Trophy className="mr-3 h-4 w-4 text-yellow-500" />
+                                            <div>
+                                                <span className="text-sm text-zinc-400">Score</span>
+                                                <p className="text-white">{userScore}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Credits */}
+                                    <div className="flex items-center p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70  transition-all duration-200">
+                                        <FaCoins className="mr-3 h-4 w-4 text-yellow-500" />
+                                        <div>
+                                            <span className="text-sm text-zinc-400">Credits</span>
+                                            <p className="text-white">{userData.credits.toFixed(2)}</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Social Links */}
+                                    {(userData.telegramUID || userData.discordId) && (
+                                        <div className="grid grid-cols-1 gap-3">
+                                            {userData.telegramUID && userData.telegramUID.trim() !== "" && (
+                                                <div className="flex items-center p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70  transition-all duration-200">
+                                                    <FaTelegram className="mr-3 h-4 w-4 text-[#0088cc]" />
+                                                    <div>
+                                                        <span className="text-sm text-zinc-400">Telegram</span>
+                                                        <p className="text-white">{userData.telegramUID}</p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {userData.discordId && userData.discordId.trim() !== "" && (
+                                                <div className="flex items-center p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70  transition-all duration-200">
+                                                    <FaDiscord className="mr-3 h-4 w-4 text-[#5865F2]" />
+                                                    <div>
+                                                        <span className="text-sm text-zinc-400">Discord</span>
+                                                        <p className="text-white">{userData.discordId}</p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* BTC Address */}
                                     {userData.btcAddress && userData.btcAddress.length > 0 && (
-                                        <div className="flex items-center">
-                                            <FileText className="mr-2 h-4 w-4 text-zinc-300" />
-                                            <span className="mr-2 truncate text-zinc-300">{`${userData.btcAddress.slice(0, 6)}...${userData.btcAddress.slice(-4)}`}</span>
+                                        <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70  transition-all duration-200 group">
+                                            <div className="flex items-center flex-1 min-w-0">
+                                                <Bitcoin className="mr-3 h-4 w-4 text-[#F7931A]" />
+                                                <div className="overflow-hidden">
+                                                    <span className="text-sm text-zinc-400 block">BTC Address</span>
+                                                    <p className="text-white truncate">
+                                                        {`${userData.btcAddress.slice(0, 6)}...${userData.btcAddress.slice(-4)}`}
+                                                    </p>
+                                                </div>
+                                            </div>
                                             <button
-                                                className="bg-transparent hover:bg-zinc-700 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                                className="ml-2 p-2 rounded-full bg-zinc-700/50 hover:bg-zinc-700 transition-colors duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100"
                                                 onClick={() => {
                                                     navigator.clipboard.writeText(userData.btcAddress);
                                                     toast({
                                                         title: "Copied!",
-                                                        description: "BTC Address has been copied to clipboard!",
-                                                        variant: "destructive",
+                                                        description: "BTC Address has been copied to clipboard",
+                                                        variant: "success",
                                                     });
                                                 }}
                                             >
@@ -392,285 +1156,53 @@ export default function ForumUserProfile() {
                             </CardContent>
                         </Card>
 
-                        <Card className={`bg-zinc-900/50 text-white border-0 shadow-lg rounded-lg ${userData.isBanned ? 'opacity-50 pointer-events-none' : ''}`}>
-                            <CardHeader>
-                                <CardTitle className="text-lg font-semibold">Recent Reputation</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <ScrollArea className="h-[200px] overflow-y-auto">
-                                    {userData.reputationGivers.map((giver) => (
-                                        <div key={giver.userId} className="flex items-center mb-4">
-                                            <Avatar className="w-10 h-10 mr-3">
-                                                <AvatarImage src={giver.profilePic} alt={giver.username} />
-                                                <AvatarFallback>{giver.username[0]}</AvatarFallback>
-                                            </Avatar>
-                                            <a href={`/user/${giver.username}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
-                                                <span className={`font-medium ${giver.usernameEffect}`}>{giver.username}</span> {renderTextWithEmojis(giver.statusEmoji, emojis)}
-                                            </a>
-                                            <hr className='my-2 border-zinc-700' />
-                                        </div>
-                                    ))}
-                                </ScrollArea>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    <div className="lg:w-1/2">
-                        {userData.isBanned && (
-                            <div className="bg-red-500/10 border-l-4 border-red-500 p-4 mb-4 rounded-md">
-                                <div className="container mx-auto flex items-center justify-between">
-                                    <div className="flex items-center space-x-3">
-                                        <FaBan className="h-6 w-6 text-red-500" />
-                                        <div>
-                                            <h3 className="text-lg font-semibold text-red-500">Account Permanently Banned</h3>
-                                            <p className="text-zinc-300">This user has been permanently banned from the platform.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                        <Card className={`bg-zinc-900/50 text-white border-0 shadow-lg mb-6 ${userData.isBanned ? 'opacity-50' : ''}`}>
-                            <CardContent className="pt-6">
-                                <Card className={`bg-zinc-900/50 text-white border-0 shadow-lg mb-4 ${userData.isBanned ? 'grayscale' : ''}`}>
-                                    <CardContent className="pt-6" style={
-                                        userData.bannerImg && userData.bannerImg.trim() !== "" && !userData.isBanned
-                                            ? {
-                                                background: `url(${userData.bannerImg}) no-repeat`,
-                                                backgroundSize: "cover",
-                                                backgroundPosition: "center",
-                                                width: "100%",
-                                                borderRadius: "16px",
-                                                opacity: 0.8,
-                                            }
-                                            : {}
-                                    }>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center">
-                                                <Avatar className={`w-24 h-24 mr-4 ${userData.isBanned ? 'grayscale' : ''}`}>
-                                                    <AvatarImage
-                                                        src={userData.isBanned 
-                                                            ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2-flKQOIE8ribInudJWpIsy94v1B7LMCemuBf8RcjpIY1Pt3hLHZR5r78rXBFW0cIhVg&usqp=CAU"
-                                                            : userData.profilePicture
-                                                        }
-                                                        alt={userData.username}
-                                                        className={userData.isBanned ? 'opacity-50' : ''}
-                                                    />
-                                                    <AvatarFallback>{userData.username[0]}</AvatarFallback>
-                                                </Avatar>
-
-                                                <div className="flex flex-col">
-                                                    <div className={`text-2xl font-bold flex items-center gap-2 ${userData.isBanned ? 'line-through text-red-500' : ''}`}>
-                                                        <span className={userData.isBanned ? '' : userData.usernameEffect}>
-                                                            {userData.username}
-                                                        </span>
-                                                        {!userData.isBanned && renderTextWithEmojis(userData.statusEmoji, emojis)}
-                                                    </div>
-
-                                                    {!userData.isBanned && (
-                                                        <>
-                                                            <p className="text-white">
-                                                                {userData.bio === "Edit your bio..." ? "Bio not set" : userData.bio}
-                                                            </p>
-                                                            {userData.isSuspended && (
-                                                                <div className="flex items-center gap-2 mt-1 self-start">
-                                                                    <span className="text-xs text-white">
-                                                                        This user is suspended until {new Date(userData.suspendUntil).toLocaleDateString()}
-                                                                    </span>
-                                                                </div>
-                                                            )}
-                                                        </>
-                                                    )}
-                                                    {userData.isBanned && (
-                                                        <p className="text-red-500 italic mt-1">
-                                                            This account has been permanently banned
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            </div>
-
-
-                                            {/* Reputation Button */}
-                                            {currentUser && currentUser.userId !== userData.userId && !userData.isBanned && (
-                                                <div className="flex-shrink-0">
-                                                    <TooltipProvider>
-                                                        <Tooltip>
-                                                            <TooltipTrigger asChild>
-                                                                <Button
-                                                                    onClick={handleRepToggle}
-                                                                    variant={userData.reputation.includes(currentUser.userId) ? "destructive" : "default"}
-                                                                    className={`
-                                                                        ${userData.reputation.includes(currentUser.userId)
-                                                                            ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20'
-                                                                            : 'bg-yellow-500 text-black hover:bg-yellow-600'}
-                                                                            transition-colors duration-200
-                                                                        `}>
-                                                                    {userData.reputation.includes(currentUser.userId) ? "Remove Rep" : "Give Rep"}
-                                                                </Button>
-                                                            </TooltipTrigger>
-                                                            <TooltipContent className="bg-zinc-800 border-zinc-700">
-                                                                <p className="text-white">
-                                                                    {userData.reputation.includes(currentUser.userId)
-                                                                        ? "Remove your reputation point"
-                                                                        : "Give a reputation point"}
-                                                                </p>
-                                                            </TooltipContent>
-                                                        </Tooltip>
-                                                    </TooltipProvider>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                                <div className="grid grid-cols-2 gap-4 mb-4">
-                                <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-2 hover:bg-zinc-900/70 transition-all duration-300 backdrop-blur-sm">
-                                        <CardContent className="pt-6">
-                                            <div className="flex flex-col">
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <ThumbsUp className="h-4 w-4 text-yellow-500" />
-                                                    <p className="font-semibold">Reputation</p>
-                                                </div>
-                                                <p className='text-2xl font-bold text-white/80'>{userData.stats.reputation}</p>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                    <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-2 hover:bg-zinc-900/70 transition-all duration-300 backdrop-blur-sm">
-                                        <CardContent className="pt-6">
-                                            <div className="flex flex-col">
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <FileText className="h-4 w-4 text-yellow-500" />
-                                                    <p className="font-semibold">Threads</p>
-                                                </div>
-                                                <p className='text-2xl font-bold text-white/80'>{userData.stats.threads}</p>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                    <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-2 hover:bg-zinc-900/70 transition-all duration-300 backdrop-blur-sm">
-                                        <CardContent className="pt-6">
-                                            <div className="flex flex-col">
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <FileText className="h-4 w-4 text-yellow-500" />
-                                                    <p className="font-semibold">Posts</p>
-                                                </div>
-                                                <p className='text-2xl font-bold text-white/80'>{userData.stats.posts}</p>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                    <Card className="bg-zinc-900/50 text-white border-0 shadow-lg mb-2 hover:bg-zinc-900/70 transition-all duration-300 backdrop-blur-sm">
-                                        <CardContent className="pt-6">
-                                            <div className="flex flex-col">
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <FaCoins className="h-4 w-4 text-yellow-500" />
-                                                    <p className="font-semibold">Credits</p>
-                                                </div>
-                                                <p className='text-2xl font-bold text-white/80'>{userData.credits.toFixed(2)}</p>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-
-                                </div>
-                                <div className="mb-4">
-                                    <p className="font-semibold mb-2">Groups</p>
-                                    <div className="flex flex-wrap gap-2">
-                                        {userData.groups.map((group, index) => {
-                                            const groupKey = group.groupName.toLowerCase();
-                                            const imageUrl = groupData[groupKey];
-
-                                            return (
-                                                <img
-                                                    key={index}
-                                                    src={imageUrl}
-                                                    alt={group.groupName}
-                                                    style={{ width: '150px', height: '50px' }}
-                                                    className="mr-1"
-                                                />
-                                            );
-                                        })}
-
-                                    </div>
-                                </div>
-                                {userData.signature &&
-                                    <div>
-                                        <p className="font-semibold mb-2">Signature</p>
-                                        <MarkdownWithEmojis content={userData.signature} />
-                                    </div>}
-                                {userData.favYtVideo && (
-                                    <Card className="bg-zinc-900/50 text-white border-0 mt-4 shadow-lg mb-4">
-                                        <CardContent className="pt-6">
-                                            <p className="font-semibold mb-4">Favorite Video</p>
-                                            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                                                {videoId ? (
-                                                    <iframe
-                                                        className="absolute top-0 left-0 w-full h-full rounded-lg"
-                                                        src={`https://www.youtube.com/embed/${videoId}`}
-                                                        title="YouTube video"
-                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                        allowFullScreen
-                                                    />
-                                                ) : (
-                                                    <p className="text-gray-400 text-center">Nigga set Invalid YouTube video link.</p>
-                                                )}
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                )}
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    <div className="lg:w-1/4">
-                        <Card className={`bg-zinc-900/50 text-white border-0 shadow-lg mb-6 ${userData.isBanned ? 'opacity-50 pointer-events-none' : ''}`}>
+                        {/* Latest Visitors */}
+                        <Card className="bg-zinc-900/50 text-white border-0 shadow-lg">
                             <CardHeader>
                                 <CardTitle className="text-lg flex items-center gap-2">
-                                    Recent Activity
+                                    <Users className="h-5 w-5 text-yellow-500" />
+                                    Latest Visitors
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <ScrollArea className="h-[300px] overflow-y-auto pr-4">
-                                    {userData.activity.threads.length > 0 || userData.activity.posts.length > 0 ? (
-                                        <>
-                                            {userData.activity.threads.length > 0 && (
-                                                <div>
-                                                    <h4 className="font-semibold text-lg mb-2 text-yellow-500">Threads</h4>
-                                                    {userData.activity.threads.map((thread) => (
-                                                        <div key={thread._id} className="mb-4 p-3 rounded-lg hover:bg-white/5 transition-colors duration-200">
-                                                            <a href={`/thread/${thread._id}`} className='text-white hover:text-yellow-500 transition-colors duration-200'>
-                                                                <h3 className="font-semibold">{thread.title}</h3>
-                                                            </a>
-                                                            <p className="text-sm text-gray-400">
-                                                                {new Date(thread.createdAt).toLocaleDateString()}
-                                                            </p>
-                                                            <p className="text-sm mt-1 text-gray-300">{renderTextWithEmojis(thread.content.substring(0, 100), emojis)}...</p>
+                                {userData.latestVisitors.length > 0 ? (
+                                    <div className="space-y-3">
+                                        {userData.latestVisitors.map((visitor) => (
+                                            <div 
+                                                key={visitor.userId} 
+                                                className="flex items-center p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70 transition-all duration-200"
+                                            >
+                                                <Avatar className="h-10 w-10 border-2 border-zinc-800">
+                                                    <AvatarImage src={visitor.profilePic} alt={visitor.username} />
+                                                    <AvatarFallback>{visitor.username[0]}</AvatarFallback>
+                                                </Avatar>
+                                                <div className="ml-3 min-w-0 flex items-center gap-2">
+                                                    <a 
+                                                        href={`/user/${visitor.userId}`} 
+                                                        className={`font-medium hover:underline ${visitor.usernameEffect}`}
+                                                    >
+                                                        {visitor.username}
+                                                    </a>
+                                                    {visitor.statusEmoji && (
+                                                        <div className="ml-auto">
+                                                            {renderTextWithEmojis(visitor.statusEmoji, emojis)}
                                                         </div>
-                                                    ))}
+                                                    )}
                                                 </div>
-                                            )}
-                                            {userData.activity.posts.length > 0 && (
-                                                <div className="mt-6">
-                                                    <h4 className="font-semibold text-lg mb-2 text-yellow-500">Posts</h4>
-                                                    {userData.activity.posts.map((post) => (
-                                                        <div key={post._id} className="mb-4 p-3 rounded-lg hover:bg-white/5 transition-colors duration-200">
-                                                            <a href={`/thread/${post.threadId}`} className='text-white hover:text-yellow-500 transition-colors duration-200'>
-                                                                <h3 className="font-semibold">{post.threadTitle || "Untitled Thread"}</h3>
-                                                            </a>
-                                                            <p className="text-sm text-gray-400">
-                                                                {new Date(post.createdAt).toLocaleDateString()}
-                                                            </p>
-                                                            <p className="text-sm mt-1 text-gray-300">{renderTextWithEmojis(post.content.substring(0, 100), emojis)}...</p>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <p className="text-gray-400 text-center text-sm">
-                                            No recent activity yet.
-                                        </p>
-                                    )}
-                                </ScrollArea>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-8">
+                                        <User className="h-12 w-12 text-zinc-700 mx-auto mb-3" />
+                                        <p className="text-zinc-500">No recent visitors</p>
+                                    </div>
+                                )}
                             </CardContent>
                         </Card>
 
-                        {userData.favSpotifyTrack && userData.favSpotifyTrack.trim() !== "" && !userData.isBanned ? (
+                        {/* Spotify Track - If exists */}
+                        {userData.favSpotifyTrack && !userData.isBanned && (
                             <iframe
                                 style={{ borderRadius: "12px" }}
                                 src={`https://open.spotify.com/embed/track/${extractSpotifyTrackId(userData.favSpotifyTrack)}?utm_source=generator&theme=0`}
@@ -679,86 +1211,40 @@ export default function ForumUserProfile() {
                                 allowFullScreen
                                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                                 loading="lazy"
-                                className="mb-6 mt-6"
                             ></iframe>
-                        ) : null}
+                        )}
 
-
-
-                        <Card className={`bg-zinc-900/50 text-white border-0 shadow-lg rounded-lg mb-6 ${userData.isBanned ? 'opacity-50 pointer-events-none' : ''}`}>
-                            <CardHeader>
-                                <CardTitle className="text-lg font-semibold">Latest Visitors</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <ScrollArea className="h-[300px] overflow-y-auto">
-                                    {userData.latestVisitors.length > 0 ? (
-                                        userData.latestVisitors.map((visitor) => (
-                                            <div key={visitor.userId} className="flex items-center mb-4">
-                                                <Avatar className="w-10 h-10 mr-3">
-                                                    <AvatarImage src={visitor.profilePic} alt={visitor.username} />
-                                                    <AvatarFallback>{visitor.username[0]}</AvatarFallback>
-                                                </Avatar>
-                                                <div className="flex flex-col">
-                                                    <a href={`/user/${visitor.userId}`} className='text-white hover:text-blue-400 transition-colors duration-200'>
-                                                        <span className={`font-medium ${visitor.usernameEffect}`}>{visitor.username}</span> {renderTextWithEmojis(visitor.statusEmoji, emojis)}
-                                                    </a>
-                                                </div>
-                                                <hr className='my-2 border-zinc-700' />
+                        {/* Favorite Video - Moved to sidebar */}
+                        {userData.favYtVideo && (
+                            <Card className="bg-zinc-900/50 text-white border-0 shadow-lg">
+                                <CardHeader>
+                                    <CardTitle className="text-lg flex items-center gap-2">
+                                        <Video className="h-5 w-5 text-yellow-500" />
+                                        Favorite Video
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                                        {videoId ? (
+                                            <iframe
+                                                className="absolute top-0 left-0 w-full h-full rounded-lg"
+                                                src={`https://www.youtube.com/embed/${videoId}`}
+                                                title="YouTube video"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            />
+                                        ) : (
+                                            <div className="absolute top-0 left-0 w-full h-full rounded-lg bg-zinc-800/50 flex items-center justify-center">
+                                                <p className="text-zinc-400">Invalid YouTube video link</p>
                                             </div>
-                                        ))
-                                    ) : (
-                                        <p className="text-gray-400 text-center text-sm">
-                                            No recent visitors yet.
-                                        </p>
-                                    )}
-                                </ScrollArea>
-                            </CardContent>
-                        </Card>
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
                     </div>
                 </div>
                 <Toaster />
-                {showRepDialog && (
-                    <Dialog open={showRepDialog} onOpenChange={setShowRepDialog}>
-                        <DialogContent className="bg-zinc-900/95 border border-zinc-800 text-white shadow-xl backdrop-blur-xl">
-                            <DialogHeader>
-                                <DialogTitle className="text-xl font-semibold text-white flex items-center gap-2">
-                                    <ThumbsUp className="w-5 h-5 text-yellow-500" />
-                                    Give Reputation
-                                </DialogTitle>
-                            </DialogHeader>
-                            <div className="space-y-4 py-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="repMessage" className="text-zinc-400">Message (optional)</Label>
-                                    <Textarea
-                                        id="repMessage"
-                                        placeholder="e.g., +rep very good person"
-                                        value={repMessage}
-                                        onChange={(e) => setRepMessage(e.target.value)}
-                                        className="min-h-[100px] bg-zinc-800/50 border-zinc-700/50 focus:border-yellow-500/50 
-                                            placeholder:text-zinc-500 text-white resize-none rounded-xl transition-all duration-200
-                                            focus:ring-yellow-500/20 hover:border-yellow-500/30"
-                                    />
-                                </div>
-                            </div>
-                            <DialogFooter className="gap-2">
-                                <Button 
-                                    variant="ghost" 
-                                    onClick={() => setShowRepDialog(false)}
-                                    className="bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
-                                >
-                                    Cancel
-                                </Button>
-                                <Button 
-                                    onClick={() => submitRep(repMessage)}
-                                    className="bg-yellow-500 hover:bg-yellow-600 text-black transition-all duration-200 
-                                        rounded-xl px-6 shadow-lg hover:shadow-yellow-500/20"
-                                >
-                                    Give Rep
-                                </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                )}
             </main>
         </div>
     )

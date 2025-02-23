@@ -48,7 +48,49 @@ export default function NotificationPopup({ isOpen, onClose, userId, isDarkTheme
         })
         const data = await response.json()
         if (data.success) {
-          setNotifications(data.data.slice(0, 10))
+          const exampleNotifications = [
+            {
+              _id: '1',
+              type: 'reply',
+              message: 'John_Doe replied to your thread "Best Mining Strategies 2024"',
+              read: false,
+              createdAt: new Date(Date.now() - 1000 * 60 * 5),
+              projectId: 'thread-1'
+            },
+            {
+              _id: '2',
+              type: 'rep',
+              message: 'CryptoExpert gave you +1 reputation for your helpful answer',
+              read: false,
+              createdAt: new Date(Date.now() - 1000 * 60 * 30),
+              projectId: 'thread-2'
+            },
+            {
+              _id: '3',
+              type: 'mention',
+              message: '@BlockchainDev mentioned you in "Security Best Practices"',
+              read: true,
+              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
+              projectId: 'thread-3'
+            },
+            {
+              _id: '4',
+              type: 'comment',
+              message: 'New comment on your guide: "Excellent explanation!"',
+              read: true,
+              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
+              projectId: 'thread-4'
+            },
+            {
+              _id: '5',
+              type: 'message',
+              message: 'You received a new private message from Alice_Chain',
+              read: true,
+              createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48),
+              projectId: 'thread-5'
+            }
+          ];
+          setNotifications(exampleNotifications);
         }
       } catch (error) {
         console.error('Error fetching notifications:', error)
@@ -74,23 +116,26 @@ export default function NotificationPopup({ isOpen, onClose, userId, isDarkTheme
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 10, scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className={`absolute right-0 mt-2 w-96 max-w-[90vw] rounded-lg shadow-lg ${
+          className={`absolute right-0 mt-2 w-96 max-w-[90vw] rounded-xl shadow-xl ${
             isDarkTheme 
-              ? 'bg-zinc-900/95 border border-white/10' 
-              : 'bg-white/95 border border-black/10'
+              ? 'bg-zinc-900/50 border-0' 
+              : 'bg-white/95 border-0'
           } backdrop-blur-xl overflow-hidden z-50`}
         >
           <div className={`flex items-center justify-between p-4 border-b ${
-            isDarkTheme ? 'border-white/10' : 'border-black/10'
+            isDarkTheme ? 'border-zinc-800' : 'border-zinc-200'
           }`}>
-            <h3 className={`font-semibold ${isDarkTheme ? 'text-white' : 'text-black'}`}>
-              Notifications
-            </h3>
+            <div className="space-y-1">
+              <h3 className={`font-semibold ${isDarkTheme ? 'text-white' : 'text-black'}`}>
+                Notifications
+              </h3>
+              <p className="text-sm text-zinc-400">Recent activity</p>
+            </div>
             <Button
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className={`rounded-md hover:bg-${isDarkTheme ? 'white' : 'black'}/10`}
+              className={`rounded-lg hover:text-zinc-200 hover:bg-zinc-800/50`}
             >
               <X className="h-4 w-4" />
             </Button>
@@ -104,41 +149,46 @@ export default function NotificationPopup({ isOpen, onClose, userId, isDarkTheme
                     key={notification._id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className={`p-4 ${
+                    className={`p-4 hover:bg-zinc-500/5 transition-colors cursor-pointer ${
                       !notification.read 
                         ? isDarkTheme 
-                          ? 'bg-yellow-400/10' 
-                          : 'bg-yellow-50' 
-                        : ''
+                          ? 'bg-zinc-700/20' 
+                          : 'bg-zinc-100/80' 
+                        : isDarkTheme
+                          ? 'hover:bg-zinc-800'
+                          : 'hover:bg-zinc-50'
                     }`}
                   >
                     <div className="flex items-start space-x-3">
-                      <div className={`p-2 rounded-md ${
-                        isDarkTheme ? 'bg-zinc-800' : 'bg-zinc-100'
+                      <div className={`p-2 rounded-xl transition-colors ${
+                        isDarkTheme 
+                          ? 'bg-zinc-900 text-zinc-400' 
+                          : 'bg-zinc-100 text-zinc-600'
                       }`}>
                         {notificationIcons[notification.type]}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm ${
-                          isDarkTheme ? 'text-zinc-300' : 'text-zinc-600'
+                        <p className={`text-sm font-medium ${
+                          isDarkTheme ? 'text-zinc-200' : 'text-zinc-700'
                         }`}>
                           {notification.message}
                         </p>
                         <div className="flex items-center justify-between mt-1">
                           <p className={`text-xs ${
-                            isDarkTheme ? 'text-zinc-500' : 'text-zinc-400'
+                            isDarkTheme ? 'text-zinc-400' : 'text-zinc-500'
                           }`}>
                             {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
                           </p>
                           {notification.projectId && (
-                            <Link 
-                              href={`/product/${notification.projectId}`}
-                              onClick={onClose}
-                              className={`text-xs font-medium ${
-                                isDarkTheme ? 'text-yellow-400' : 'text-yellow-600'
-                              } hover:underline`}
-                            >
-                              View Product
+                            <Link href={`/thread/${notification.projectId}`}>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="hover:bg-zinc-800/50 hover:text-yellow-500 rounded-lg transition-colors duration-200"
+                                onClick={onClose}
+                              >
+                                View Thread
+                              </Button>
                             </Link>
                           )}
                         </div>
@@ -148,20 +198,22 @@ export default function NotificationPopup({ isOpen, onClose, userId, isDarkTheme
                 ))}
               </div>
             ) : (
-              <div className={`p-4 text-center ${
-                isDarkTheme ? 'text-zinc-500' : 'text-zinc-400'
-              }`}>
-                No notifications
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <Bell className="w-12 h-12 text-zinc-500 mb-4" />
+                <h3 className="text-lg font-medium text-zinc-300 mb-2">No notifications</h3>
+                <p className="text-sm text-zinc-500">
+                  You&apos;re all caught up!
+                </p>
               </div>
             )}
           </ScrollArea>
 
           <div className={`p-3 border-t ${
-            isDarkTheme ? 'border-white/10' : 'border-black/10'
+            isDarkTheme ? 'border-zinc-800' : 'border-zinc-200'
           }`}>
             <Button
               onClick={viewAllNotifications}
-              className="w-full rounded-md bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20"
+              className="w-full rounded-lg bg-zinc-800/50 text-white hover:bg-zinc-800 transition-colors duration-200"
             >
               View All Notifications
             </Button>

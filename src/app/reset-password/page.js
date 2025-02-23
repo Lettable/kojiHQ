@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -121,107 +121,140 @@ export default function PasswordReset() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-900 p-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
-        className="w-full max-w-md"
-      >
-        <Card className="border-none bg-black/30 backdrop-blur-xl border-white shadow-2xl text-white">
-          <CardContent className="p-6">
-            <h2 className="text-2xl font-bold mb-6 text-center">Reset Password</h2>
-            {message && (
-              <Alert
-                variant={message.type === 'error' ? 'destructive' : 'default'}
-                className="mb-4 bg-white/10 border-white/20"
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-10 left-1/4 w-72 h-72 bg-yellow-500/10 rounded-full filter blur-3xl" />
+        <div className="absolute bottom-10 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full filter blur-3xl" />
+      </div>
+
+      <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="w-full max-w-md"
+        >
+          <Card className="border-none bg-zinc-900/40 backdrop-blur-xl shadow-2xl text-white">
+            <CardContent className="p-8">
+              <motion.div 
+                initial={{ y: -20 }}
+                animate={{ y: 0 }}
+                transition={{ delay: 0.1, duration: 0.4 }}
+                className="flex justify-center mb-8"
               >
-                <AlertTitle className="text-white">{message.type === 'error' ? 'Error' : 'Success'}</AlertTitle>
-                <AlertDescription className="text-white/80">{message.text}</AlertDescription>
-              </Alert>
-            )}
-            {step === 1 ? (
-              <form onSubmit={handleSendOtp}>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="email" className="text-white">Email</Label>
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50" 
-                    />
-                  </div>
-                </div>
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="mt-6"
-                >
-                  <Button 
-                    className="w-full bg-white/10 hover:bg-white/20 text-white" 
-                    type="submit" 
-                    disabled={isLoading}
+                <img
+                  src="https://i.postimg.cc/85s7TkJz/suize-364-424-og-white-logo.png"
+                  alt="Logo"
+                  className="w-20 h-20 object-cover filter drop-shadow-glow"
+                />
+              </motion.div>
+
+              <h2 className="text-2xl font-bold mb-6 text-center">Reset Password</h2>
+
+              <AnimatePresence mode="wait">
+                {message && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
                   >
-                    {isLoading ? 'Sending OTP...' : 'Send OTP'}
-                  </Button>
-                </motion.div>
-              </form>
-            ) : (
-              <form onSubmit={handleResetPassword}>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="otp" className="text-white">OTP</Label>
-                    <Input 
-                      id="otp" 
-                      value={otp}
-                      onChange={(e) => setOtp(e.target.value)}
-                      required
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50" 
-                    />
+                    <Alert
+                      variant={message.type === 'error' ? 'destructive' : 'default'}
+                      className="mb-6 bg-zinc-800/50 border-zinc-700"
+                    >
+                      <AlertTitle className="text-white">
+                        {message.type === 'error' ? 'Error' : 'Success'}
+                      </AlertTitle>
+                      <AlertDescription className="text-zinc-300">
+                        {message.text}
+                      </AlertDescription>
+                    </Alert>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {step === 1 ? (
+                <form onSubmit={handleSendOtp}>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="email" className="text-zinc-300 mb-2">Email</Label>
+                      <Input 
+                        id="email" 
+                        type="email" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 focus:ring-yellow-500/50 focus:border-yellow-500/50"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="newPassword" className="text-white">New Password</Label>
-                    <Input 
-                      id="newPassword" 
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      required
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50" 
-                    />
-                  </div>
-                </div>
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="mt-6"
-                >
-                  <Button 
-                    className="w-full bg-white/10 hover:bg-white/20 text-white" 
-                    type="submit" 
-                    disabled={isLoading}
+                  <motion.div
+                    whileTap={{ scale: 0.98 }}
+                    className="mt-6"
                   >
-                    {isLoading ? 'Resetting Password...' : 'Reset Password'}
-                  </Button>
-                </motion.div>
-              </form>
-            )}
-          </CardContent>
-          <CardFooter className="flex justify-center pb-6">
-            <motion.a
-              href="/auth"
-              className="text-sm text-white/60 hover:text-white"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Back to Login
-            </motion.a>
-          </CardFooter>
-        </Card>
-      </motion.div>
+                    <Button 
+                      className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold transition-all duration-200"
+                      type="submit" 
+                      disabled={isLoading}
+                    >
+                      {isLoading ? 'Sending OTP...' : 'Send OTP'}
+                    </Button>
+                  </motion.div>
+                </form>
+              ) : (
+                <form onSubmit={handleResetPassword}>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="otp" className="text-zinc-300 mb-2">OTP</Label>
+                      <Input 
+                        id="otp" 
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                        required
+                        className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 focus:ring-yellow-500/50 focus:border-yellow-500/50"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="newPassword" className="text-zinc-300 mb-2">New Password</Label>
+                      <Input 
+                        id="newPassword" 
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        required
+                        className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 focus:ring-yellow-500/50 focus:border-yellow-500/50"
+                      />
+                    </div>
+                  </div>
+                  <motion.div
+                    whileTap={{ scale: 0.98 }}
+                    className="mt-6"
+                  >
+                    <Button 
+                      className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold transition-all duration-200"
+                      type="submit" 
+                      disabled={isLoading}
+                    >
+                      {isLoading ? 'Resetting Password...' : 'Reset Password'}
+                    </Button>
+                  </motion.div>
+                </form>
+              )}
+            </CardContent>
+            <CardFooter className="flex justify-center pb-6">
+              <motion.a
+                href="/auth"
+                className="text-sm text-white/60 hover:text-white transition-colors duration-200"
+                whileTap={{ scale: 0.95 }}
+              >
+                Back to Login
+              </motion.a>
+            </CardFooter>
+          </Card>
+        </motion.div>
+      </div>
     </div>
   )
 }

@@ -94,6 +94,9 @@ export default function ChatPage() {
     const storedPinnedChats = JSON.parse(localStorage.getItem('pinnedChats') || '[]')
     setPinnedChats(storedPinnedChats)
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const userToChat = urlParams.get('user');
+
     if (!token) {
       router.push('/auth')
     } else {
@@ -104,6 +107,10 @@ export default function ChatPage() {
         setCurrentUserID(decoded.userId)
         SetCurrentUserAsPremium(decoded.isPremium)
         initializeWebSocket(decoded.userId)
+
+        if (userToChat) {
+          setSelectedChat(userToChat)
+        }
       } catch (error) {
         console.error('Error decoding token:', error)
       }

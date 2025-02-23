@@ -7,7 +7,7 @@ const isObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
 export async function POST(req) {
     await connectDB();
 
-    const { userGiving, userToGiveRep, message } = await req.json();
+    const { userGiving, userToGiveRep, message, type } = await req.json();
 
     if (!userGiving || !userToGiveRep) {
         return NextResponse.json({ message: 'Both userGiving and userToGiveRep are required' }, { status: 400 });
@@ -31,32 +31,41 @@ export async function POST(req) {
             return NextResponse.json({ message: 'User to give rep not found' }, { status: 404 });
         }
 
-        const hasGivenRep = userGivingDoc.reputationGiven.some(rep => 
-            rep.user && rep.user.toString() === userToGiveRepDoc._id.toString()
+        if (!userGivingDoc.reputationGiven) userGivingDoc.reputationGiven = [];
+        if (!userToGiveRepDoc.reputationTaken) userToGiveRepDoc.reputationTaken = [];
+
+        const existingGivenRep = userGivingDoc.reputationGiven.find(
+            rep => rep.userId && rep.userId.toString() === userToGiveRepDoc._id.toString()
         );
 
-        if (hasGivenRep) {
-            userGivingDoc.reputationGiven = userGivingDoc.reputationGiven.filter(rep => 
-                !rep.user || rep.user.toString() !== userToGiveRepDoc._id.toString()
+        const existingTakenRep = userToGiveRepDoc.reputationTaken.find(
+            rep => rep.userId && rep.userId.toString() === userGivingDoc._id.toString()
+        );
+
+        if (existingGivenRep) {
+            userGivingDoc.reputationGiven = userGivingDoc.reputationGiven.filter(
+                rep => rep.userId && rep.userId.toString() !== userToGiveRepDoc._id.toString()
             );
-            userToGiveRepDoc.reputationTaken = userToGiveRepDoc.reputationTaken.filter(rep => 
-                !rep.user || rep.user.toString() !== userGiving.toString()
+            userToGiveRepDoc.reputationTaken = userToGiveRepDoc.reputationTaken.filter(
+                rep => rep.userId && rep.userId.toString() !== userGivingDoc._id.toString()
             );
         } else {
-            const repData = {
-                user: userToGiveRepDoc._id,
+            const newRep = {
+                userId: userToGiveRepDoc._id,
                 message: message || '',
-                date: new Date()
-            };
-            
-            const repTakenData = {
-                user: userGiving,
-                message: message || '',
-                date: new Date()
+                type: type || 'positive',
+                givenAt: new Date()
             };
 
-            userGivingDoc.reputationGiven.push(repData);
-            userToGiveRepDoc.reputationTaken.push(repTakenData);
+            const newTakenRep = {
+                userId: userGivingDoc._id,
+                message: message || '',
+                type: type || 'positive',
+                givenAt: new Date()
+            };
+
+            userGivingDoc.reputationGiven.push(newRep);
+            userToGiveRepDoc.reputationTaken.push(newTakenRep);
         }
 
         await userGivingDoc.save();
@@ -64,8 +73,8 @@ export async function POST(req) {
 
         return NextResponse.json({
             success: true,
-            message: hasGivenRep ? 'Reputation removed successfully' : 'Reputation given successfully',
-            hasGivenRep: !hasGivenRep,
+            message: existingGivenRep ? 'Reputation removed successfully' : 'Reputation given successfully',
+            hasGivenRep: !existingGivenRep,
         }, { status: 200 });
     } catch (error) {
         console.error('Error in giving/removing rep:', error);

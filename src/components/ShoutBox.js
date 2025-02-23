@@ -135,6 +135,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
   const VB88_COMMAND_REGEX = /^\/vb88\s+(https?:\/\/.+\.mp3)$/i;
   const GIFT_COMMAND_REGEX = /^\/gift\s+(\d+)\s+@(\w+)\s*$/i;
   const BAN_COMMAND_REGEX = /^\/ban\s+@(\w+)\s*$/i;
+  const UNBAN_COMMAND_REGEX = /^\/unban\s+@(\w+)\s*$/i;
 
   const boss = {
     username: "Suized",
@@ -354,6 +355,85 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     return false;
   };
 
+  const handleUnbanCommand = async (messageContent) => {
+    if (messageContent.startsWith('/unban')) {
+      if (!UNBAN_COMMAND_REGEX.test(messageContent)) {
+        const errorMessage = `Incorrect command format. Correct usage: /unban @username`;
+        const correctedTime = new Date(Date.now() + timeOffset).toISOString();
+        const bossError = {
+          username: boss.username,
+          userId: boss.userId,
+          profilePic: boss.profilePic,
+          usernameEffect: boss.usernameEffect,
+          statusEmoji: boss.statusEmoji,
+          content: errorMessage,
+          createdAt: correctedTime,
+          type: 'unban_command_error',
+        };
+        if (wsRef.current?.readyState === WebSocket.OPEN) {
+          wsRef.current.send(JSON.stringify(bossError));
+        }
+        return true;
+      }
+
+      const match = messageContent.match(UNBAN_COMMAND_REGEX);
+      if (match) {
+        const targetUsername = match[1];
+        const token = localStorage.getItem('accessToken');
+        const requestBody = {
+          uid: user.userId,
+          tk: token,
+          t: targetUsername,
+        };
+
+        try {
+          const res = await fetch('/api/mics/unb4n', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody),
+          });
+          const result = await res.json();
+
+          let bossMessage = '';
+          if (!result.success) {
+            if (result.message.toLowerCase().includes("user not found")) {
+              bossMessage = `Target user @${targetUsername} not found.`;
+            } else if (result.message.toLowerCase().includes("unauthorized")) {
+              bossMessage = `Unauthorized action, @${user.username}!`;
+            } else if (result.message.toLowerCase().includes("not banned")) {
+              bossMessage = `User @${targetUsername} is not banned.`;
+            } else {
+              bossMessage = result.message;
+            }
+          } else {
+            bossMessage = `User @${targetUsername} has been unbanned by @${user.username}. They can now log in again.`;
+          }
+
+          const correctedTime = new Date(Date.now() + timeOffset).toISOString();
+          const bossData = {
+            username: boss.username,
+            userId: boss.userId,
+            profilePic: boss.profilePic,
+            usernameEffect: boss.usernameEffect,
+            statusEmoji: boss.statusEmoji,
+            content: bossMessage,
+            createdAt: correctedTime,
+            type: 'unban_command',
+          };
+
+          if (wsRef.current?.readyState === WebSocket.OPEN) {
+            wsRef.current.send(JSON.stringify(bossData));
+          }
+          return true;
+        } catch (error) {
+          console.error("Unban command error:", error);
+          return false;
+        }
+      }
+    }
+    return false;
+  };
+
   const connectWebSocket = useCallback(() => {
     if (typeof window === "undefined") return
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return
@@ -423,8 +503,26 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       }
     }
 
-    wsRef.current.onerror = (error) => {
-      console.error("WebSocket error:", error)
+    wsRef.current.onerror = (event) => {
+      console.error("WebSocket error:", {
+        type: event?.type || 'Unknown error type',
+        message: event?.message || 'No error message available',
+        timestamp: new Date().toISOString(),
+        readyState: wsRef.current?.readyState
+      });
+
+      setMessages(prev => [...prev, {
+        _id: `error-${Date.now()}`,
+        username: "System",
+        content: "Connection error occurred. Attempting to reconnect...",
+        type: "system_message",
+        createdAt: new Date().toISOString()
+      }]);
+
+      if (wsRef.current) {
+        wsRef.current.close();
+      }
+      reconnectTimeoutRef.current = setTimeout(connectWebSocket, 5000);
     }
 
     wsRef.current.onclose = (event) => {
@@ -481,7 +579,9 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
         setEmojis(emojisData)
         setMessages(messagesData.messages.slice(-MAX_DISPLAYED_MESSAGES))
 
-        requestAnimationFrame(scrollToBottom)
+        setTimeout(() => {
+          scrollToBottom()
+        }, 1500)
 
         if (typeof window !== "undefined") {
           const token = localStorage.getItem("accessToken")
@@ -543,6 +643,12 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     }
 
     if (await handleBanCommand(newMessage.trim())) {
+      setNewMessage("")
+      scrollToBottom()
+      return
+    }
+
+    if (await handleUnbanCommand(newMessage.trim())) {
       setNewMessage("")
       scrollToBottom()
       return
@@ -781,6 +887,101 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
           )}
         </div>
       </main>
+
+      <Dialog open={isSettingsDialogOpen} onOpenChange={setIsSettingsDialogOpen}>
+        <DialogContent className="bg-zinc-900 border border-zinc-800 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-yellow-500">Shoutbox Settings</DialogTitle>
+            <DialogDescription className="text-zinc-400">
+              Customize your shoutbox experience
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="flex items-center space-x-4">
+              <Label htmlFor="msb" className="text-zinc-200">Mute Sound</Label>
+              <Checkbox
+                id="msb"
+                checked={msb}
+                onCheckedChange={(checked) => {
+                  setMsb(checked)
+                  localStorage.setItem("msb", checked.toString())
+                }}
+                className="border-yellow-500/50 data-[state=checked]:bg-yellow-500"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="fva" className="text-zinc-200">Notification Sound</Label>
+              <Input
+                id="fva"
+                value={fva}
+                onChange={(e) => {
+                  setFva(e.target.value)
+                  localStorage.setItem("fva", e.target.value)
+                }}
+                className="bg-zinc-800 border-zinc-700 text-white focus:border-yellow-500/50"
+              />
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
+        <DialogContent className="bg-zinc-900 border border-zinc-800 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-yellow-500">Delete Message</DialogTitle>
+            <DialogDescription className="text-zinc-400">
+              Are you sure you want to delete this message? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button 
+              variant="ghost" 
+              onClick={() => setShowDeleteModal(false)}
+              className="hover:bg-zinc-800 text-zinc-400 hover:text-white"
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={confirmDelete}
+              className="bg-red-500/80 hover:bg-red-600 text-white"
+            >
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+        <DialogContent className="bg-zinc-900 border border-zinc-800 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-yellow-500">Edit Message</DialogTitle>
+            <DialogDescription className="text-zinc-400">
+              Make changes to your message below.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+            className="min-h-[100px] bg-zinc-800 border-2 border-zinc-700 rounded-lg p-3 text-white
+              focus:border-yellow-500/50 transition-colors duration-200"
+          />
+          <DialogFooter>
+            <Button 
+              variant="ghost" 
+              onClick={() => setShowEditModal(false)}
+              className="hover:bg-zinc-800 text-zinc-400 hover:text-white"
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={confirmEdit}
+              className="bg-yellow-500/80 hover:bg-yellow-600 text-black"
+            >
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
