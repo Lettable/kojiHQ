@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const connections = {};
 
-export const connectDB = async (dbName = "KojiHQ") => {
+export const connectDB = async (dbName = "admin") => {
   if (connections[dbName]) {
     return connections[dbName];
   }
@@ -24,10 +24,8 @@ export const connectDB = async (dbName = "KojiHQ") => {
       connectTimeoutMS: 30000,         
       family: 4,                       
       retryWrites: true,
-      ssl: true,
-      tls: true,
-      tlsAllowInvalidCertificates: true,
-      tlsAllowInvalidHostnames: true,
+      ssl: false,
+      tls: false,
       authSource: 'admin'
     });
 

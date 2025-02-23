@@ -503,8 +503,26 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       }
     }
 
-    wsRef.current.onerror = (error) => {
-      console.error("WebSocket error:", error)
+    wsRef.current.onerror = (event) => {
+      console.error("WebSocket error:", {
+        type: event?.type || 'Unknown error type',
+        message: event?.message || 'No error message available',
+        timestamp: new Date().toISOString(),
+        readyState: wsRef.current?.readyState
+      });
+
+      setMessages(prev => [...prev, {
+        _id: `error-${Date.now()}`,
+        username: "System",
+        content: "Connection error occurred. Attempting to reconnect...",
+        type: "system_message",
+        createdAt: new Date().toISOString()
+      }]);
+
+      if (wsRef.current) {
+        wsRef.current.close();
+      }
+      reconnectTimeoutRef.current = setTimeout(connectWebSocket, 5000);
     }
 
     wsRef.current.onclose = (event) => {
@@ -561,7 +579,9 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
         setEmojis(emojisData)
         setMessages(messagesData.messages.slice(-MAX_DISPLAYED_MESSAGES))
 
-        requestAnimationFrame(scrollToBottom)
+        setTimeout(() => {
+          scrollToBottom()
+        }, 1500)
 
         if (typeof window !== "undefined") {
           const token = localStorage.getItem("accessToken")
