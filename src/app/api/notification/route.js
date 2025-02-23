@@ -113,130 +113,143 @@ import { NextResponse } from "next/server";
 const isObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
 
 export async function POST(req) {
-  await connectDB();
+    await connectDB();
 
-  try {
-    const { senderId, receiverId, type, productId, value } = await req.json();
+    try {
+        const { senderId, receiverId, type, productId, value } = await req.json();
 
-    if (!senderId || !receiverId || !type) {
-      return NextResponse.json(
-        { success: false, message: "Missing required fields" },
-        { status: 400 }
-      );
-    }
-
-    if (!["productReply", "message", "mention", "rep"].includes(type)) {
-      return NextResponse.json(
-        { success: false, message: "Invalid notification type" },
-        { status: 400 }
-      );
-    }
-
-    const sender = await User.findById(senderId);
-    if (!sender) {
-      return NextResponse.json(
-        { success: false, message: "Sender not found" },
-        { status: 404 }
-      );
-    }
-
-    let message = "";
-    let state = "";
-    let target = "";
-
-    switch (type) {
-      case "productReply": {
-        if (!productId) {
-          return NextResponse.json(
-            { success: false, message: "Product ID is required for productReply" },
-            { status: 400 }
-          );
+        if (!senderId || !receiverId || !type) {
+            return NextResponse.json(
+                { success: false, message: "Missing required fields" },
+                { status: 400 }
+            );
         }
 
-        const product = await Product.findById(productId);
-        if (!product) {
-          return NextResponse.json(
-            { success: false, message: "Product not found" },
-            { status: 404 }
-          );
+        if (!["productReply", "message", "mention", "rep"].includes(type)) {
+            return NextResponse.json(
+                { success: false, message: "Invalid notification type" },
+                { status: 400 }
+            );
         }
 
-        const trimmedTitle =
-          product.title.length > 6
-            ? product.title.substring(0, 6) + "..."
-            : product.title;
-
-        message = `${sender.username} replied on your product "${trimmedTitle}"`;
-        state = "dynamic";
-        target = `/product/${productId}`;
-        break;
-      }
-      case "message": {
-        message = `${sender.username} sent a new private message`;
-        state = "dynamic";
-        target = `/chat?user=${senderId}`;
-        break;
-      }
-      case "mention": {
-        message = `${sender.username} mentioned you in shoutbox`;
-        state = "static";
-        target = "";
-        break;
-      }
-      case "rep": {
-        if (value === undefined) {
-          return NextResponse.json(
-            { success: false, message: "Value is required for rep type" },
-            { status: 400 }
-          );
+        const sender = await User.findById(senderId);
+        if (!sender) {
+            return NextResponse.json(
+                { success: false, message: "Sender not found" },
+                { status: 404 }
+            );
         }
-        message = `${sender.username} rep you by ${value}`;
-        state = "static";
-        target = "";
-        break;
-      }
-      default:
+
+        let message = "";
+        let state = "";
+        let target = "";
+
+        switch (type) {
+            case "productReply": {
+                if (!productId) {
+                    return NextResponse.json(
+                        { success: false, message: "Product ID is required for productReply" },
+                        { status: 400 }
+                    );
+                }
+
+                const product = await Product.findById(productId);
+                if (!product) {
+                    return NextResponse.json(
+                        { success: false, message: "Product not found" },
+                        { status: 404 }
+                    );
+                }
+
+                const trimmedTitle =
+                    product.title.length > 6
+                        ? product.title.substring(0, 6) + "..."
+                        : product.title;
+
+                message = `${sender.username} replied on your product "${trimmedTitle}"`;
+                state = "dynamic";
+                target = `/product/${productId}`;
+                break;
+            }
+            case "message": {
+                message = `${sender.username} sent a new private message`;
+                state = "dynamic";
+                target = `/chat?user=${senderId}`;
+                break;
+            }
+            case "mention": {
+                message = `${sender.username} mentioned you in shoutbox`;
+                state = "static";
+                target = "";
+                break;
+            }
+            case "rep": {
+                if (value === undefined) {
+                    return NextResponse.json(
+                        { success: false, message: "Value is required for rep type" },
+                        { status: 400 }
+                    );
+                }
+
+                if (value === "positive") {
+                    value = "+1";
+                } else if (value === "negative") {
+                    value = "-1";
+                } else {
+                    return NextResponse.json(
+                        { success: false, message: "Invalid value for rep type" },
+                        { status: 400 }
+                    );
+                }
+
+                message = `${sender.username} rep you by ${value}`;
+                state = "static";
+                target = "";
+                break;
+            }
+
+            default:
+                return NextResponse.json(
+                    { success: false, message: "Invalid notification type" },
+                    { status: 400 }
+                );
+        }
+
+        let actualReceiverId = receiverId;
+        if (!isObjectId(receiverId)) {
+            const actualReceiver = await User.findOne({
+                username: { $regex: `^${receiverId}$`, $options: "i" },
+            });
+            if (!actualReceiver) {
+                return NextResponse.json(
+                    { success: false, message: "Receiver not found" },
+                    { status: 404 }
+                );
+            }
+            actualReceiverId = actualReceiver._id;
+        }
+
+        const newNotification = new Notification({
+            senderId,
+            receiverId: actualReceiverId,
+            type,
+            productId: productId || null,
+            state,
+            target,
+            message,
+        });
+
+        await newNotification.save();
+
         return NextResponse.json(
-          { success: false, message: "Invalid notification type" },
-          { status: 400 }
+            { success: true, message: "Notification created successfully" },
+            { status: 201 }
+        );
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json(
+            { success: false, message: "Server error" },
+            { status: 500 }
         );
     }
-
-    let actualReceiverId = receiverId;
-    if (!isObjectId(receiverId)) {
-      const actualReceiver = await User.findOne({
-        username: { $regex: `^${receiverId}$`, $options: "i" },
-      });
-      if (!actualReceiver) {
-        return NextResponse.json(
-          { success: false, message: "Receiver not found" },
-          { status: 404 }
-        );
-      }
-      actualReceiverId = actualReceiver._id;
-    }
-
-    const newNotification = new Notification({
-      senderId,
-      receiverId: actualReceiverId,
-      type,
-      productId: productId || null,
-      state,
-      target,
-      message,
-    });
-
-    await newNotification.save();
-
-    return NextResponse.json(
-      { success: true, message: "Notification created successfully" },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { success: false, message: "Server error" },
-      { status: 500 }
-    );
-  }
 }

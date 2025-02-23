@@ -1370,7 +1370,7 @@ import { useRouter, useParams } from 'next/navigation'
 import { usePathname } from 'next/navigation'
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
-
+import { sendNotification } from '@/lib/utils/notifications'
 
 const renderTextWithEmojis = (text, emojis) => {
     if (!emojis || !Array.isArray(emojis)) {
@@ -1407,7 +1407,7 @@ const Comment = ({ comment, onReply, projectCreatorId, emojis, isDarkTheme }) =>
     const [replyContent, setReplyContent] = useState('')
 
     const handleReply = () => {
-        if (comment.userId === null ) {
+        if (comment.userId === null) {
             toast({
                 title: "Error",
                 description: "You can't submit projects as a guest user, please sign in from your real account.",
@@ -1568,7 +1568,7 @@ export default function ProjectDetails() {
             if (startChatData.success) {
                 setIsChatStarted(true)
 
-                wsRef.current = new WebSocket(`wss://kojihq-ws.onrender.com/p2p?userId=${currentUser.userId}`)
+                wsRef.current = new WebSocket(`${SOCKET_BASE_SERVER_URL}/p2p?userId=${currentUser.userId}`)
 
                 wsRef.current.onopen = () => {
                     const messageData = {
@@ -1863,7 +1863,7 @@ export default function ProjectDetails() {
 
         const emojiRegex = /:([\w-]+):/g;
         const foundEmojis = newComment.match(emojiRegex) || [];
-    
+
         for (const emojiTitle of foundEmojis) {
             const emojiData = emojis.find(e => e.emojiTitle === emojiTitle);
             if (emojiData && emojiData.isPremium && !IsCurrentUserPremium) {
@@ -1890,21 +1890,14 @@ export default function ProjectDetails() {
                 if (data.success) {
                     fetchComments();
                     setNewComment('');
-
-                    const notificationResponse = await fetch(`/api/notification`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            senderId: currentUser.userId,
-                            receiverId: projectData.author.id,
-                            type: 'comment',
-                            projectId: params.id,
-                        }),
-                    });
-
-                    const notificationData = await notificationResponse.json();
-
-                    if (!notificationData.success) {
+                    const notificationData = {
+                        senderId: currentUser.userId,
+                        receiverId: projectData.author.id,
+                        type: "productReply",
+                        productId: params.id
+                    };
+                    const result = await sendNotification(notificationData);
+                    if (!result.success) {
                         console.warn("Failed to send notification:", notificationData.message);
                     }
                 } else {
@@ -1937,7 +1930,7 @@ export default function ProjectDetails() {
 
         const emojiRegex = /:([\w-]+):/g;
         const foundEmojis = content.match(emojiRegex) || [];
-    
+
         for (const emojiTitle of foundEmojis) {
             const emojiData = emojis.find(e => e.emojiTitle === emojiTitle);
             if (emojiData && emojiData.isPremium && !IsCurrentUserPremium) {
@@ -1963,21 +1956,14 @@ export default function ProjectDetails() {
 
             if (data.success) {
                 fetchComments();
-
-                const notificationResponse = await fetch(`/api/notification`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        senderId: currentUser.userId,
-                        receiverId: projectData.author.id,
-                        type: 'reply',
-                        projectId: params.id,
-                    }),
-                });
-
-                const notificationData = await notificationResponse.json();
-
-                if (!notificationData.success) {
+                const notificationData = {
+                    senderId: currentUser.userId,
+                    receiverId: projectData.author.id,
+                    type: "productReply",
+                    productId: params.id
+                };
+                const result = await sendNotification(notificationData);
+                if (!result.success) {
                     console.warn("Failed to send notification:", notificationData.message);
                 }
             } else {
@@ -2144,7 +2130,7 @@ export default function ProjectDetails() {
                                         <h2 className={`${isDarkTheme ? 'text-xl text-white font-semibold mb-2' : 'text-xl text-black font-semibold mb-2'}`}>Reason for Selling</h2>
                                         <p className={`${isDarkTheme ? 'text-white/70' : 'text-zinc-700'}`}>{projectData.sellingReason}</p>
                                     </div>
-                                    
+
                                 </CardContent>
                             </Card>
 

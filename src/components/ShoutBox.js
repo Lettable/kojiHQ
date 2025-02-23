@@ -24,9 +24,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
+import { sendNotification } from "@/lib/utils/notifications"
 
 const MAX_MESSAGE_LENGTH = 500
 const MAX_DISPLAYED_MESSAGES = 40
+const SOCKET_BASE_SERVER_URL = process.env.SOCKET_BASE_SERVER_URL
 
 const formatTimestamp = (date) => {
   const now = new Date()
@@ -438,7 +440,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     if (typeof window === "undefined") return
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return
 
-    wsRef.current = new WebSocket("ws://kgc40gksk48wsgkwsw8cg0wo.196.251.85.48.sslip.io/")
+    wsRef.current = new WebSocket(`${SOCKET_BASE_SERVER_URL}`)
 
     wsRef.current.onopen = () => {
       console.log("WebSocket connected")
@@ -487,6 +489,30 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
           if (isBanned) {
             window.location.reload();
             return;
+          }
+        }
+
+        if (user && parsedData.message.content) {
+          const mentionRegex = /@(\w+)/gi;
+          let mentionMatch;
+          while ((mentionMatch = mentionRegex.exec(parsedData.message.content)) !== null) {
+            if (
+              mentionMatch[1].toLowerCase() === user.username.toLowerCase() &&
+              parsedData.message.senderId !== user.userId
+            ) {
+              sendNotification({
+                senderId: parsedData.message.senderId,
+                receiverId: user.userId,
+                type: "mention",
+              })
+                .then((result) =>
+                  console.log("Mention notification sent:", result)
+                )
+                .catch((err) =>
+                  console.error("Error sending mention notification:", err)
+                );
+              break;
+            }
           }
         }
 
@@ -934,14 +960,14 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={() => setShowDeleteModal(false)}
               className="hover:bg-zinc-800 text-zinc-400 hover:text-white"
             >
               Cancel
             </Button>
-            <Button 
+            <Button
               onClick={confirmDelete}
               className="bg-red-500/80 hover:bg-red-600 text-white"
             >
@@ -966,14 +992,14 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
               focus:border-yellow-500/50 transition-colors duration-200"
           />
           <DialogFooter>
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={() => setShowEditModal(false)}
               className="hover:bg-zinc-800 text-zinc-400 hover:text-white"
             >
               Cancel
             </Button>
-            <Button 
+            <Button
               onClick={confirmEdit}
               className="bg-yellow-500/80 hover:bg-yellow-600 text-black"
             >

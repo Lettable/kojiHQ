@@ -15,6 +15,9 @@ import EnhancedEmojiPicker from '@/components/EmojiPicker'
 import { useRouter } from 'next/navigation'
 import { toast } from "@/hooks/use-toast"
 import { Toaster } from "@/components/ui/toaster";
+import { sendNotification } from '@/lib/utils/notifications'
+
+const SOCKET_BASE_SERVER_URL = process.env.SOCKET_BASE_SERVER_URL
 
 const renderTextWithEmojis = (text, emojis) => {
   if (!emojis || !Array.isArray(emojis)) {
@@ -148,7 +151,7 @@ export default function ChatPage() {
   }, [selectedChat, scrollToBottom])
 
   const initializeWebSocket = (userId) => {
-    wsRef.current = new WebSocket(`wss://kojihq-ws.onrender.com/p2p?userId=${userId}`)
+    wsRef.current = new WebSocket(`${SOCKET_BASE_SERVER_URL}/p2p?userId=${userId}`)
 
     wsRef.current.onopen = () => {
       console.log('WebSocket connection established')
@@ -341,6 +344,13 @@ export default function ChatPage() {
           content: newMessage,
           parentId: replyTo ? replyTo._id : null,
         };
+
+        const notificationData = {
+          senderId: currentUser.userId,
+          receiverId: selectedChat,
+          type: "message" 
+        };
+        await sendNotification(notificationData);
 
         wsRef.current.send(JSON.stringify(messageData));
 

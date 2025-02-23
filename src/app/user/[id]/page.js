@@ -21,16 +21,17 @@ import { AlertCircle } from 'lucide-react'
 import { Toaster } from '@/components/ui/toaster'
 import { FaBan } from 'react-icons/fa'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from "@/components/ui/dialog"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { sendNotification } from '@/lib/utils/notifications'
 
 const groupData = {
     "admin": "https://images.ctfassets.net/49i3hw7ggo6y/3OkSp11XO91MOQtGUptuVg/25987da20092116b791efd3b3c8f5e21/SyTqJLO.png?fm=webp&w=225&h=75&q=100&fit=fill",
@@ -145,6 +146,15 @@ export default function ForumUserProfile() {
                 }),
             })
 
+            const notificationData = {
+                senderId: currentUser.userId,
+                receiverId: userData.userId,
+                type: "rep",
+                value: repType
+            };
+
+            await sendNotification(notificationData);
+
             if (!response.ok) throw new Error('Failed to give reputation')
             const result = await response.json()
 
@@ -152,7 +162,7 @@ export default function ForumUserProfile() {
                 ...prevData,
                 stats: {
                     ...prevData.stats,
-                    reputation: result.hasGivenRep 
+                    reputation: result.hasGivenRep
                         ? prevData.stats.reputation + (repType === 'positive' ? 1 : -1)
                         : prevData.stats.reputation - (repType === 'positive' ? 1 : -1)
                 },
@@ -363,17 +373,17 @@ export default function ForumUserProfile() {
                         </div>
                     </div>
                 </DialogHeader>
-                
+
                 <ScrollArea className="mt-6 h-[500px] pr-4">
                     {userData.reputationGivers && userData.reputationGivers.length > 0 ? (
                         <div className="space-y-4">
                             {userData.reputationGivers.map((giver, index) => (
-                                <div 
+                                <div
                                     key={index}
                                     className={`
                                         relative rounded-lg border backdrop-blur-sm transition-colors duration-200
-                                        ${giver.type === 'positive' 
-                                            ? 'border-green-500/20 bg-green-500/5 hover:bg-green-500/10' 
+                                        ${giver.type === 'positive'
+                                            ? 'border-green-500/20 bg-green-500/5 hover:bg-green-500/10'
                                             : 'border-red-500/20 bg-red-500/5 hover:bg-red-500/10'}
                                     `}
                                 >
@@ -385,13 +395,13 @@ export default function ForumUserProfile() {
                                             </Avatar>
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center gap-2 mb-1">
-                                                    <a 
+                                                    <a
                                                         href={`/user/${giver.username}`}
                                                         className={`font-medium hover:underline ${giver.usernameEffect}`}
                                                     >
                                                         {giver.username}
                                                     </a>
-                                                    <Badge 
+                                                    <Badge
                                                         variant={giver.type === 'positive' ? 'success' : 'destructive'}
                                                         className={`
                                                             px-2 py-0.5 text-xs font-medium
@@ -416,7 +426,7 @@ export default function ForumUserProfile() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div 
+                                    <div
                                         className={`
                                             absolute top-4 right-4 h-2 w-2 rounded-full
                                             ${giver.type === 'positive' ? 'bg-green-500' : 'bg-red-500'}
@@ -477,7 +487,7 @@ export default function ForumUserProfile() {
                     ...prevData,
                     stats: {
                         ...prevData.stats,
-                        reputation: result.hasGivenRep 
+                        reputation: result.hasGivenRep
                             ? prevData.stats.reputation + (localRepType === 'positive' ? 1 : -1)
                             : prevData.stats.reputation - (localRepType === 'positive' ? 1 : -1)
                     },
@@ -489,7 +499,7 @@ export default function ForumUserProfile() {
                             message: localRepMessage,
                             type: localRepType,
                             givenAt: new Date()
-                          }]
+                        }]
                         : (prevData.reputationGivers || []).filter(rep => rep.userId !== currentUser.userId)
                 }));
 
@@ -551,7 +561,7 @@ export default function ForumUserProfile() {
                             {existingRep ? 'Remove Reputation' : 'Give Reputation'}
                         </DialogTitle>
                         <DialogDescription className="text-zinc-400">
-                            {existingRep 
+                            {existingRep
                                 ? 'Are you sure you want to remove your reputation?'
                                 : 'Choose the type of reputation and add a message'}
                         </DialogDescription>
@@ -681,11 +691,11 @@ export default function ForumUserProfile() {
                             This will remove your {existingRep.type === 'positive' ? '+1' : '-1'} reputation from {userData.username}.
                         </div>
                     )}
-                    <Button 
+                    <Button
                         onClick={handleLocalSubmit}
                         disabled={isSubmitting}
-                        className={`w-full ${existingRep 
-                            ? 'bg-red-500 hover:bg-red-600' 
+                        className={`w-full ${existingRep
+                            ? 'bg-red-500 hover:bg-red-600'
                             : 'bg-yellow-500 hover:bg-yellow-600'} text-black`}
                     >
                         {isSubmitting ? (
@@ -745,8 +755,8 @@ export default function ForumUserProfile() {
                     <div className="lg:col-span-8 space-y-6">
                         {/* Profile Banner Card */}
                         <Card className="bg-zinc-900/50 text-white border-0 shadow-lg backdrop-blur-sm overflow-hidden">
-                            <CardContent 
-                                className="pt-6 relative" 
+                            <CardContent
+                                className="pt-6 relative"
                                 style={
                                     userData.bannerImg && userData.bannerImg.trim() !== "" && !userData.isBanned
                                         ? {
@@ -763,7 +773,7 @@ export default function ForumUserProfile() {
                                     <div className="flex items-start gap-6">
                                         <Avatar className={`w-28 h-28 ring-4 ${userData.isBanned ? 'grayscale ring-red-500/20' : 'ring-yellow-500/30'} ring-offset-4 ring-offset-black/50 transition-all duration-300 shadow-xl`}>
                                             <AvatarImage
-                                                src={userData.isBanned 
+                                                src={userData.isBanned
                                                     ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2-flKQOIE8ribInudJWpIsy94v1B7LMCemuBf8RcjpIY1Pt3hLHZR5r78rXBFW0cIhVg&usqp=CAU"
                                                     : userData.profilePicture
                                                 }
@@ -821,26 +831,26 @@ export default function ForumUserProfile() {
                                                             recipientId: userData.userId
                                                         })
                                                     })
-                                                    .then(response => response.json())
-                                                    .then(data => {
-                                                        if (data.success) {
-                                                            window.location.href = `/chat?user=${userData.userId}`;
-                                                        } else {
+                                                        .then(response => response.json())
+                                                        .then(data => {
+                                                            if (data.success) {
+                                                                window.location.href = `/chat?user=${userData.userId}`;
+                                                            } else {
+                                                                toast({
+                                                                    title: "Error",
+                                                                    description: "Failed to start chat",
+                                                                    variant: "destructive",
+                                                                });
+                                                            }
+                                                        })
+                                                        .catch(error => {
+                                                            console.error('Error starting chat:', error);
                                                             toast({
                                                                 title: "Error",
                                                                 description: "Failed to start chat",
                                                                 variant: "destructive",
                                                             });
-                                                        }
-                                                    })
-                                                    .catch(error => {
-                                                        console.error('Error starting chat:', error);
-                                                        toast({
-                                                            title: "Error",
-                                                            description: "Failed to start chat",
-                                                            variant: "destructive",
                                                         });
-                                                    });
                                                 }}
                                             >
                                                 <MessageCircle className="h-4 w-4 mr-2" />
@@ -879,8 +889,8 @@ export default function ForumUserProfile() {
                                     description: "Available balance"
                                 }
                             ].map((stat, index) => (
-                                <Card 
-                                    key={index} 
+                                <Card
+                                    key={index}
                                     className="bg-zinc-900/50 text-white border-0 shadow-lg hover:bg-zinc-900/70 transition-all duration-300 backdrop-blur-sm group"
                                 >
                                     <CardContent className="pt-6">
@@ -950,8 +960,8 @@ export default function ForumUserProfile() {
                                                 <h4 className="text-sm font-medium text-zinc-400 mb-2">Latest Threads</h4>
                                                 <div className="space-y-2">
                                                     {userData.activity.threads.slice(0, 3).map((thread) => (
-                                                        <a 
-                                                            key={thread._id} 
+                                                        <a
+                                                            key={thread._id}
                                                             href={`/thread/${thread._id}`}
                                                             className="block p-4 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70 transition-all duration-200"
                                                         >
@@ -974,14 +984,14 @@ export default function ForumUserProfile() {
                                                 </div>
                                             </div>
                                         )}
-                                        
+
                                         {userData.activity.posts.length > 0 && (
                                             <div>
                                                 <h4 className="text-sm font-medium text-zinc-400 mb-2">Latest Posts</h4>
                                                 <div className="space-y-2">
                                                     {userData.activity.posts.slice(0, 3).map((post) => (
-                                                        <a 
-                                                            key={post._id} 
+                                                        <a
+                                                            key={post._id}
                                                             href={`/thread/${post.threadId}`}
                                                             className="block p-4 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70 transition-all duration-200"
                                                         >
@@ -1168,8 +1178,8 @@ export default function ForumUserProfile() {
                                 {userData.latestVisitors.length > 0 ? (
                                     <div className="space-y-3">
                                         {userData.latestVisitors.map((visitor) => (
-                                            <div 
-                                                key={visitor.userId} 
+                                            <div
+                                                key={visitor.userId}
                                                 className="flex items-center p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900/70 transition-all duration-200"
                                             >
                                                 <Avatar className="h-10 w-10 border-2 border-zinc-800">
@@ -1177,8 +1187,8 @@ export default function ForumUserProfile() {
                                                     <AvatarFallback>{visitor.username[0]}</AvatarFallback>
                                                 </Avatar>
                                                 <div className="ml-3 min-w-0 flex items-center gap-2">
-                                                    <a 
-                                                        href={`/user/${visitor.userId}`} 
+                                                    <a
+                                                        href={`/user/${visitor.userId}`}
                                                         className={`font-medium hover:underline ${visitor.usernameEffect}`}
                                                     >
                                                         {visitor.username}
