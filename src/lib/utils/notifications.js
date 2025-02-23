@@ -1,6 +1,6 @@
 export const sendNotification = async (data) => {
     try {
-      const res = await fetch('/api/notifications', {
+      const res = await fetch('/api/notification', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
