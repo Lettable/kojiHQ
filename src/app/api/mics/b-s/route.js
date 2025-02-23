@@ -16,7 +16,7 @@ export async function POST(req) {
     }
 
     if (uid) {
-      const user = await User.findOne({ userId: uid });
+      const user = await User.findById(uid);
       if (user && user.isAdmin) {
         return NextResponse.json({
           success: true,
