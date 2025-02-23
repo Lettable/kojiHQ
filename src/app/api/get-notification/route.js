@@ -2,7 +2,7 @@ import { connectDB } from "@/lib/config/db";
 import Notification from "@/lib/model/Notification";
 import User from "@/lib/model/User.model";
 import { NextResponse } from "next/server";
-import { jwtDecode } from "jwt-decode";
+import jwt from "jsonwebtoken";
 
 export async function POST(req) {
   await connectDB();
