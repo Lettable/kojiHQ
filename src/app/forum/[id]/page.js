@@ -157,7 +157,7 @@ export default function ForumView() {
         </section>
 
         {/* Main Content Skeleton */}
-        <main className="container mx-auto px-4 py-12 max-w-[65%]">
+        <main className="container px-4 py-12 max-w-[75%]">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
             {/* Left side - Threads */}
             <div className="lg:col-span-3">

@@ -531,7 +531,7 @@ export default function ThreadView() {
                                         <div>
                                             <span className={`text-xl font-semibold ${thread.author.usernameEffect} hover:text-yellow-500 transition-colors duration-200`}>
                                                 {thread.author.username}
-                                            </Link>
+                                            </span>
                                             <p className="text-sm text-gray-400">{formatDate(thread.createdAt)}</p>
                                         </div>
                                     </div>
