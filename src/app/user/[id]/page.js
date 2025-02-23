@@ -754,7 +754,7 @@ export default function ForumUserProfile() {
                                             minHeight: "200px",
                                         }
                                         : {
-                                            background: "linear-gradient(to right, rgba(24, 24, 27, 0.5), rgba(39, 39, 42, 0.5))",
+                                            background: "rgba(24, 24, 27, 0.05)",
                                             minHeight: "200px",
                                         }
                                 }

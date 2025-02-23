@@ -234,7 +234,7 @@ export default function ThreadView() {
                     <CardContent className="p-6">
                         <div className="flex items-start space-x-4">
                             <div className="relative group">
-                                <Avatar className="w-10 h-10 ring-2 ring-yellow-500/20 transition-all duration-300 group-hover:ring-yellow-500/40">
+                                <Avatar className="w-10 h-10 ring-2 ring-white/70 transition-all duration-300 group-hover:ring-yellow-500/40">
                                     <AvatarImage src={post.author.profilePic} />
                                     <AvatarFallback>{post.author.username}</AvatarFallback>
                                 </Avatar>
@@ -679,7 +679,7 @@ export default function ThreadView() {
                                                             
                                                             return (
                                                                 <div className="flex gap-4">
-                                                                    <Avatar className="w-10 h-10 ring-2 ring-yellow-500/20">
+                                                                    <Avatar className="w-10 h-10 ring-2 ring-white/70">
                                                                         <AvatarImage src={replyingTo.author.profilePic} />
                                                                         <AvatarFallback>{replyingTo.author.username[0]}</AvatarFallback>
                                                                     </Avatar>

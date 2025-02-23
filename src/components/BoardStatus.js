@@ -68,24 +68,24 @@ export default function SiteStatusOverlay() {
   if (loading) return null
 
   return (
-    <Dialog open={open} onOpenChange={() => {}} className="border-2 border-zinc-400 shadow-md bg-opacity-70">
-      <DialogContent className="sm:max-w-md bg-black border-2 border-zinc-400 text-white bg-opacity-70" onPointerDownOutside={(e) => e.preventDefault()} >
+    <Dialog open={open} onOpenChange={() => {}} >
+      <DialogContent className="sm:max-w-md bg-zinc-900 border-zinc-800 text-white backdrop-blur-lg bg-opacity-90" onPointerDownOutside={(e) => e.preventDefault()} >
         <DialogHeader>
-          <DialogTitle className="text-center text-white">
+          <DialogTitle className="text-xl font-bold text-center">
             {config?.status === "maintenance" ? "System Maintenance" : config?.message || "Site Unavailable"}
           </DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col items-center justify-center space-y-4">
+        <div className="flex flex-col items-center justify-center space-y-6">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
           >
-            <Loader2 className="h-12 w-12 text-white" />
+            <Loader2 className="h-12 w-12 text-yellow-500" />
           </motion.div>
           {config?.countdownTimestamp && (
-            <div className="text-center">
-              <p className="text-sm text-gray-400 mb-1">Estimated Time Remaining:</p>
-              <p className="text-2xl font-bold text-white">{countdown}</p>
+            <div className="text-center space-y-2">
+              <p className="text-sm text-zinc-400">Estimated Time Remaining:</p>
+              <p className="text-3xl font-bold text-yellow-500">{countdown}</p>
             </div>
           )}
         </div>

@@ -253,11 +253,19 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  telegramUID: {
+  telegramUsername: {
     type: String,
     required: false,
+    sparse: true,
     unique: true,
-    trim: true
+    trim: true,
+    lowercase: true,
+    validate: {
+      validator: function(v) {
+        return !v || /^[a-zA-Z0-9_]{5,32}$/.test(v);
+      },
+      message: props => `${props.value} is not a valid Telegram username!`
+    }
   },
   profilePic: {
     type: String,
@@ -366,6 +374,7 @@ const UserSchema = new mongoose.Schema({
   walletAddress: {
     type: String,
     unique: true,
+    sparse: true,
     required: false,
   },
   nonce: {
@@ -382,7 +391,7 @@ const UserSchema = new mongoose.Schema({
   planName: {
     type: String,
     default: null,
-    enum: ["Weekly", "Monthly", "Yearly"]
+    enum: ["HEAVEN", "GODLIKE", "SUPREME"]
   },
   premiumEndDate: {
     type: Date,

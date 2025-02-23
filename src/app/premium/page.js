@@ -96,7 +96,7 @@ const PremiumSubscription = () => {
 
     const plans = [
         {
-            name: 'Heaven',
+            name: 'HEAVEN',
             price: '$4.99',
             period: 'week',
             image: '/groupimgs/heaven.png',
@@ -111,7 +111,7 @@ const PremiumSubscription = () => {
             highlight: false
         },
         {
-            name: 'Godlike',
+            name: 'GODLIKE',
             price: '$16.99',
             period: 'month',
             image: '/groupimgs/godlike.png',
@@ -126,7 +126,7 @@ const PremiumSubscription = () => {
             highlight: true
         },
         {
-            name: 'Supreme',
+            name: 'SUPREME',
             price: '$299.99',
             period: 'year',
             image: '/groupimgs/supreme.png',

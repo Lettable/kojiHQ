@@ -8,7 +8,7 @@ import { Smile, X, Search, Lock } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-export default function EnhancedEmojiPicker({ onEmojiSelect, isDarkTheme }) {
+export default function EnhancedEmojiPicker({ onEmojiSelect, isDarkTheme, trigger }) {
   const [isOpen, setIsOpen] = useState(false);
   const [emojis, setEmojis] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -79,21 +79,23 @@ export default function EnhancedEmojiPicker({ onEmojiSelect, isDarkTheme }) {
 
   return (
     <div className="relative inline-block">
-      <Button
-      ref={buttonRef}
-      onClick={(event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        setIsOpen(!isOpen);
-      }}
-      variant="ghost"
-      size="icon"
-      className={`text-white hover:text-white m-3 hover:bg-white/10 ${
-        isDarkTheme ? 'bg-white/0 text-white' : 'bg-white text-black border-zinc-500 hover:text-black hover:bg-zinc-200'
-      }`}
-    >
-      <Smile className="h-5 w-5" />
-    </Button>
+      {trigger ? (
+        <div ref={buttonRef} onClick={() => setIsOpen(!isOpen)}>
+          {trigger}
+        </div>
+      ) : (
+        <Button
+          ref={buttonRef}
+          onClick={() => setIsOpen(!isOpen)}
+          variant="ghost"
+          size="icon"
+          className={`text-white hover:text-white m-3 hover:bg-white/10 ${
+            isDarkTheme ? 'bg-white/0 text-white' : 'bg-white text-black border-zinc-500 hover:text-black hover:bg-zinc-200'
+          }`}
+        >
+          <Smile className="h-5 w-5" />
+        </Button>
+      )}
       <AnimatePresence>
         {isOpen && (
           <motion.div

@@ -26,7 +26,7 @@ export default function AuthPage() {
   const [signupEmail, setSignupEmail] = useState('')
   const [signupOtp, setSignupOtp] = useState('')
   const [signupUsername, setSignupUsername] = useState('')
-  const [signupTelegramUID, setSignupTelegramUID] = useState('')
+  const [signupTelegramUsername, setSignupTelegramUsername] = useState('')
   const [signupPassword, setSignupPassword] = useState('')
   const router = useRouter()
   const toast = useToast()
@@ -46,74 +46,12 @@ export default function AuthPage() {
     };
   }
 
-  async function getUserIP() {
-    const res = await fetch('https://api.ipify.org?format=json');
-    const data = await res.json();
-    return data.ip;
-  }
-
-  const handleMetaMaskAuth = async () => {
-    try {
-      if (!window.ethereum) {
-        return toast({
-          title: 'MetaMask not detected',
-          description: "Install MetaMask extension on your browser and create a wallet first.",
-          variant: 'destructive'
-        })
-      }
-  
-      const username = `${Math.random().toString(36).substring(2, 8)}${Math.floor(Math.random() * 100)}`;
-  
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const userAddress = accounts[0];
-  
-      const nonce = Math.floor(Math.random() * 1000000).toString();
-      const message = `Sign this message to log in: ${nonce}`;
-  
-      const signature = await window.ethereum.request({
-        method: 'personal_sign',
-        params: [message, userAddress],
-      });
-  
-      const response = await fetch('/api/auth/metamask', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username,
-          walletAddress: userAddress,
-          nonce,
-          signature,
-        }),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to authenticate');
-      }
-  
-      const data = await response.json();
-  
-      console.log('Authentication success:', data);
-  
-      if (data.token) {
-        router.push(`/welcome?token=${data.token}`);
-        return data;
-      } else {
-        throw new Error('Token not found in response');
-      }
-  
-    } catch (error) {
-      console.error('Error during MetaMask authentication:', error);
-      throw error;
-    }
-  };
-
   const handleLogin = async (event) => {
     event.preventDefault();
     setIsLoginLoading(true);
     setMessage(null);
   
     const deviceDetails = getDeviceDetails();
-    const userIP = await getUserIP();
   
     const email = event.target.loginEmail.value;
     const password = event.target.loginPassword.value;
@@ -122,7 +60,7 @@ export default function AuthPage() {
       const response = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, deviceDetails, userIP }),
+        body: JSON.stringify({ email, password, deviceDetails }),
       });
       const data = await response.json();
   
@@ -168,7 +106,7 @@ export default function AuthPage() {
       const data = await response.json()
 
       if (response.ok) {
-        setMessage({ type: 'success', text: 'OTP sent successfully!' })
+        setMessage({ type: 'success', text: 'OTP sent successfully, check your email!' })
         setSignupStep(2)
       } else {
         setMessage({ type: 'error', text: data.message || 'Failed to send OTP!' })
@@ -191,6 +129,10 @@ export default function AuthPage() {
       return
     }
 
+    const cleanTelegramUsername = signupTelegramUsername.startsWith('@') 
+      ? signupTelegramUsername.substring(1) 
+      : signupTelegramUsername
+
     try {
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
@@ -198,7 +140,7 @@ export default function AuthPage() {
         body: JSON.stringify({
           username: signupUsername,
           email: signupEmail,
-          telegramUID: signupTelegramUID,
+          telegramUsername: cleanTelegramUsername,
           password: signupPassword,
           otp: signupOtp
         })
@@ -387,23 +329,24 @@ export default function AuthPage() {
                           />
                         </div>
                         <div>
-                          <Label htmlFor="signupTelegramUID" className="text-white mb-1 flex items-center gap-1">
-                            Telegram UID
+                          <Label htmlFor="signupTelegramUsername" className="text-white mb-1 flex items-center gap-1">
+                            Telegram Username
                             <TooltipProvider>
                               <Tooltip>
                                 <TooltipTrigger asChild>
                                   <FaRegQuestionCircle className='mb-[1px]' />
                                 </TooltipTrigger>
                                 <TooltipContent className="text-xs">
-                                  {"We need your Telegram User Id to link your Telegram ID with our forum, Don't worry it's safe. get it by using rose bot."}
+                                  Enter your Telegram username (with or without @)
                                 </TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
                           </Label>
                           <Input
-                            id="signupTelegramUID"
-                            value={signupTelegramUID}
-                            onChange={(e) => setSignupTelegramUID(e.target.value)}
+                            id="signupTelegramUsername"
+                            placeholder="@username"
+                            value={signupTelegramUsername}
+                            onChange={(e) => setSignupTelegramUsername(e.target.value)}
                             required
                             className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                           />
@@ -429,7 +372,7 @@ export default function AuthPage() {
                           type="submit"
                           disabled={isSignupLoading}
                         >
-                          {isSignupLoading ? 'Sending OTP...' : 'Send OTP'}
+                          {isSignupLoading ? 'Sending OTP...' : 'Register'}
                         </Button>
                       </motion.div>
                     </form>

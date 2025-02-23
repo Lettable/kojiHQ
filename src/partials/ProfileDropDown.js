@@ -70,7 +70,7 @@ export function ProfileDropdown({
       exit="hidden"
       variants={dropdownVariants}
       transition={{ duration: 0.2 }}
-      className={`absolute right-0 top-14 w-72 rounded-md shadow-lg py-1 bg-zinc-900 ring-1 ring-black ring-opacity-5 z-50`}
+      className={`absolute right-0 top-14 w-72 rounded-md shadow-lg py-1 bg-zinc-900 z-50`}
     >
       <div className="px-4 py-3">
         <div className="flex items-center">
@@ -123,7 +123,7 @@ export function ProfileDropdown({
           <div className="px-2 py-2">
             <Button 
               variant="premium" 
-              className="w-full justify-start bg-gradient-to-r from-yellow-400 to-yellow-600 text-white font-semibold hover:bg-zinc-800 hover:from-yellow-500 hover:to-yellow-700 transition-all duration-300"
+              className="w-full justify-start bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold hover:from-yellow-600 hover:to-yellow-700 transition-all duration-500"
               onClick={() => { router.push('/premium'); onClose(); }}
             >
               <Crown className="mr-2 h-4 w-4" /> Go Premium

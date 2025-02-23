@@ -1,136 +1,3 @@
-// 'use client'
-
-// import * as React from 'react'
-// import { motion, AnimatePresence } from 'framer-motion'
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-// import { ScrollArea } from "@/components/ui/scroll-area"
-
-
-// export function ForumSection({ forumData, setForumCategories, isDarkTheme }) {
-//   const [activeCategory, setActiveCategory] = React.useState(forumData[0]?._id || '')
-
-//   React.useEffect(() => {
-//     const fetchForumData = async () => {
-//       try {
-//         const response = await fetch('/api/home-forum');
-//         const data = await response.json();
-//         console.log('Data direct from API', data)
-//         setForumCategories(data);
-//         setActiveCategory(data[0]._id);
-//       } catch (error) {
-//         setError(err.message)
-//         console.error('Error fetching forum data:', error);
-//       }
-//     };
-
-//     fetchForumData();
-//   }, [setForumCategories]);
-
-//   console.log(forumData)
-//   return (
-//     <div className="space-y-6">
-//       <Tabs 
-//         defaultValue={activeCategory} 
-//         onValueChange={setActiveCategory}
-//         className="w-full"
-//       >
-//         <div className="border-b border-zinc-800">
-//           <ScrollArea className="w-full">
-//             <div className="flex pb-0.5">
-//               <TabsList className="h-14 bg-transparent p-0 justify-start">
-//                 {forumData.map((category) => (
-//                   <TabsTrigger
-//                     key={category._id}
-//                     value={category._id}
-//                     className="data-[state=active]:bg-transparent data-[state=active]:text-yellow-500 relative px-4 py-2 text-white transition-colors hover:text-yellow-500 data-[state=active]:shadow-none"
-//                   >
-//                     {category.name}
-//                     {/* Active indicator line */}
-//                     <motion.div
-//                       className="absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-500"
-//                       initial={false}
-//                       animate={{
-//                         opacity: activeCategory === category._id ? 1 : 0
-//                       }}
-//                       transition={{ duration: 0.2 }}
-//                     />
-//                   </TabsTrigger>
-//                 ))}
-//               </TabsList>
-//             </div>
-//           </ScrollArea>
-//         </div>
-
-//         <AnimatePresence mode="wait">
-//           {forumData.length > 0 ? (
-//             forumData.map((category) => (
-//               <TabsContent 
-//                 key={category._id} 
-//                 value={category._id}
-//                 className="mt-6 space-y-6"
-//               >
-//                 {category.subcategories.map((subcategory) => (
-//                   <motion.div
-//                     key={subcategory._id}
-//                     initial={{ opacity: 0, y: 20 }}
-//                     animate={{ opacity: 1, y: 0 }}
-//                     exit={{ opacity: 0, y: -20 }}
-//                     transition={{ duration: 0.2 }}
-//                   >
-//                     <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
-//                       <CardHeader>
-//                         <CardTitle className="text-xl">{subcategory.name}</CardTitle>
-//                       </CardHeader>
-//                       <CardContent>
-//                         <div className="space-y-2">
-//                           {subcategory.forums.map((forum) => (
-//                             <a
-//                               href={`/forum/${forum._id}`}
-//                               key={forum._id}
-//                               className={`flex items-center text-white justify-between p-4 rounded-lg bg-zinc-800/10 ${
-//                                 isDarkTheme ? 'hover:bg-zinc-800/50' : 'hover:bg-gray-50'
-//                               } transition-colors cursor-pointer`}
-//                             >
-//                               <div className="flex-1">
-//                                 <h3 className="font-semibold">{forum.name}</h3>
-//                                 <p className={`text-sm ${
-//                                   isDarkTheme ? 'text-gray-400' : 'text-gray-600'
-//                                 }`}>
-//                                   {forum.description}
-//                                 </p>
-//                               </div>
-//                               <div className={`text-sm ${
-//                                 isDarkTheme ? 'text-gray-400' : 'text-gray-600'
-//                               }`}>
-//                                 <p>
-//                                   Last post by{' '}
-//                                   <span className={`${forum.latestPost?.usernameEffect || ''}`}>
-//                                     {forum.latestPost?.user}
-//                                   </span>
-//                                 </p>
-//                                 <p className="text-right">{forum.latestPost?.time}</p>
-//                               </div>
-//                             </a>
-//                           ))}
-//                         </div>
-//                       </CardContent>
-//                     </Card>
-//                   </motion.div>
-//                 ))}
-//               </TabsContent>
-//             ))
-//           ) : (
-//             <div>
-//               <span className="text-center text-white">No Forum found.</span>
-//             </div>
-//           )}
-//         </AnimatePresence>
-//       </Tabs>
-//     </div>
-//   )
-// }
-
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -140,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import LoadingIndicator from './LoadingIndicator'
 import { useRouter } from 'next/navigation'
+import { Clock } from 'lucide-react'
 
 const renderTextWithEmojis = (text, emojis) => {
   if (!text || typeof text !== 'string') return text || ''
@@ -178,9 +46,9 @@ export function ForumSection({ isDarkTheme }) {
   const [forumData, setForumData] = useState([])
   const [activeCategory, setActiveCategory] = useState('')
   const [error, setError] = useState(null)
-  const [activeUsers, setActiveUsers] = useState([]);
+  const [activeUsers, setActiveUsers] = useState([])
   const [emojis, setEmojis] = useState([])
-  const [activeUserCount, setActiveUserCount] = useState(0);
+  const [activeUserCount, setActiveUserCount] = useState(0)
   const router = useRouter()
 
   const fetchActiveUsers = async () => {
@@ -250,13 +118,19 @@ export function ForumSection({ isDarkTheme }) {
 
 
   if (error) {
-    return <div className="text-white">Error: {error}</div>
+    return (
+      <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-4 text-red-500">
+        Error: {error}
+      </div>
+    )
   }
 
   if (forumData.length === 0) {
-    return <div className='text-center justify-center items-center flex h-96'>
-      <LoadingIndicator />
-    </div>
+    return (
+      <div className="flex justify-center items-center h-96 bg-zinc-900/30 rounded-xl backdrop-blur-sm">
+        <LoadingIndicator />
+      </div>
+    )
   }
 
   return (
@@ -266,26 +140,21 @@ export function ForumSection({ isDarkTheme }) {
         onValueChange={setActiveCategory}
         className="w-full"
       >
-        <div className="border-b border-zinc-800">
+        <div className="bg-zinc-900/50 rounded-xl backdrop-blur-sm border border-zinc-800/50">
           <ScrollArea className="w-full">
-            <div className="flex pb-0.5">
-              <TabsList className="h-14 bg-transparent p-0 justify-start">
+            <div className="flex p-1">
+              <TabsList className="h-14 bg-transparent justify-start gap-2 p-2">
                 {forumData.map((category) => (
                   <TabsTrigger
                     key={category._id}
                     value={category._id}
-                    className="data-[state=active]:bg-transparent data-[state=active]:text-yellow-500 relative px-4 py-2 text-white transition-colors hover:text-yellow-500 data-[state=active]:shadow-none"
+                    className="relative px-6 py-2.5 rounded-lg text-zinc-400 transition-all duration-200
+                      data-[state=active]:bg-yellow-500/10
+                      data-[state=active]:text-yellow-500
+                      hover:text-yellow-500/80
+                      hover:bg-zinc-800/50"
                   >
                     {category.name}
-                    {/* Active indicator line */}
-                    <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-500"
-                      initial={false}
-                      animate={{
-                        opacity: activeCategory === category._id ? 1 : 0
-                      }}
-                      transition={{ duration: 0.2 }}
-                    />
                   </TabsTrigger>
                 ))}
               </TabsList>
@@ -294,95 +163,86 @@ export function ForumSection({ isDarkTheme }) {
         </div>
 
         <AnimatePresence mode="wait">
-          {forumData.length > 0 ? (
-            forumData.map((category) => (
-              <TabsContent
-                key={category._id}
-                value={category._id}
-                className="mt-6 space-y-6"
-              >
-                {category.subcategories.map((subcategory) => (
-                  <motion.div
-                    key={subcategory._id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Card className={`${isDarkTheme ? 'bg-zinc-900/50' : 'bg-white'} text-white border-0 shadow-lg`}>
-                      <CardHeader>
-                        <CardTitle className="text-xl">{subcategory.name}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {subcategory.forums.map((forum) => (
-                            <a
-                              href={`/forum/${forum._id}`}
-                              key={forum._id}
-                              className={`flex items-center text-white justify-between p-4 rounded-lg bg-zinc-800/10 ${isDarkTheme ? 'hover:bg-zinc-800/50' : 'hover:bg-gray-50'
-                                } transition-colors cursor-pointer`}
+          {forumData.map((category) => (
+            <TabsContent
+              key={category._id}
+              value={category._id}
+              className="mt-6 space-y-6"
+            >
+              {category.subcategories.map((subcategory) => (
+                <motion.div
+                  key={subcategory._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Card className="bg-zinc-900/50 border border-zinc-800/50 shadow-lg backdrop-blur-sm rounded-xl overflow-hidden">
+                    <CardHeader className="border-b border-zinc-800/50 bg-zinc-900/50 py-4">
+                      <CardTitle className="text-xl text-white">{subcategory.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-4">
+                      <div className="space-y-3">
+                        {subcategory.forums.map((forum) => (
+                          <a
+                            href={`/forum/${forum._id}`}
+                            key={forum._id}
+                            className="block group"
+                          >
+                            <div className="flex items-center justify-between p-4 rounded-xl
+                              bg-zinc-800/30 hover:bg-zinc-800/50 
+                              transition-all duration-200 backdrop-blur-sm
+                              border border-zinc-700/30 hover:border-yellow-500/20
+                              hover:shadow-lg hover:shadow-yellow-500/5"
                             >
-                              <div className="flex-1">
-                                <h3 className="font-semibold">{forum.name}</h3>
-                                <p className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'
-                                  }`}>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-medium text-white group-hover:text-yellow-500 transition-colors">
+                                  {forum.name}
+                                </h3>
+                                <p className="text-sm text-zinc-400 truncate mt-1">
                                   {forum.description}
                                 </p>
                               </div>
-                              <div className={`text-sm ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'
-                                }`}>
-                                <p>
+                              <div className="ml-4 flex-shrink-0 text-right">
+                                <p className="text-sm text-zinc-400">
                                   Last post by{' '}
-                                  <span className={`${forum.latestPost?.usernameEffect || ''}`}>
+                                  <span className={`${forum.latestPost?.usernameEffect || ''} text-white`}>
                                     {forum.latestPost?.user}
                                   </span>
                                 </p>
-                                <p className="text-right">{forum.latestPost?.time}</p>
+                                <div className="flex items-center justify-end gap-1.5 text-xs text-zinc-500 mt-1">
+                                  <Clock className="h-3.5 w-3.5" />
+                                  {forum.latestPost?.time}
+                                </div>
                               </div>
-                            </a>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </TabsContent>
-            ))
-          ) : (
-            <div className='text-center justify-center items-center flex h-96'>
-              <LoadingIndicator />
-            </div>
-          )}
-          {/* Member Activity Section */}
-          <div className="bg-zinc-900/50 rounded-lg mt-4 overflow-hidden">
-            <div className="bg-yellow-500 px-4 py-2">
-              <h2 className="text-black font-medium">Member Activity</h2>
-            </div>
+                            </div>
+                          </a>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </TabsContent>
+          ))}
+        </AnimatePresence>
 
+        <div className="mt-6">
+          <Card className="bg-zinc-900/50 border border-zinc-800/50 shadow-lg backdrop-blur-sm rounded-xl overflow-hidden">
+            <div className="bg-yellow-500/10 px-4 py-3 border-b border-yellow-500/20">
+              <h2 className="text-yellow-500 font-medium">Member Activity</h2>
+            </div>
             <div className="p-4">
-              <p className="text-sm text-gray-400 mb-4">
-                {activeUserCount} USERS ACTIVE TODAY OUT OF {activeUsers.length} MEMBERS. WE DON&apos;T STORE GUEST&apos;S USERS DATA.
+              <p className="text-sm text-zinc-400 mb-4">
+                {activeUserCount} USERS ACTIVE TODAY OUT OF {activeUsers.length} MEMBERS
               </p>
-              {/* <div className="flex flex-wrap gap-2 mb-4">
-                {activeUsers.map((user, index) => (
-                  <span
-                    key={user.username}
-                    className={`
-                      ${user.usernameEffect}
-                      hover:underline cursor-pointer
-                    `}
-                  >
-                    {user.username}
-                    {index < activeUsers.length - 1 && <span className="text-gray-600 ml-1">,</span>}
-                  </span>
-                ))}
-              </div> */}
-              <div className="flex flex-wrap gap-1 mb-4">
+              <div className="flex flex-wrap gap-1.5">
                 {activeUsers.map((user, index) => (
                   <span key={user.username}>
                     <span
                       onClick={() => router.push(`/user/${user.username}`)}
-                      className={`text-zinc-300 text-xs ${user.usernameEffect} hover:underline cursor-pointer text-inherit`}
+                      className={`text-zinc-300 text-xs ${user.usernameEffect} 
+                        hover:underline cursor-pointer hover:text-yellow-500 transition-colors`}
                     >
                       {user.username}
                     </span>
@@ -391,14 +251,15 @@ export function ForumSection({ isDarkTheme }) {
                         {renderTextWithEmojis(user.statusEmoji, emojis)}
                       </span>
                     )}
-                    {index < activeUsers.length - 1 && <span className="text-zinc-300 text-xs">,</span>}
+                    {index < activeUsers.length - 1 && (
+                      <span className="text-zinc-500 text-xs mx-1">•</span>
+                    )}
                   </span>
                 ))}
               </div>
-
             </div>
-          </div>
-        </AnimatePresence>
+          </Card>
+        </div>
       </Tabs>
     </div>
   )

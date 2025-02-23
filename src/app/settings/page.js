@@ -15,7 +15,7 @@ import { Switch } from '@/components/ui/switch';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { formatDistanceToNow } from 'date-fns';
-import { Settings, User, Sliders, FileSignature, Shield, AlertTriangle, Trophy, MessageSquare, Bookmark, Star, Eye, EyeOff, Camera, Smile } from 'lucide-react';
+import { Settings, User, Sliders, FileSignature, Shield, AlertTriangle, Trophy, MessageSquare, Bookmark, Star, Eye, EyeOff, Camera, Smile, Lock } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import ReactMarkdownEditorLite from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
@@ -116,7 +116,7 @@ export default function SettingsPage() {
   const [content, setContent] = useState('')
   const [usernameEffect, setUsernameEffect] = useState()
   const [bannerImg, setBannerImg] = useState("")
-  const [emojis, setEmojis] = useState()
+  const [emojis, setEmojis] = useState([])
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -465,16 +465,20 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
     x: 0,
     y: 0,
   })
+  const [emojis, setEmojis] = useState([])
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken')
-    if (token) {
-      const decoded = jwtDecode(token)
-      const profilePic = decoded.profilePic
-      setProfilePic(profilePic)
-    } else {
-      throw new Error('No access token found')
+    const fetchEmojis = async () => {
+      try {
+        const response = await fetch('/api/emojis')
+        const data = await response.json()
+        setEmojis(data)
+      } catch (error) {
+        console.error('Error fetching emojis:', error)
+      }
     }
+
+    fetchEmojis()
   }, [])
 
   const fileInputRef = useRef(null)
@@ -533,58 +537,62 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
   const handleCropConfirm = async () => {
     let base64Image;
 
-    const isGifFile = uploadedImage instanceof File && uploadedImage.type === 'image/gif';
-    const isGifBase64 = typeof uploadedImage === 'string' && uploadedImage.startsWith('data:image/gif');
-
-    if (isGifFile || isGifBase64) {
-      if (isGifFile) {
-        base64Image = await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(uploadedImage);
-        });
-      } else {
-        base64Image = uploadedImage;
-      }
-    } else if (imageRef.current && completedCrop) {
-      const canvas = document.createElement('canvas');
-      const scaleX = imageRef.current.naturalWidth / imageRef.current.width;
-      const scaleY = imageRef.current.naturalHeight / imageRef.current.height;
-      canvas.width = completedCrop.width;
-      canvas.height = completedCrop.height;
-      const ctx = canvas.getContext('2d');
-
-      ctx.drawImage(
-        imageRef.current,
-        completedCrop.x * scaleX,
-        completedCrop.y * scaleY,
-        completedCrop.width * scaleX,
-        completedCrop.height * scaleY,
-        0,
-        0,
-        completedCrop.width,
-        completedCrop.height
-      );
-
-      base64Image = await new Promise((resolve) => {
-        canvas.toBlob((blob) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(blob);
-        }, 'image/png');
-      });
-    }
-
-    if (!base64Image) {
+    // If there's no uploaded image, exit early
+    if (!uploadedImage) {
       toast({
         title: "Error",
-        description: "Failed to process the image.",
+        description: "No image selected.",
         variant: "destructive",
       });
       return;
     }
 
     try {
+      const isGifFile = uploadedImage instanceof File && uploadedImage.type === 'image/gif';
+      const isGifBase64 = typeof uploadedImage === 'string' && uploadedImage.startsWith('data:image/gif');
+
+      if (isGifFile || isGifBase64) {
+        if (isGifFile) {
+          base64Image = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(uploadedImage);
+          });
+        } else {
+          base64Image = uploadedImage;
+        }
+      } else {
+        // For non-GIF images, use the uploaded image directly if no crop is made
+        if (!completedCrop) {
+          base64Image = uploadedImage;
+        } else if (imageRef.current && completedCrop) {
+          const canvas = document.createElement('canvas');
+          const scaleX = imageRef.current.naturalWidth / imageRef.current.width;
+          const scaleY = imageRef.current.naturalHeight / imageRef.current.height;
+          canvas.width = completedCrop.width;
+          canvas.height = completedCrop.height;
+          const ctx = canvas.getContext('2d');
+
+          ctx.drawImage(
+            imageRef.current,
+            completedCrop.x * scaleX,
+            completedCrop.y * scaleY,
+            completedCrop.width * scaleX,
+            completedCrop.height * scaleY,
+            0,
+            0,
+            completedCrop.width,
+            completedCrop.height
+          );
+
+          base64Image = canvas.toDataURL('image/png');
+        }
+      }
+
+      if (!base64Image) {
+        throw new Error("Failed to process the image.");
+      }
+
       const response = await fetch(`/api/edit-user?action=profilePic&token=${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -596,7 +604,7 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
         localStorage.setItem('accessToken', result.accessToken);
         setProfilePic(result.user.profilePic);
         toast({
-          title: "Profile Picture Updated",
+          title: "Success",
           description: "Your profile picture has been successfully updated.",
           variant: "destructive",
         });
@@ -604,15 +612,17 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
         throw new Error(result.message);
       }
     } catch (error) {
+      console.error('Error processing image:', error);
       toast({
         title: "Update Failed",
         description: error.message || "An error occurred while updating your profile picture.",
         variant: "destructive",
       });
+      return;
     }
 
     setIsUploadingImage(false);
-    setUploadedImage('');
+    setUploadedImage(null);
   };
 
   const handleEmojiSelect = async (emoji) => {
@@ -662,15 +672,36 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
                 className="mt-1 bg-zinc-800 border-zinc-700 text-white"
               />
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="mt-7 hover:bg-white/10 hover:text-white"
-              onClick={() => setIsSelectingEmoji(true)}
-            >
-              <Smile className="h-4 w-4" />
-            </Button>
+            <div className="flex flex-col items-start mt-7">
+              <div className="flex items-center gap-2">
+                <EnhancedEmojiPicker 
+                  onEmojiSelect={handleEmojiSelect}
+                  isDarkTheme={true}
+                  trigger={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="default"
+                      className="bg-zinc-800 px-4 py-1 hover:bg-white/10 hover:text-white flex items-center gap-2"
+                    >
+                      <div className="flex items-center gap-2">
+                        {userData.statusEmoji ? (
+                          <>
+                            {renderTextWithEmojis(userData.statusEmoji, emojis)}
+                            <span className="text-xs text-zinc-400">(change)</span>
+                          </>
+                        ) : (
+                          <>
+                            <Smile className="h-4 w-4" />
+                            <span className="text-sm text-zinc-400">Add status</span>
+                          </>
+                        )}
+                      </div>
+                    </Button>
+                  }
+                />
+              </div>
+            </div>
           </div>
 
           <div>
@@ -749,7 +780,12 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
       </form>
 
       {/* Image Crop Dialog */}
-      <Dialog open={isUploadingImage} onOpenChange={setIsUploadingImage}>
+      <Dialog open={isUploadingImage} onOpenChange={(open) => {
+        setIsUploadingImage(open);
+        if (!open) {
+          setUploadedImage(null);
+        }
+      }}>
         <DialogContent className="bg-zinc-900 border-0 text-white">
           <DialogHeader>
             <DialogTitle>Crop Your Image</DialogTitle>
@@ -775,8 +811,8 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
               variant="outline"
               className="bg-zinc-800 text-white hover:bg-zinc-700"
               onClick={() => {
-                setIsUploadingImage(false)
-                setUploadedImage('')
+                setIsUploadingImage(false);
+                setUploadedImage(null);
               }}
             >
               Cancel
@@ -793,31 +829,45 @@ function ProfileTab({ token, userData, profilePic, setProfilePic, setUsername, s
 
       {/* Emoji Selection Dialog */}
       <Dialog open={isSelectingEmoji} onOpenChange={setIsSelectingEmoji}>
-        <DialogContent className="bg-black text-white border-white/10 max-w-md w-full">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-center">Choose Your Status Emoji</DialogTitle>
-          </DialogHeader>
-          <div className="my-6 p-4 rounded-lg items-center text-center bg-gradient-to-br from-yellow-400/20 to-purple-400/20">
-            <EnhancedEmojiPicker
-              onEmojiSelect={handleEmojiSelect}
-              isDarkTheme={true}
-            />
-            <DialogDescription className="text-center mt-2">
-              Express yourself with a status emoji that represents your current mood or activity.
+        <DialogContent className="bg-zinc-900/50 backdrop-blur-lg border-white/10 max-w-[400px] w-full">
+          <DialogHeader className="space-y-2 pb-4">
+            <DialogTitle className="text-lg font-semibold text-white">Status Emoji</DialogTitle>
+            <DialogDescription className="text-sm text-zinc-400">
+              Choose an emoji to display next to your username
             </DialogDescription>
+          </DialogHeader>
+          
+          <div className="relative rounded-lg bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 border border-white/10">
+            <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-purple-500/5 rounded-lg" />
+            <div className="relative p-2">
+              <EnhancedEmojiPicker
+                onEmojiSelect={handleEmojiSelect}
+                isDarkTheme={true}
+              />
+            </div>
           </div>
-          <DialogFooter className="flex justify-between items-center mt-6">
-            <p className="text-sm text-gray-400">
-              {userData.isPremium ? 'Premium user: All emojis available!' : 'Upgrade to Premium for more emojis!'}
-            </p>
+
+          <div className="flex items-center justify-between pt-4">
+            {userData.isPremium ? (
+              <div className="flex items-center gap-2 text-xs text-yellow-500">
+                <Star className="h-3.5 w-3.5" />
+                <span>Premium: All emojis available</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 text-xs text-zinc-400">
+                <Lock className="h-3.5 w-3.5" />
+                <span>Upgrade for more emojis</span>
+              </div>
+            )}
             <Button
               variant="outline"
-              className="border-yellow-400/10 text-white hover:text-white hover:bg-white/10 bg-white/20"
               onClick={() => setIsSelectingEmoji(false)}
+              className="bg-zinc-800 text-white hover:bg-zinc-700 border-white/10"
+              size="sm"
             >
               Cancel
             </Button>
-          </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
