@@ -441,7 +441,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
     if (typeof window === "undefined") return
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return
 
-    wsRef.current = new WebSocket(`${SOCKET_BASE_SERVER_URL}`)
+    wsRef.current = new WebSocket("ws://kgc40gksk48wsgkwsw8cg0wo.196.251.85.48.sslip.io")
 
     wsRef.current.onopen = () => {
       console.log("WebSocket connected")

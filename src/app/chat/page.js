@@ -151,7 +151,7 @@ export default function ChatPage() {
   }, [selectedChat, scrollToBottom])
 
   const initializeWebSocket = (userId) => {
-    wsRef.current = new WebSocket(`${SOCKET_BASE_SERVER_URL}/p2p?userId=${userId}`)
+    wsRef.current = new WebSocket(`ws://kgc40gksk48wsgkwsw8cg0wo.196.251.85.48.sslip.io/p2p?userId=${userId}`)
 
     wsRef.current.onopen = () => {
       console.log('WebSocket connection established')
