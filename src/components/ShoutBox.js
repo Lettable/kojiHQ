@@ -140,6 +140,7 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
   const UNBAN_COMMAND_REGEX = /^\/unban\s+@(\w+)\s*$/i;
 
   const boss = {
+    _id: `command-${Date.now()}`,
     username: "Suized",
     userId: "67a5f8eb3707affe11e788a8",
     profilePic: "https://i.ibb.co/mrXm4rxg/0730b41d8ab7.png",
@@ -465,17 +466,6 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
           }
         }
 
-        if (parsedData.message.type === "vb88_command") {
-          if (!msb && audioRef.current) {
-            audioRef.current = new Audio(parsedData.message.audioUrl);
-            audioRef.current.load();
-            audioRef.current.currentTime = 0;
-            audioRef.current.play().catch((error) => {
-              console.error("Error playing audio:", error);
-            });
-          }
-        }
-
         if (parsedData.message.type === "ban_command" && user) {
           const bannedUsernameRegex = /@(\w+)/gi;
           let match;
@@ -538,11 +528,14 @@ export default function Shoutbox({ isSettingsDialogOpen, setIsSettingsDialogOpen
       });
 
       setMessages(prev => [...prev, {
-        _id: `error-${Date.now()}`,
-        username: "System",
+        _id: boss._id,
+        profilePic: boss.profilePic,
+        username: boss.username,
         content: "Connection error occurred. Attempting to reconnect...",
         type: "system_message",
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        usernameEffect: boss.usernameEffect,
+        statusEmoji: boss.statusEmoji
       }]);
 
       if (wsRef.current) {
